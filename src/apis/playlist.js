@@ -1,9 +1,9 @@
 import request from '@/utils/request.js';
 
-//私人FM
-export const getFM = () => {
+//推荐新音乐
+export const getNewsong = () => {
     return request({
-        url: '/personal_fm',
+        url: '/personalized/newsong',
         method: 'get',
     })
 }

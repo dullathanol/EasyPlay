@@ -37,12 +37,9 @@ const props = defineProps(['mvlist'])
 
 <style lang='less' scoped>
 .cover-row {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 30px 25px;
-
     .item {
         color: var(--color-text);
+        margin-bottom: 10px;
 
         .info {
             margin-top: 8px;

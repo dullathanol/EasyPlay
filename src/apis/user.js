@@ -11,6 +11,17 @@ export const getRecommendSongs = () => {
     })
 }
 
+//私人FM
+export const getFM = () => {
+    return request({
+        url: '/personal_fm',
+        method: 'get',
+        params: {
+            timestamp: new Date().getTime(),
+        }
+    })
+}
+
 //用户详情
 export const getUserDetail = (id) => {
     return request({

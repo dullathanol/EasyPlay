@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { getLikelist } from '@/apis/user.js'
 import { usePlayStore } from '@/stores/playStore.js';
 import { useUserStore } from '@/stores/userStore.js';
@@ -21,8 +21,6 @@ const loadData = async () => {
     likelist.value = Likelist.ids
 }
 
-loadData()
-
 const isLike = computed(() => {
     return likelist.value.includes(playStore.songId)
 })
@@ -36,6 +34,14 @@ const title = computed(() => {
     }
     if (playStore.playMode == 2) {
         return '随机播放'
+    }
+})
+
+const src = computed(() => {
+    if (playStore.songList[playStore.currentIndex]?.picUrl) {
+        return playStore.songList[playStore.currentIndex]?.picUrl
+    } else {
+        return playStore.songList[playStore.currentIndex]?.al.picUrl
     }
 })
 
@@ -57,6 +63,12 @@ const volume = computed({
         playStore.Howl.volume(value)
     }
 })
+
+watch(() => userStore.login, () => {
+    if (userStore.login) {
+        loadData()
+    }
+});
 </script>
 
 <template>
@@ -68,7 +80,7 @@ const volume = computed({
         <div class="controls">
             <div class="playing">
                 <div class="container">
-                    <img :src="playStore.songList[playStore.currentIndex]?.al.picUrl">
+                    <img :src="src">
                     <div class="track-info">
                         <div class="name">{{ playStore.songList[playStore.currentIndex]?.name }}</div>
                         <div class="artist">
@@ -76,7 +88,7 @@ const volume = computed({
                         </div>
                     </div>
                     <div class="like-button">
-                        <ButtonIcon v-show="playStore.songList[playStore.currentIndex]">
+                        <ButtonIcon v-show="userStore.login">
                             <SvgIcon v-show="!isLike" icon-class="heart"></SvgIcon>
                             <SvgIcon v-show="isLike" icon-class="heart-solid"></SvgIcon>
                         </ButtonIcon>

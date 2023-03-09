@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue';
-import { getFM } from '@/apis/playlist.js';
+import { getFM } from '@/apis/user.js';
 import { usePlayStore } from '@/stores/playStore.js';
 import { useRouter } from 'vue-router';
 import ArtistsName from '@/components/Body/ArtistsName.vue'

@@ -5,7 +5,7 @@ import { getLike, getLikelist } from '@/apis/user.js'
 import { FormatSongTime } from '@/utils/common.js';
 import { useUserStore } from '@/stores/userStore.js';
 import { usePlayStore } from '@/stores/playStore.js';
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 
 const props = defineProps(['playlist'])
 const userStore = useUserStore()
@@ -18,7 +18,6 @@ const loadData = async () => {
     likelist.value = Likelist.ids
 }
 
-loadData()
 
 const isLike = computed(() => {
     return likelist.value.includes(props.playlist.id)
@@ -27,6 +26,10 @@ const isLike = computed(() => {
 const like = async (like) => {
     await getLike(props.playlist.id, like)
 }
+
+watch(() => userStore.login, () => {
+    if (userStore.login) loadData()
+})
 </script>
 
 <template>
@@ -45,7 +48,7 @@ const like = async (like) => {
         <div class="album">
             <router-link :to="{ name: 'album' }">{{ playlist.al.name }}</router-link>
         </div>
-        <div class="actions">
+        <div class="actions" v-show="userStore.login">
             <button>
                 <SvgIcon v-show="!isLike" @click="like('true')" icon-class="heart"></SvgIcon>
                 <SvgIcon v-show="isLike" @click="like('false')" icon-class="heart-solid"></SvgIcon>

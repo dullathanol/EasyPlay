@@ -1,44 +1,39 @@
 <script setup>
 import SvgIcon from '@/components/Plugins/SvgIcon.vue';
-import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
-import { useUserStore } from '@/stores/userStore.js';
+import { ref, computed, watch } from 'vue';
+import { addSong } from '@/hooks/Player.js';
+import { getRecommend } from '@/hooks/playlist.js';
 import { usePlayStore } from '@/stores/playStore.js';
-import { getRecommendSongs } from '@/apis/user.js';
+import { useUserStore } from '@/stores/userStore.js';
+import { usePlaylistStore } from '@/stores/playlistStore.js';
 
 const router = useRouter()
 const userStore = useUserStore()
 const playStore = usePlayStore()
+const playlistStore = usePlaylistStore()
 
-const songs = ref([{}])
+const index = ref(null)
 
-const loadData = async () => {
-    const RecommendSongs = await getRecommendSongs()
-    songs.value = RecommendSongs.data.dailySongs
-}
-
-loadData()
+getRecommend()
 
 const goToDailyTracks = () => {
-    if (userStore.login) {
-        router.push({ name: 'dailySongs' })
-    } else {
-        userStore.loginTip = true
-    }
+    router.push({ name: 'dailySongs' })
 }
 
 const coverUrl = computed(() => {
-    let index = Math.floor((Math.random() * songs.value.length));
-    return songs.value[index]?.al?.picUrl
+    index.value = Math.floor((Math.random() * playlistStore.recommendSong.length));
+    return playlistStore.recommendSong[index.value]?.picUrl
 })
 
 const playDailyTracks = () => {
-    if (userStore.login) {
-        playStore.playlist = songs[0].value
-    } else {
-        userStore.loginTip = true
-    }
+    playStore.songList = playlistStore.recommendSong
+    addSong(playlistStore.recommendSong[index.value].id, index.value, true)
 }
+
+watch(() => userStore.login, () => {
+    getRecommend()
+});
 </script>
 
 <template>

@@ -25,7 +25,7 @@ const loadData = async () => {
 const all = async (info) => {
     showCatOptions.value = false
     active.value = info
-    const MvAll = await getMvAll(50)
+    const MvAll = await getMvAll(10)
     mvlist.value = MvAll.data
 }
 
@@ -99,7 +99,7 @@ const toggleCat = async (item, type) => {
 
         </div>
         <div class="playlists">
-            <MvListCover :mvlist="mvlist"></MvListCover>
+            <MvListCover class="mv-row" :mvlist="mvlist"></MvListCover>
         </div>
     </div>
 </template>
@@ -195,6 +195,12 @@ const toggleCat = async (item, type) => {
 
     .playlists {
         margin-top: 24px;
+
+        .mv-row {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 30px 25px;
+        }
     }
 }
 </style>

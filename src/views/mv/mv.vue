@@ -3,66 +3,26 @@ import ArtistsName from '@/components/Body/ArtistsName.vue'
 import ButtonIcon from '@/components/Plugins/ButtonIcon.vue';
 import SvgIcon from '@/components/Plugins/SvgIcon.vue';
 import MvListCover from '@/components/Body/MvListCover.vue';
-import { getDetail, getMvUrl, getSimi } from '@/apis/mvlist.js'
+import { useVideoStore } from '@/stores/videoStore.js'
+import { play, getVideo } from '@/hooks/Video.js'
 import { FormatPlayCount } from '@/utils/common.js'
 import { useRoute } from 'vue-router';
-import { ref, onMounted } from 'vue';
-
-import Plyr from 'plyr'
+import { watch, onMounted } from 'vue';
 import 'plyr/dist/plyr.css';
 
 const route = useRoute()
+const videoStore = useVideoStore()
 
-const detail = ref([{}])
-// const simi = ref([{}])
+getVideo(route.query.id)
 
-const id = route.query.id
-
-// const loadSimi = async () => {
-//     const Simi = await getSimi(id)
-//     simi.value = Simi.mvs
-// }
-
-// loadSimi()
+watch(() => route.query.id, () => {
+    if (route.query.id) {
+        getVideo(route.query.id)
+    }
+});
 
 onMounted(() => {
-
-    const loadData = async () => {
-        const Detail = await getDetail(id)
-        detail.value = Detail.data
-
-        let config = {
-            settings: ['captions', 'quality', 'speed', 'loop'],
-            autoplay: false,
-            quality: {
-                default: 1080,
-                options: [1080, 720, 480, 240],
-            },
-        };
-
-        const player = new Plyr('#player', config)
-
-        let sources = []
-        let brs = detail.value.brs
-
-        for (let i = 0; i < brs.length; i++) {
-            const MvUrl = await getMvUrl(id, brs[i].br)
-            sources.push({
-                src: MvUrl.data.url,
-                type: "video/mp4",
-                size: MvUrl.data.r
-            })
-        }
-
-        player.source = {
-            type: 'video',
-            title: detail.value.name,
-            sources: sources,
-            poster: detail.value.cover
-        }
-    }
-
-    loadData()
+    play()
 })
 </script>
 
@@ -74,7 +34,7 @@ onMounted(() => {
             </div>
             <div class="video-info">
                 <div class="title">
-                    {{ detail.name }}
+                    {{ videoStore.detail.name }}
                     <div class="buttons">
                         <ButtonIcon>
                             <SvgIcon icon-class="heart"></SvgIcon>
@@ -82,24 +42,24 @@ onMounted(() => {
                     </div>
                 </div>
                 <div class="artists">
-                    <ArtistsName :artists="detail.artists"></ArtistsName>
+                    <ArtistsName :artists="videoStore.detail.artists"></ArtistsName>
                 </div>
                 <div class="info">
                     <div class="time">
                         <SvgIcon icon-class="time"></SvgIcon>
-                        {{ detail.publishTime }}
+                        {{ videoStore.detail.publishTime }}
                     </div>
                     <div class="play-count">
                         <SvgIcon icon-class="play-circle"></SvgIcon>
-                        {{ FormatPlayCount(detail.playCount) }}
+                        {{ FormatPlayCount(videoStore.detail.playCount) }}
                     </div>
                 </div>
             </div>
         </div>
-        <!-- <div class="more-video">
-                <div class="section-title">更多推荐</div>
-                <MvListCover :mvlist="simi"></MvListCover>
-            </div> -->
+        <div class="more-video">
+            <div class="section-title">更多推荐</div>
+            <MvListCover class="mv-row" :mvlist="videoStore.simi"></MvListCover>
+        </div>
     </div>
 </template>
 
@@ -108,10 +68,12 @@ onMounted(() => {
     margin: 64px 10vw 96px 10vw;
 
     .current-video {
+        width: 65%;
+        position: fixed;
+
         .video {
             border-radius: 16px;
             overflow: hidden;
-            width: 70vw;
             max-height: 100vh;
             margin: 0 auto;
             background: transparent;
@@ -120,14 +82,13 @@ onMounted(() => {
         }
 
         .video-info {
-            margin-top: 12px;
+            margin-top: 8px;
             display: flex;
             justify-content: space-between;
             color: var(--color-text);
-            padding: 0 5vw;
 
             .title {
-                font-size: 24px;
+                font-size: 20px;
                 font-weight: 600;
 
                 .buttons {
@@ -149,7 +110,6 @@ onMounted(() => {
             }
 
             .info {
-
                 font-size: 12px;
                 opacity: 0.88;
                 display: flex;
@@ -175,15 +135,20 @@ onMounted(() => {
         }
     }
 
-    // .more-video {
-    //     margin-top: 48px;
+    .more-video {
+        margin-left: 85%;
 
-    //     .section-title {
-    //         font-size: 24px;
-    //         font-weight: 600;
-    //         color: var(--color-text);
-    //         margin-bottom: 12px;
-    //     }
-    // }
+        .section-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--color-text);
+            margin-bottom: 12px;
+        }
+
+        .mv-row {
+            display: flex;
+            flex-wrap: wrap;
+        }
+    }
 }
 </style>

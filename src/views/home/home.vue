@@ -45,7 +45,7 @@ loadData()
                 推荐MV
                 <router-link to="/expolore">查看更多</router-link>
             </div>
-            <MvListCover :mvlist="mvAll"></MvListCover>
+            <MvListCover class="mv-row" :mvlist="mvAll"></MvListCover>
         </div>
         <div class="index-row">
             <div class="title">
@@ -78,6 +78,12 @@ loadData()
                 font-weight: 600;
                 opacity: 0.68;
             }
+        }
+
+        .mv-row {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 30px 25px;
         }
 
         .for-you-row {

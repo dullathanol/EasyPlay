@@ -1,7 +1,7 @@
 import request from '@/utils/request.js';
 
 //全部mv
-export function getMvAll(limit, area = '全部', type = '全部', order = '上升最快') {
+export function getMvAll(limit, area = '', type = '', order = '') {
     return request({
         url: `/mv/all?limit=${limit}&area=${area}&type=${type}&order=${order}`,
         method: 'get',
