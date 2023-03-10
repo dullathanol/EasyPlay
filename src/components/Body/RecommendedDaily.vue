@@ -1,15 +1,13 @@
 <script setup>
 import SvgIcon from '@/components/Plugins/SvgIcon.vue';
 import { useRouter } from 'vue-router';
-import { ref, computed, watch } from 'vue';
+import { ref, computed } from 'vue';
 import { addSong } from '@/hooks/Player.js';
 import { getRecommend } from '@/hooks/playlist.js';
 import { usePlayStore } from '@/stores/playStore.js';
-import { useUserStore } from '@/stores/userStore.js';
 import { usePlaylistStore } from '@/stores/playlistStore.js';
 
 const router = useRouter()
-const userStore = useUserStore()
 const playStore = usePlayStore()
 const playlistStore = usePlaylistStore()
 
@@ -23,7 +21,12 @@ const goToDailyTracks = () => {
 
 const coverUrl = computed(() => {
     index.value = Math.floor((Math.random() * playlistStore.recommendSong.length));
-    return playlistStore.recommendSong[index.value]?.picUrl
+    if (playlistStore.recommendSong[index.value]?.picUrl) {
+        return playlistStore.recommendSong[index.value]?.picUrl
+    }
+    if (playlistStore.recommendSong[index.value]?.al) {
+        return playlistStore.recommendSong[index.value]?.al.picUrl
+    }
 })
 
 const playDailyTracks = () => {
@@ -31,9 +34,6 @@ const playDailyTracks = () => {
     addSong(playlistStore.recommendSong[index.value].id, index.value, true)
 }
 
-watch(() => userStore.login, () => {
-    getRecommend()
-});
 </script>
 
 <template>

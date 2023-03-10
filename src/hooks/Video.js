@@ -2,6 +2,7 @@ import Plyr from 'plyr'
 import pinia from '@/utils/pinia.js'
 import { useVideoStore } from "@/stores/videoStore.js";
 import { getDetail, getMvUrl, getSimi } from '@/apis/mvlist.js'
+import { startMusic, pauseMusic } from '@/hooks/Player.js';
 
 const videoStore = useVideoStore(pinia)
 
@@ -16,6 +17,13 @@ export const play = () => {
     };
 
     videoStore.Plyr = new Plyr('#player', config)
+
+    videoStore.Plyr.on('playing', () => {
+        pauseMusic()
+    });
+    videoStore.Plyr.on('pause', () => {
+        startMusic()
+    });
 }
 
 export const getVideo = (id) => {

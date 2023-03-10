@@ -22,6 +22,17 @@ export const getFM = () => {
     })
 }
 
+//FM垃圾桶
+export const getTrash = (id) => {
+    return request({
+        url: `/fm_trash?id${id}`,
+        method: 'get',
+        params: {
+            timestamp: new Date().getTime(),
+        }
+    })
+}
+
 //用户详情
 export const getUserDetail = (id) => {
     return request({

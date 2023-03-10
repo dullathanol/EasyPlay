@@ -8,7 +8,6 @@ const playStore = usePlayStore()
 
 const play = (id, index) => {
     playStore.songList = props.playlist
-    console.log(props.playlist);
     addSong(id, index, true)
 }
 

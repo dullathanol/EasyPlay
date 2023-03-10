@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useUserStore } from '@/stores/userStore.js';
+import { init } from '@/hooks/init.js';
 import ButtonIcon from '@/components/Plugins/ButtonIcon.vue';
 import SvgIcon from '@/components/Plugins/SvgIcon.vue';
 
@@ -13,7 +14,7 @@ const inputFocus = ref(false)
 const keywords = ref(null)
 
 if (localStorage.getItem('cookie')) {
-    userStore.loadDetail()
+    init()
 }
 
 const go = (where) => {

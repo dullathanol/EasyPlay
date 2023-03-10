@@ -1,29 +1,18 @@
 <script setup>
-import { ref, computed, watch } from 'vue';
-import { getLikelist } from '@/apis/user.js'
+import { computed } from 'vue';
+import { like } from '@/hooks/PlayList.js';
 import { usePlayStore } from '@/stores/playStore.js';
 import { useUserStore } from '@/stores/userStore.js';
 import { FormatTrackTime } from '@/utils/common.js';
 import { startMusic, pauseMusic, playLast, playNext, changePlayMode, mute } from '@/hooks/Player.js';
 import ButtonIcon from '@/components/Plugins/ButtonIcon.vue';
-import SvgIcon from '@/components/Plugins/SvgIcon.vue';
 import ArtistsName from '@/components/Body/ArtistsName.vue';
+import SvgIcon from '@/components/Plugins/SvgIcon.vue';
 import VueSlider from 'vue-slider-component';
 import '@/assets/css/slider.css'
 
 const playStore = usePlayStore()
 const userStore = useUserStore()
-
-const likelist = ref([{}])
-
-const loadData = async () => {
-    const Likelist = await getLikelist(userStore.userId)
-    likelist.value = Likelist.ids
-}
-
-const isLike = computed(() => {
-    return likelist.value.includes(playStore.songId)
-})
 
 const title = computed(() => {
     if (playStore.playMode == 0) {
@@ -39,10 +28,36 @@ const title = computed(() => {
 
 const src = computed(() => {
     if (playStore.songList[playStore.currentIndex]?.picUrl) {
-        return playStore.songList[playStore.currentIndex]?.picUrl
-    } else {
-        return playStore.songList[playStore.currentIndex]?.al.picUrl
+        return playStore.songList[playStore.currentIndex].picUrl
     }
+    if (playStore.songList[playStore.currentIndex]?.al) {
+        return playStore.songList[playStore.currentIndex].al.picUrl
+    }
+    if (playStore.songList[playStore.currentIndex]?.album) {
+        return playStore.songList[playStore.currentIndex].album.picUrl
+    }
+})
+
+const name = computed(() => {
+    if (playStore.songList[playStore.currentIndex]?.name) {
+        return playStore.songList[playStore.currentIndex].name
+    }
+})
+
+const artists = computed(() => {
+    if (playStore.songList[playStore.currentIndex]?.ar) {
+        return playStore.songList[playStore.currentIndex].ar
+    }
+    if (playStore.songList[playStore.currentIndex]?.artists) {
+        return playStore.songList[playStore.currentIndex].artists
+    }
+    if (playStore.songList[playStore.currentIndex]?.song.artists) {
+        return playStore.songList[playStore.currentIndex].song.artists
+    }
+})
+
+const isLike = computed(() => {
+    return userStore.likelist.includes(playStore.songList[playStore.currentIndex]?.id)
 })
 
 const progress = computed({
@@ -64,16 +79,31 @@ const volume = computed({
     }
 })
 
-watch(() => userStore.login, () => {
-    if (userStore.login) {
-        loadData()
+const last = () => {
+    if (playStore.Howl) {
+        playLast()
     }
-});
+}
+const start = () => {
+    if (playStore.Howl) {
+        startMusic()
+    }
+}
+const pause = () => {
+    if (playStore.Howl) {
+        pauseMusic()
+    }
+}
+const next = () => {
+    if (playStore.Howl) {
+        playNext()
+    }
+}
 </script>
 
 <template>
     <div class="player">
-        <div class="progress-bar">
+        <div class="progress-bar" v-show="playStore.Howl">
             <VueSlider v-model="progress" :min="0" :max="playStore.time" :interval="1" :drag-on-click="true" :duration="0"
                 :dot-size="12" :height="2" :tooltip-formatter="FormatTrackTime" :silent="true"></VueSlider>
         </div>
@@ -82,29 +112,31 @@ watch(() => userStore.login, () => {
                 <div class="container">
                     <img :src="src">
                     <div class="track-info">
-                        <div class="name">{{ playStore.songList[playStore.currentIndex]?.name }}</div>
+                        <div class="name">{{ name }}</div>
                         <div class="artist">
-                            <ArtistsName :artists="playStore.songList[playStore.currentIndex]?.ar"></ArtistsName>
+                            <ArtistsName :artists="artists"></ArtistsName>
                         </div>
                     </div>
                     <div class="like-button">
-                        <ButtonIcon v-show="userStore.login">
-                            <SvgIcon v-show="!isLike" icon-class="heart"></SvgIcon>
-                            <SvgIcon v-show="isLike" icon-class="heart-solid"></SvgIcon>
+                        <ButtonIcon v-show="userStore.login && playStore.songList[playStore.currentIndex]">
+                            <SvgIcon v-show="!isLike" @click="like(playStore.songList[playStore.currentIndex]?.id, 'true')"
+                                icon-class="heart"></SvgIcon>
+                            <SvgIcon v-show="isLike" @click="like(playStore.songList[playStore.currentIndex]?.id, 'false')"
+                                icon-class="heart-solid"></SvgIcon>
                         </ButtonIcon>
                     </div>
                 </div>
             </div>
             <div class="middle-control-buttons">
                 <div class="container">
-                    <ButtonIcon title="上一首" @click="playLast">
+                    <ButtonIcon title="上一首" @click="last">
                         <SvgIcon icon-class="previous"></SvgIcon>
                     </ButtonIcon>
                     <ButtonIcon :title="playStore.playing ? '暂停' : '播放'" class="play">
-                        <SvgIcon v-show="!playStore.playing" icon-class="play" @click="startMusic"></SvgIcon>
-                        <SvgIcon v-show="playStore.playing" icon-class="pause" @click="pauseMusic"></SvgIcon>
+                        <SvgIcon v-show="!playStore.playing" icon-class="play" @click="start"></SvgIcon>
+                        <SvgIcon v-show="playStore.playing" icon-class="pause" @click="pause"></SvgIcon>
                     </ButtonIcon>
-                    <ButtonIcon title="下一首" @click="playNext">
+                    <ButtonIcon title="下一首" @click="next">
                         <SvgIcon icon-class="next"></SvgIcon>
                     </ButtonIcon>
                 </div>

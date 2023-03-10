@@ -10,13 +10,10 @@ const playlist = ref([{}])
 const show = ref(false)
 const active = ref(null)
 
-const loadData = async () => {
-    const Playlist = await getPlaylist(localStorage.getItem('userId'))
+getPlaylist(localStorage.getItem('userId')).then((Playlist)=>{
     playlist.value = Playlist.playlist
     show.value = true
-}
-
-loadData()
+})
 
 const go = (id) => {
     active.value = id

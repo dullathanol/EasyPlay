@@ -1,61 +1,82 @@
 <script setup>
 import ArtistsName from '@/components/Body/ArtistsName.vue';
 import SvgIcon from '@/components/Plugins/SvgIcon.vue';
-import { getLike, getLikelist } from '@/apis/user.js'
 import { FormatSongTime } from '@/utils/common.js';
 import { useUserStore } from '@/stores/userStore.js';
 import { usePlayStore } from '@/stores/playStore.js';
-import { ref, computed, watch } from 'vue';
+import { like } from '@/hooks/PlayList.js';
+import { computed } from 'vue';
 
 const props = defineProps(['playlist'])
 const userStore = useUserStore()
 const playStore = usePlayStore()
 
-const likelist = ref([{}])
+const src = computed(() => {
+    if (props.playlist?.picUrl) {
+        return props.playlist.picUrl
+    }
+    if (props.playlist?.al) {
+        return props.playlist.al.picUrl
+    }
+})
 
-const loadData = async () => {
-    const Likelist = await getLikelist(userStore.userId)
-    likelist.value = Likelist.ids
-}
+const artists = computed(() => {
+    if (props.playlist?.ar) {
+        return props.playlist.ar
+    }
+    if (props.playlist?.song) {
+        return props.playlist.song.artists
+    }
+})
 
+const album = computed(() => {
+    if (props.playlist?.al) {
+        return props.playlist.al
+    }
+    if (props.playlist?.song) {
+        return props.playlist.song.album
+    }
+})
+
+const time = computed(() => {
+    if (props.playlist?.dt) {
+        return FormatSongTime(props.playlist.dt)
+    }
+    if (props.playlist?.song) {
+        return FormatSongTime(props.playlist.song.duration)
+    }
+})
 
 const isLike = computed(() => {
-    return likelist.value.includes(props.playlist.id)
+    return userStore.likelist.includes(props.playlist.id)
 })
 
-const like = async (like) => {
-    await getLike(props.playlist.id, like)
-}
-
-watch(() => userStore.login, () => {
-    if (userStore.login) loadData()
-})
 </script>
 
 <template>
     <div class="track" :class="{ active: playStore.songId == playlist.id }">
-        <img :src="playlist.al.picUrl">
+        <img :src="src">
         <div class="title-and-artist">
             <div class="container">
                 <div class="title">
                     {{ playlist.name }}
                 </div>
                 <div class="artist">
-                    <ArtistsName :artists="playlist.ar"></ArtistsName>
+                    <ArtistsName :artists="artists"></ArtistsName>
                 </div>
             </div>
         </div>
         <div class="album">
-            <router-link :to="{ name: 'album' }">{{ playlist.al.name }}</router-link>
+            <router-link :to="{ name: 'album' }">{{ album?.name }}</router-link>
         </div>
-        <div class="actions" v-show="userStore.login">
+        <div class="actions" v-if="userStore.login">
             <button>
-                <SvgIcon v-show="!isLike" @click="like('true')" icon-class="heart"></SvgIcon>
-                <SvgIcon v-show="isLike" @click="like('false')" icon-class="heart-solid"></SvgIcon>
+                <SvgIcon v-show="!isLike" @click="like(playlist.id, 'true')" icon-class="heart"></SvgIcon>
+                <SvgIcon v-show="isLike" @click="like(playlist.id, 'false')" icon-class="heart-solid"></SvgIcon>
             </button>
         </div>
         <div class="time">
-            {{ FormatSongTime(playlist.dt) }}
+            {{ time }}
         </div>
     </div>
 </template>

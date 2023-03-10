@@ -9,6 +9,7 @@ const playStore = usePlayStore(pinia)
 let musicProgress = null
 
 export const play = (url, autoplay) => {
+    if (playStore.Howl) playStore.Howl.unload()
     playStore.Howl = new Howl({
         src: url,
         autoplay: autoplay,
@@ -40,8 +41,8 @@ export const play = (url, autoplay) => {
 }
 
 export const addSong = (id, index, autoplay) => {
-    playStore.progress = 0
     setId(id, index)
+    playStore.progress = 0
     if (playStore.Howl && playStore.volume != 0) {
         playStore.Howl.fade(playStore.volume, 0, 200)
         playStore.Howl.once('fade', () => {
@@ -55,7 +56,6 @@ export const addSong = (id, index, autoplay) => {
     } else {
         getSong(id, autoplay)
     }
-
 }
 
 export const getSong = async (id, autoplay) => {

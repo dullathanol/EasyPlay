@@ -1,5 +1,27 @@
 import request from '@/utils/request.js';
 
+//收藏的 MV 列表
+export function getMvSublist() {
+    return request({
+        url: '/mv/sublist',
+        method: 'get',
+        params: {
+            timestamp: new Date().getTime(),
+        }
+    })
+}
+
+//收藏/取消收藏 MV
+export function getMvSub(id, sub) {
+    return request({
+        url: `/mv/sub?mvid=${id}&t=${sub}`,
+        method: 'get',
+        params: {
+            timestamp: new Date().getTime(),
+        }
+    })
+}
+
 //全部mv
 export function getMvAll(limit, area = '', type = '', order = '') {
     return request({
@@ -40,7 +62,7 @@ export const getMvUrl = (id, r) => {
     })
 }
 
-////相似mv
+//相似mv
 export const getSimi = (id) => {
     return request({
         url: `/simi/mv?mvid=${id}`,

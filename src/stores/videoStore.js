@@ -6,5 +6,5 @@ export const useVideoStore = defineStore('videoStore', () => {
     const detail = ref([{}])    //视频详情
     const simi = ref([{}])      //相关视频
 
-    return { Plyr, detail, sources, simi }
+    return { Plyr, detail, simi }
 })

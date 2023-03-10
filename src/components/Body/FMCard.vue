@@ -1,59 +1,56 @@
 <script setup>
 import { ref, computed } from 'vue';
-import { getFM } from '@/apis/user.js';
+import { getFM, getTrash } from '@/apis/user.js';
 import { usePlayStore } from '@/stores/playStore.js';
-import { useRouter } from 'vue-router';
+import { addSong, startMusic, pauseMusic } from '@/hooks/Player.js';
 import ArtistsName from '@/components/Body/ArtistsName.vue'
 import ButtonIcon from '@/components/Plugins/ButtonIcon.vue';
 import SvgIcon from '@/components/Plugins/SvgIcon.vue';
 
-const router = useRouter()
 const playStore = usePlayStore()
 
 const fm = ref([{}])
-const artists = ref([{}])
 
-const loadData = async () => {
-    const FM = await getFM()
+getFM().then((FM) => {
     fm.value = FM.data
-    artists.value = FM.data[0].artists
-}
-
-loadData()
+})
 
 const cover = computed(() => {
-    return fm.value[0].album?.picUrl ? fm.value[0].album.picUrl : ''
+    return fm.value[0]?.album?.picUrl
 })
 
-const isPlaying = computed(() => {
-    return false
+const name = computed(() => {
+    return fm.value[0]?.name
 })
 
+const artists = computed(() => {
+    return fm.value[0]?.artists
+})
 
-const goAlbum = () => {
-    if (!fm.value[0].album?.id) return
-    router.push({ name: 'album', query: { id: fm.value[0].album.id } })
-}
-
-const moveToFM = () => {
-    playStore.moveToFM()
+const moveToFM = async () => {
+    getTrash(fm.value[0].id)
 }
 
 const play = () => {
-    playStore.play()
+    playStore.songList = fm.value
+    addSong(fm.value[0].id, 0, true)
 }
 
 const next = () => {
-    playStore.next()
+    getFM().then((FM) => {
+        fm.value = FM.data
+        playStore.songList = fm.value
+        addSong(fm.value[0].id, 0, true)
+    })
 }
 </script>
 
 <template>
     <div class="fm">
-        <img class="cover" :src="cover" @click="goAlbum">
+        <img class="cover" :src="cover">
         <div class="right-part">
             <div class="info">
-                <div class="title">{{ fm[0].name }}</div>
+                <div class="title">{{ name }}</div>
                 <div class="artist">
                     <ArtistsName :artists="artists"></ArtistsName>
                 </div>
@@ -63,10 +60,10 @@ const next = () => {
                     <ButtonIcon title="不喜欢" @click.native="moveToFM">
                         <SvgIcon icon-class="thumbs-down"></SvgIcon>
                     </ButtonIcon>
-                    <ButtonIcon :title="isPlaying ? '暂停' : '播放'" @click.native="play">
-                        <SvgIcon :icon-class="isPlaying ? 'pause' : 'play'"></SvgIcon>
+                    <ButtonIcon title="播放" @click="play">
+                        <SvgIcon icon-class="play"></SvgIcon>
                     </ButtonIcon>
-                    <ButtonIcon title="下一首" @click.native="next">
+                    <ButtonIcon title="下一页" @click.native="next">
                         <SvgIcon icon-class="next"></SvgIcon>
                     </ButtonIcon>
                 </div>
