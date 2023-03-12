@@ -63,6 +63,13 @@ export const getSong = async (id, autoplay) => {
         if (result.success == true) {
             getSongUrl(id).then(songInfo => {
                 play(songInfo.data[0].url, autoplay)
+                let detail = {
+                    songId: playStore.songId,
+                    songList: playStore.songList,
+                    currentIndex: playStore.currentIndex
+                }
+                localStorage.setItem('detail', JSON.stringify(detail))
+
             })
         }
     })

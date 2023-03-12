@@ -1,31 +1,38 @@
 <script setup>
-import ButtonIcon from '@/components/Plugins/ButtonIcon.vue';
 import TrackList from '@/components/Body/TrackList.vue';
 import { getArtistDetail, getArtistFollow, getArtistSong } from '@/apis/artist.js';
 import { useRoute } from 'vue-router';
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 
 const route = useRoute()
 
-const showMorePopTracks = ref(false)
 const detail = ref([{}])
 const follow = ref([{}])
 const song = ref([{}])
 
-getArtistDetail(route.query.id).then((Detail) => {
-    detail.value = Detail.data
-})
+const lodaData = () => {
+    getArtistDetail(route.query.id).then((Detail) => {
+        detail.value = Detail.data
+    })
 
-getArtistFollow(route.query.id).then((Follow) => {
-    follow.value = Follow.data
-})
+    getArtistFollow(route.query.id).then((Follow) => {
+        follow.value = Follow.data
+    })
 
-getArtistSong(route.query.id).then((Song) => {
-    song.value = Song.songs
-})
+    getArtistSong(route.query.id).then((Song) => {
+        song.value = Song.songs
+    })
+
+}
+
+lodaData()
 
 const artist = computed(() => {
     return detail.value.artist
+})
+
+watch(() => route.query.id, () => {
+    lodaData()
 })
 
 </script>
@@ -39,26 +46,15 @@ const artist = computed(() => {
             <div class="right">
                 <div class="name">{{ artist?.name }}</div>
                 <div class="artist" v-for="item in artist?.identifyTag">{{ item }}</div>
-                <div class="statistics">
-                    <a href=""></a>
-                    <a href=""></a>
-                    <a href=""></a>
-                </div>
                 <div class="description">{{ artist?.briefDesc }}</div>
                 <div class="buttons">
-                    <ButtonIcon>关注</ButtonIcon>
+                    <button>关注</button>
                 </div>
             </div>
         </div>
         <div class="popularTracks">
-            <div class="section-title"></div>
+            <div class="section-title">热门歌曲</div>
             <TrackList :playlist="song"></TrackList>
-            <div class="show-more">
-                <button @click="showMorePopTracks = !showMorePopTracks">
-                    <span v-show="!showMorePopTracks">更多</span>
-                    <span v-show="showMorePopTracks">收起</span>
-                </button>
-            </div>
         </div>
     </div>
 </template>
@@ -89,27 +85,52 @@ const artist = computed(() => {
             }
 
             .artist {
-                font-size: 18px;
+                font-size: 16px;
                 opacity: 0.88;
                 margin: 12px 0;
-            }
-
-            .statistics {
-                font-size: 16px;
-                font-weight: 700;
             }
 
             .description {
                 font-size: 14px;
                 opacity: 0.88;
-                margin: 12px 0;
                 display: -webkit-box;
                 -webkit-box-orient: vertical;
                 -webkit-line-clamp: 2;
                 overflow: hidden;
             }
 
-            .buttons {}
+            .buttons {
+                display: flex;
+                margin: 12px 0;
+
+                button {
+                    font-size: 15px;
+                    padding: 8px 12px;
+                    border-radius: 8px;
+                    color: var(--color-text);
+                    background-color: var(--color-secondary-bg-for-transparent);
+                    user-select: none;
+                    transition: 0.2s;
+
+                    &:hover {
+                        transform: scale(1.06);
+                    }
+
+                    &:active {
+                        transform: scale(0.94);
+                    }
+                }
+            }
+        }
+    }
+
+    .popularTracks {
+        .section-title {
+            font-size: 24px;
+            font-weight: 600;
+            opacity: 0.88;
+            margin-bottom: 16px;
+            color: var(--color-text);
         }
     }
 }
