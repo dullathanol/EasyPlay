@@ -1,9 +1,11 @@
 import Plyr from 'plyr'
 import pinia from '@/utils/pinia.js'
+import { usePlayStore } from '@/stores/playStore.js';
 import { useVideoStore } from "@/stores/videoStore.js";
 import { getDetail, getMvUrl, getSimi } from '@/apis/mvlist.js'
 import { startMusic, pauseMusic } from '@/hooks/Player.js';
 
+const playStore = usePlayStore()
 const videoStore = useVideoStore(pinia)
 
 export const play = () => {
@@ -19,10 +21,10 @@ export const play = () => {
     videoStore.Plyr = new Plyr('#player', config)
 
     videoStore.Plyr.on('playing', () => {
-        pauseMusic()
+        if (playStore.Howl) pauseMusic()
     });
     videoStore.Plyr.on('pause', () => {
-        startMusic()
+        if (playStore.Howl) startMusic()
     });
 }
 

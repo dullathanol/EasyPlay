@@ -30,8 +30,8 @@ const loadData = async () => {
             qrMessage.value = LoginCheck.message;
             localStorage.setItem('cookie', LoginCheck.cookie)
             userStore.loadDetail()
-            clearInterval(timer)
             router.push({ name: 'library' })
+            clearInterval(timer)
         }
     }, 1000);
 }

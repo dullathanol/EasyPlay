@@ -44,7 +44,7 @@ const artist = computed(() => {
                     <a href=""></a>
                     <a href=""></a>
                 </div>
-                <div class="description">{{ artist.briefDesc }}</div>
+                <div class="description">{{ artist?.briefDesc }}</div>
                 <div class="buttons">
                     <ButtonIcon>关注</ButtonIcon>
                 </div>
@@ -52,7 +52,7 @@ const artist = computed(() => {
         </div>
         <div class="popularTracks">
             <div class="section-title"></div>
-            <TrackList></TrackList>
+            <TrackList :playlist="song"></TrackList>
             <div class="show-more">
                 <button @click="showMorePopTracks = !showMorePopTracks">
                     <span v-show="!showMorePopTracks">更多</span>
@@ -109,9 +109,8 @@ const artist = computed(() => {
                 overflow: hidden;
             }
 
-            .buttons {
-                
-            }
+            .buttons {}
         }
     }
-}</style>
+}
+</style>

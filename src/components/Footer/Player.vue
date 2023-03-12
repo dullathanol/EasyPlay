@@ -80,24 +80,16 @@ const volume = computed({
 })
 
 const last = () => {
-    if (playStore.Howl) {
-        playLast()
-    }
+    if (playStore.Howl) playLast()
 }
 const start = () => {
-    if (playStore.Howl) {
-        startMusic()
-    }
+    if (playStore.Howl) startMusic()
 }
 const pause = () => {
-    if (playStore.Howl) {
-        pauseMusic()
-    }
+    if (playStore.Howl) pauseMusic()
 }
 const next = () => {
-    if (playStore.Howl) {
-        playNext()
-    }
+    if (playStore.Howl) playNext()
 }
 </script>
 
