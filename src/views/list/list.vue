@@ -1,12 +1,12 @@
 <script setup>
 import Cover from '@/components/Body/Cover.vue';
-import TrackList from '@/components/Body/TrackList.vue';
 import Detail from '@/components/Body/Detail.vue';
 import SvgIcon from '@/components/Plugins/SvgIcon.vue';
-import { getDetail } from '@/apis/playlist.js'
-import { FormatDate } from '@/utils/common.js'
+import TrackList from '@/components/Body/TrackList.vue';
 import { useDetailStore } from '@/stores/detailStore.js'
 import { useRoute, useRouter } from 'vue-router';
+import { getDetail } from '@/apis/playlist.js'
+import { FormatDate } from '@/utils/common.js'
 import { ref, computed, watch } from 'vue';
 
 const route = useRoute()
@@ -96,7 +96,7 @@ const heart = () => {
             .artist {
                 font-size: 18px;
                 opacity: 0.88;
-                margin: 24px 0;
+                margin: 12px 0;
                 color: var(--color-text);
             }
 
@@ -109,7 +109,7 @@ const heart = () => {
             .description {
                 font-size: 14px;
                 opacity: 0.88;
-                margin: 24px 0;
+                margin: 12px 0;
                 color: var(--color-text);
                 display: -webkit-box;
                 -webkit-box-orient: vertical;

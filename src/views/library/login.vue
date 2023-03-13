@@ -1,10 +1,9 @@
 <script setup>
-import { getLoginKey, getLoginCreate, getLoginCheck, getLoginStatus } from '@/apis/login.js'
-import { useUserStore } from '@/stores/userStore.js';
+import { getLoginKey, getLoginCreate, getLoginCheck } from '@/apis/login.js'
+import { initCookie } from '@/hooks/init.js';
 import { useRouter } from 'vue-router';
 import { ref } from 'vue';
 
-const userStore = useUserStore()
 const router = useRouter()
 
 const qrImg = ref(null)
@@ -29,8 +28,9 @@ const loadData = async () => {
         if (LoginCheck.code == 803) {
             qrMessage.value = LoginCheck.message;
             localStorage.setItem('cookie', LoginCheck.cookie)
-            userStore.loadDetail()
-            router.push({ name: 'library' })
+            initCookie().then(() => {
+                router.push({ name: 'library' })
+            })
             clearInterval(timer)
         }
     }, 1000);

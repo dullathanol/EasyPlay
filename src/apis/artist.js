@@ -1,9 +1,20 @@
 import request from "@/utils/request.js";
 
 //收藏的歌手列表
-export const getSublist = () => {
+export const getArtistSublist = () => {
     return request({
         url: '/artist/sublist',
+        method: 'get',
+        params: {
+            timestamp: new Date().getTime(),
+        }
+    })
+}
+
+//收藏的专辑列表
+export const getAlbumSublist = () => {
+    return request({
+        url: '/album/sublist',
         method: 'get',
         params: {
             timestamp: new Date().getTime(),
@@ -50,6 +61,14 @@ export const getArtistFollow = (id) => {
 export const getArtistAlbum = (id) => {
     return request({
         url: `/artist/album?id=${id}`,
+        method: 'get',
+    })
+}
+
+//获取专辑内容
+export const getAlbum = (id) => {
+    return request({
+        url: `/album?id=${id}`,
         method: 'get',
     })
 }

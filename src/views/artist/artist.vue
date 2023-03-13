@@ -1,10 +1,13 @@
 <script setup>
+import Detail from '@/components/Body/Detail.vue';
 import TrackList from '@/components/Body/TrackList.vue';
-import { getArtistDetail, getArtistFollow, getArtistSong } from '@/apis/artist.js';
-import { useRoute } from 'vue-router';
+import { getArtistDetail, getArtistFollow, getArtistSong, getArtistSub } from '@/apis/artist.js';
+import { useDetailStore } from '@/stores/detailStore.js'
 import { ref, computed, watch } from 'vue';
+import { useRoute } from 'vue-router';
 
 const route = useRoute()
+const detailStore = useDetailStore()
 
 const detail = ref([{}])
 const follow = ref([{}])
@@ -22,13 +25,16 @@ const lodaData = () => {
     getArtistSong(route.query.id).then((Song) => {
         song.value = Song.songs
     })
-
 }
 
 lodaData()
 
 const artist = computed(() => {
     return detail.value.artist
+})
+
+const identify = computed(() => {
+    return detail.value.identify
 })
 
 watch(() => route.query.id, () => {
@@ -45,8 +51,8 @@ watch(() => route.query.id, () => {
             </div>
             <div class="right">
                 <div class="name">{{ artist?.name }}</div>
-                <div class="artist" v-for="item in artist?.identifyTag">{{ item }}</div>
-                <div class="description">{{ artist?.briefDesc }}</div>
+                <div class="artist">{{ identify?.imageDesc }}</div>
+                <div class="description" @click="detailStore.showFullDescription = true">{{ artist?.description }}</div>
                 <div class="buttons">
                     <button>关注</button>
                 </div>
@@ -56,6 +62,7 @@ watch(() => route.query.id, () => {
             <div class="section-title">热门歌曲</div>
             <TrackList :playlist="song"></TrackList>
         </div>
+        <Detail v-if="detailStore.showFullDescription" :detail="'歌手介绍'">{{ artist?.description }}</Detail>
     </div>
 </template>
 
@@ -80,8 +87,19 @@ watch(() => route.query.id, () => {
 
         .right {
             .name {
-                font-size: 56px;
+                font-size: 36px;
                 font-weight: 700;
+
+                .alias {
+                    display: inline-block;
+                    font-weight: normal;
+                    font-size: 16px;
+                    opacity: 0.88;
+
+                    span {
+                        margin-right: 12px;
+                    }
+                }
             }
 
             .artist {
@@ -95,7 +113,7 @@ watch(() => route.query.id, () => {
                 opacity: 0.88;
                 display: -webkit-box;
                 -webkit-box-orient: vertical;
-                -webkit-line-clamp: 2;
+                -webkit-line-clamp: 3;
                 overflow: hidden;
             }
 

@@ -86,12 +86,18 @@ export const startProgress = () => {
 }
 
 export const startMusic = () => {
+    if (!playStore.Howl && !playStore.songId) return
+    if (!playStore.Howl && playStore.songId) {
+        addSong(playStore.songId, playStore.currentIndex, true)
+        return
+    }
     if (!playStore.playing) {
         playStore.Howl.play()
     }
 }
 
 export const pauseMusic = () => {
+    if (!playStore.Howl) return
     clearInterval(musicProgress)
     if (playStore.playing) {
         playStore.Howl.fade(playStore.volume, 0, 200)
@@ -103,6 +109,7 @@ export const pauseMusic = () => {
 }
 
 export const playLast = () => {
+    if (!playStore.Howl) return
     let id = null
     let index = null
     if (playStore.playMode != 2) {
@@ -124,6 +131,7 @@ export const playLast = () => {
 
 
 export const playNext = () => {
+    if (!playStore.Howl) return
     let id = null
     let index = null
     if (playStore.playMode != 2) {

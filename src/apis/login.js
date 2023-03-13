@@ -25,12 +25,24 @@ export const getLoginCheck = (key) => {
 }
 
 //登录状态
-export const getLoginStatus = (cookie) => {
+export const getLoginStatus = () => {
     return request({
         url: `/login/status?timerstamp=${Date.now()}`,
         method: 'post',
-        data: {
-            cookie,
+        params: {
+            timestamp: new Date().getTime(),
         }
     })
 }
+
+//退出登录
+export const getLogout = () => {
+    return request({
+        url: '/logout',
+        method: 'post',
+        params: {
+            timestamp: new Date().getTime(),
+        }
+    })
+}
+

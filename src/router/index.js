@@ -37,13 +37,6 @@ const router = createRouter({
       component: () => import('@/views/library/library.vue'),
       children: [
         {
-          path: '/library',
-          redirect: '/library/like'
-        }, {
-          path: 'like',
-          name: 'like',
-          component: () => import('@/views/library/like.vue')
-        }, {
           path: 'likelist',
           name: 'likelist',
           component: () => import('@/views/list/list.vue')
@@ -73,6 +66,10 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: () => import('@/views/library/login.vue')
+    }, {
+      path: '/track',
+      name: 'track',
+      component: () => import('@/views/list/track.vue')
     }
   ]
 })

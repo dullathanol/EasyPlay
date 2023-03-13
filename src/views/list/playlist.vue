@@ -9,7 +9,7 @@ const active = ref('personalized')
 const type = ref('personalized')
 const playlist = ref([{}])
 const catList = ref([{}])
-const list = ref([{}])
+const list = ref([])
 
 const loadData = async () => {
     const CatList = await getCatlist()
@@ -128,7 +128,7 @@ const toggleCat = async (sub) => {
 
     .panel {
         margin: 10px 0;
-        padding: 0 20px 20px 20px;
+        padding: 20px;
         border-radius: 10px;
         color: var(--color-text);
         background: var(--color-secondary-bg);

@@ -1,5 +1,6 @@
 <script setup>
 import { computed } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import { like } from '@/hooks/PlayList.js';
 import { usePlayStore } from '@/stores/playStore.js';
 import { useUserStore } from '@/stores/userStore.js';
@@ -11,6 +12,8 @@ import SvgIcon from '@/components/Plugins/SvgIcon.vue';
 import VueSlider from 'vue-slider-component';
 import '@/assets/css/slider.css'
 
+const route = useRoute()
+const router = useRouter()
 const playStore = usePlayStore()
 const userStore = useUserStore()
 
@@ -57,7 +60,7 @@ const artists = computed(() => {
 })
 
 const isLike = computed(() => {
-    return userStore.likelist.includes(playStore.songList[playStore.currentIndex]?.id)
+    return userStore.likelist?.includes(playStore.songList[playStore.currentIndex]?.id)
 })
 
 const progress = computed({
@@ -79,18 +82,14 @@ const volume = computed({
     }
 })
 
-const last = () => {
-    if (playStore.Howl) playLast()
+const track = () => {
+    if (route.name == 'track') {
+        router.go(-1)
+    } else {
+        router.push({ name: 'track' })
+    }
 }
-const start = () => {
-    if (playStore.Howl) startMusic()
-}
-const pause = () => {
-    if (playStore.Howl) pauseMusic()
-}
-const next = () => {
-    if (playStore.Howl) playNext()
-}
+
 </script>
 
 <template>
@@ -121,21 +120,21 @@ const next = () => {
             </div>
             <div class="middle-control-buttons">
                 <div class="container">
-                    <ButtonIcon title="上一首" @click="last">
+                    <ButtonIcon title="上一首" @click="playLast">
                         <SvgIcon icon-class="previous"></SvgIcon>
                     </ButtonIcon>
                     <ButtonIcon :title="playStore.playing ? '暂停' : '播放'" class="play">
-                        <SvgIcon v-show="!playStore.playing" icon-class="play" @click="start"></SvgIcon>
-                        <SvgIcon v-show="playStore.playing" icon-class="pause" @click="pause"></SvgIcon>
+                        <SvgIcon v-show="!playStore.playing" icon-class="play" @click="startMusic"></SvgIcon>
+                        <SvgIcon v-show="playStore.playing" icon-class="pause" @click="pauseMusic"></SvgIcon>
                     </ButtonIcon>
-                    <ButtonIcon title="下一首" @click="next">
+                    <ButtonIcon title="下一首" @click="playNext">
                         <SvgIcon icon-class="next"></SvgIcon>
                     </ButtonIcon>
                 </div>
             </div>
             <div class="right-control-buttons">
                 <div class="container">
-                    <ButtonIcon title="播放列表">
+                    <ButtonIcon title="播放列表" @click="track">
                         <SvgIcon icon-class="list"></SvgIcon>
                     </ButtonIcon>
                     <ButtonIcon :title="title" @click="changePlayMode">
