@@ -38,9 +38,6 @@ export const getUserDetail = (id) => {
     return request({
         url: `/user/detail?uid=${id}`,
         method: 'get',
-        params: {
-            timestamp: new Date().getTime(),
-        }
     })
 }
 
@@ -88,7 +85,7 @@ export const getLike = (id, like) => {
     })
 }
 
-//喜欢音乐
+//喜欢音乐列表
 export const getLikelist = (uid) => {
     return request({
         url: `/likelist?uid=${uid}`,

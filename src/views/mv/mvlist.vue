@@ -1,6 +1,6 @@
 <script setup>
 import SvgIcon from '@/components/Plugins/SvgIcon.vue';
-import MvListCover from '@/components/Body/MvListCover.vue';
+import ListCover from '@/components/Body/ListCover.vue';
 import { getMvAll, getFirst, getExclusive } from '@/apis/mvlist.js'
 import { mvArea, mvType, mvOrder } from '@/utils/data.js'
 import { ref, reactive } from 'vue';
@@ -25,7 +25,7 @@ const loadData = async () => {
 const all = async (info) => {
     showCatOptions.value = false
     active.value = info
-    const MvAll = await getMvAll(10)
+    const MvAll = await getMvAll(50)
     mvlist.value = MvAll.data
 }
 
@@ -99,7 +99,7 @@ const toggleCat = async (item, type) => {
 
         </div>
         <div class="playlists">
-            <MvListCover class="mv-row" :mvlist="mvlist"></MvListCover>
+            <ListCover class="mv-row" :list="mvlist" :type="'mvs'"></ListCover>
         </div>
     </div>
 </template>
@@ -120,19 +120,16 @@ const toggleCat = async (item, type) => {
             font-weight: 600;
             border-radius: 8px;
             color: var(--color-text);
-            background: var(--color-secondary-bg);
             user-select: none;
             cursor: pointer;
             transition: 0.2s;
 
             &:hover {
-                color: var(--color-primary);
-                background: var(--color-primary-bg);
+                background: var(--color-secondary-bg);
             }
 
             &.active {
                 color: var(--color-primary);
-                background-color: var(--color-primary-bg);
 
                 .svg-icon {
                     color: var(--color-primary);
@@ -180,12 +177,10 @@ const toggleCat = async (item, type) => {
 
                         &:hover {
                             color: var(--color-primary);
-                            background: var(--color-primary-bg);
                         }
 
                         &.active {
                             color: var(--color-primary);
-                            background-color: var(--color-primary-bg);
                         }
                     }
                 }

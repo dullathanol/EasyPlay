@@ -1,7 +1,8 @@
 <script setup>
-import { computed } from 'vue';
+import { getLike } from '@/apis/user.js';
+import { ref, computed, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { like } from '@/hooks/PlayList.js';
+import { Likelist } from '@/hooks/init.js';
 import { usePlayStore } from '@/stores/playStore.js';
 import { useUserStore } from '@/stores/userStore.js';
 import { FormatTrackTime } from '@/utils/common.js';
@@ -16,6 +17,17 @@ const route = useRoute()
 const router = useRouter()
 const playStore = usePlayStore()
 const userStore = useUserStore()
+
+const isLike = ref(false)
+
+Likelist(playStore.songList[playStore.currentIndex].id).then((value) => {
+    isLike.value = value
+})
+
+const like = (value) => {
+    isLike.value = !isLike.value
+    getLike(playStore.songList[playStore.currentIndex].id, value)
+}
 
 const title = computed(() => {
     if (playStore.playMode == 0) {
@@ -59,10 +71,6 @@ const artists = computed(() => {
     }
 })
 
-const isLike = computed(() => {
-    return userStore.likelist?.includes(playStore.songList[playStore.currentIndex]?.id)
-})
-
 const progress = computed({
     get() {
         return playStore.progress;
@@ -90,6 +98,12 @@ const track = () => {
     }
 }
 
+watch(() => playStore.songList[playStore.currentIndex].id, () => {
+    Likelist(playStore.songList[playStore.currentIndex].id).then((value) => {
+        isLike.value = value
+    })
+})
+
 </script>
 
 <template>
@@ -110,10 +124,8 @@ const track = () => {
                     </div>
                     <div class="like-button">
                         <ButtonIcon v-show="userStore.login && playStore.songList[playStore.currentIndex]">
-                            <SvgIcon v-show="!isLike" @click="like(playStore.songList[playStore.currentIndex]?.id, 'true')"
-                                icon-class="heart"></SvgIcon>
-                            <SvgIcon v-show="isLike" @click="like(playStore.songList[playStore.currentIndex]?.id, 'false')"
-                                icon-class="heart-solid"></SvgIcon>
+                            <SvgIcon v-show="!isLike" @click="like('true')" icon-class="heart"></SvgIcon>
+                            <SvgIcon v-show="isLike" @click="like('false')" icon-class="heart-solid"></SvgIcon>
                         </ButtonIcon>
                     </div>
                 </div>

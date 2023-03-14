@@ -33,6 +33,17 @@ export const getArtistSub = (id, sub) => {
     })
 }
 
+//收藏/取消收藏专辑
+export const getAlbumSub = (id, sub) => {
+    return request({
+        url: `/album/sub?id=${id}&t=${sub}`,
+        method: 'get',
+        params: {
+            timestamp: new Date().getTime(),
+        }
+    })
+}
+
 //获取歌手详情
 export const getArtistDetail = (id) => {
     return request({

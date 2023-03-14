@@ -1,23 +1,35 @@
 <script setup>
 import ArtistsName from '@/components/Body/ArtistsName.vue';
 import TrackList from '@/components/Body/TrackList.vue';
+import SvgIcon from '@/components/Plugins/SvgIcon.vue';
 import Detail from '@/components/Body/Detail.vue';
 import { useDetailStore } from '@/stores/detailStore.js'
+import { getAlbum, getAlbumSub } from '@/apis/artist.js';
 import { FormatDate } from '@/utils/common.js'
-import { getAlbum } from '@/apis/artist.js';
+import { AlbumSublist } from '@/hooks/init.js';
 import { useRoute } from 'vue-router';
 import { ref } from 'vue';
 
 const route = useRoute()
 const detailStore = useDetailStore()
 
+const isLike = ref(false)
 const album = ref([{}])
 const songs = ref([{}])
+
+AlbumSublist(route.query.id).then((value) => {
+    console.log(value);
+    isLike.value = value
+})
+
+const like = (value) => {
+    isLike.value = !isLike.value
+    getAlbumSub(route.query.id, value)
+}
 
 getAlbum(route.query.id).then((Album) => {
     album.value = Album.album
     songs.value = Album.songs
-    console.log(album.value);
 })
 
 </script>
@@ -36,7 +48,14 @@ getAlbum(route.query.id).then((Album) => {
                 <div class="data-and-count">更新于 {{ FormatDate(album.publishTime) }} · {{ songs.length }} 首歌</div>
                 <div class="description" @click="detailStore.showFullDescription = true">{{ album.description }}</div>
                 <div class="buttons">
-                    <button>收藏</button>
+                    <button v-show="!isLike" @click="like(1)">
+                        <SvgIcon icon-class="heart"></SvgIcon>
+                        收藏
+                    </button>
+                    <button v-show="isLike" @click="like(0)">
+                        <SvgIcon icon-class="heart-solid"></SvgIcon>
+                        以收藏
+                    </button>
                 </div>
             </div>
         </div>
@@ -96,9 +115,10 @@ getAlbum(route.query.id).then((Album) => {
             }
 
             .buttons {
-                display: flex;
-
                 button {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
                     font-size: 15px;
                     padding: 8px 12px;
                     border-radius: 8px;
@@ -113,6 +133,11 @@ getAlbum(route.query.id).then((Album) => {
 
                     &:active {
                         transform: scale(0.94);
+                    }
+
+                    .svg-icon {
+                        margin-right: 6px;
+                        color: var(--color-primary);
                     }
                 }
             }

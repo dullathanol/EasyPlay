@@ -3,7 +3,6 @@ import { getNewsong } from '@/apis/playlist.js';
 import { getRecommendSongs } from '@/apis/user.js';
 import { useUserStore } from '@/stores/userStore.js';
 import { usePlaylistStore } from '@/stores/playlistStore.js';
-import { getLike } from '@/apis/user.js'
 
 const userStore = useUserStore(pinia)
 const playlistStore = usePlaylistStore(pinia)
@@ -18,19 +17,5 @@ export const getRecommend = () => {
         getNewsong().then((Newsong) => {
             playlistStore.recommendSong = Newsong.result
         })
-    }
-}
-
-export const like = async (id, like) => {
-    await getLike(id, like)
-    if (like === 'true') {
-        userStore.likelist.push(id)
-    }
-    if (like === 'false') {
-        for (let i = 0; i < userStore.likelist.length; i++) {
-            if (userStore.likelist[i] == id) {
-                userStore.likelist.splice(i, 1);
-            }
-        }
     }
 }

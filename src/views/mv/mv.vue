@@ -2,7 +2,7 @@
 import ArtistsName from '@/components/Body/ArtistsName.vue'
 import ButtonIcon from '@/components/Plugins/ButtonIcon.vue';
 import SvgIcon from '@/components/Plugins/SvgIcon.vue';
-import MvListCover from '@/components/Body/MvListCover.vue';
+import ListCover from '@/components/Body/ListCover.vue';
 import { useVideoStore } from '@/stores/videoStore.js'
 import { play, getVideo } from '@/hooks/Video.js'
 import { FormatPlayCount } from '@/utils/common.js'
@@ -58,7 +58,7 @@ onMounted(() => {
         </div>
         <div class="more-video">
             <div class="section-title">更多推荐</div>
-            <MvListCover class="mv-row" :mvlist="videoStore.simi"></MvListCover>
+            <ListCover class="mv-row" :list="videoStore.simi" :type="'mvs'"></ListCover>
         </div>
     </div>
 </template>

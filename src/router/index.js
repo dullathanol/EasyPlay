@@ -70,6 +70,15 @@ const router = createRouter({
       path: '/track',
       name: 'track',
       component: () => import('@/views/list/track.vue')
+    }, {
+      path: '/search',
+      name: 'search',
+      component: () => import('@/views/expolore/search.vue')
+    }
+    , {
+      path: '/user',
+      name: 'user',
+      component: () => import('@/views/artist/user.vue')
     }
   ]
 })

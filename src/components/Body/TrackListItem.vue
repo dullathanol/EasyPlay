@@ -5,12 +5,23 @@ import { FormatSongTime } from '@/utils/common.js';
 import { useUserStore } from '@/stores/userStore.js';
 import { usePlayStore } from '@/stores/playStore.js';
 import { Likelist } from '@/hooks/init.js';
-import { like } from '@/hooks/PlayList.js';
-import { computed } from 'vue';
+import { getLike } from '@/apis/user.js';
+import { ref, computed } from 'vue';
 
 const props = defineProps(['playlist'])
 const userStore = useUserStore()
 const playStore = usePlayStore()
+
+const isLike = ref(false)
+
+Likelist(props.playlist.id).then((value) => {
+    isLike.value = value
+})
+
+const like = (value) => {
+    isLike.value = !isLike.value
+    getLike(props.playlist.id, value)
+}
 
 const src = computed(() => {
     if (props.playlist?.picUrl) {
@@ -68,8 +79,10 @@ const time = computed(() => {
         </div>
         <div class="actions" v-if="userStore.login">
             <button>
-                <SvgIcon v-show="!Likelist(playlist.id)" @click="like(playlist.id, 'true')" icon-class="heart"></SvgIcon>
-                <SvgIcon v-show="Likelist(playlist.id)" @click="like(playlist.id, 'false')" icon-class="heart-solid"></SvgIcon>
+                <SvgIcon v-show="!isLike" @click="like('true')" icon-class="heart">
+                </SvgIcon>
+                <SvgIcon v-show="isLike" @click="like('false')" icon-class="heart-solid">
+                </SvgIcon>
             </button>
         </div>
         <div class="time">

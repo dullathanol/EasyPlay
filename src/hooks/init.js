@@ -2,6 +2,7 @@ import pinia from '@/utils/pinia.js'
 import { getLoginStatus } from '@/apis/login.js'
 import { getArtistSublist, getAlbumSublist } from '@/apis/artist.js';
 import { getMvSublist } from '@/apis/mvlist.js';
+import { getLike } from '@/apis/user.js'
 import { getUserDetail, getLikelist } from '@/apis/user.js'
 import { useUserStore } from '@/stores/userStore.js';
 import { usePlayStore } from '@/stores/playStore.js';
@@ -27,22 +28,50 @@ export const initDetail = async () => {
 }
 
 export const Likelist = async (id) => {
-    getLikelist(userStore.userId).then((Likelist) => {
-        userStore.likelist = Likelist.ids
-    })
+    const Likelist = await getLikelist(userStore.userId)
+    if (Likelist.ids.includes(id)) {
+        return true
+    } else {
+        return false
+    }
+}
+
+
+export const AlbumSublist = async (id) => {
+    const AlbumSublist = await getAlbumSublist()
+    let ids = []
+    AlbumSublist.data.forEach(data => {
+        ids.push(String(data.id))
+    });
+    if (ids.includes(id)) {
+        return true
+    } else {
+        return false
+    }
 }
 
 export const ArtistSublist = async (id) => {
     const ArtistSublist = await getArtistSublist()
-    userStore.artistSublist = ArtistSublist.data
-}
-
-export const AlbumSublist = async (id) => {
-    const AlbumSublist = await getAlbumSublist()
-    userStore.albumSublist = AlbumSublist.data
+    let ids = []
+    ArtistSublist.data.forEach(data => {
+        ids.push(String(data.id))
+    });
+    if (ids.includes(id)) {
+        return true
+    } else {
+        return false
+    }
 }
 
 export const MvSublist = async (id) => {
     const MvSublist = await getMvSublist()
-    userStore.mvSublist = MvSublist.data
+    let ids = []
+    MvSublist.data.forEach(data => {
+        ids.push(String(data.id))
+    });
+    if (ids.includes(id)) {
+        return true
+    } else {
+        return false
+    }
 }

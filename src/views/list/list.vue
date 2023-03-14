@@ -43,7 +43,7 @@ const heart = () => {
     <div class="playlist" :class="{ active: !route.path.indexOf('/library') }">
         <div class="playlist-info">
             <div class="cover">
-                <Cover :item="playlist" :type="'coverImgUrl'"></Cover>
+                <img :src="playlist.coverImgUrl">
             </div>
             <div class="info">
                 <div class="title">{{ playlist.name }}</div>
@@ -78,6 +78,12 @@ const heart = () => {
 
         .cover {
             flex: 1;
+
+            img {
+                width: 100%;
+                border-radius: 0.75rem;
+                user-select: none;
+            }
         }
 
         .info {

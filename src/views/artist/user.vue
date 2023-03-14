@@ -1,76 +1,51 @@
 <script setup>
 import Detail from '@/components/Body/Detail.vue';
-import TrackList from '@/components/Body/TrackList.vue';
-import { getArtistDetail, getArtistFollow, getArtistSong, getArtistSub } from '@/apis/artist.js';
 import { useDetailStore } from '@/stores/detailStore.js'
-import { ref, computed, watch } from 'vue';
+import { getUserDetail } from '@/apis/user.js';
 import { useRoute } from 'vue-router';
+import { ref, computed } from 'vue';
 
 const route = useRoute()
 const detailStore = useDetailStore()
 
 const detail = ref([{}])
-const follow = ref([{}])
-const song = ref([{}])
 
-const lodaData = () => {
-    getArtistDetail(route.query.id).then((Detail) => {
-        detail.value = Detail.data
-    })
-
-    getArtistFollow(route.query.id).then((Follow) => {
-        follow.value = Follow.data
-    })
-
-    getArtistSong(route.query.id).then((Song) => {
-        song.value = Song.songs
-    })
-}
-
-lodaData()
-
-const artist = computed(() => {
-    return detail.value.artist
+getUserDetail(route.query.id).then((Detail) => {
+    detail.value = Detail
 })
 
-const identify = computed(() => {
-    return detail.value.identify
-})
-
-watch(() => route.query.id, () => {
-    lodaData()
+const profile = computed(() => {
+    return detail.value.profile
 })
 
 </script>
 
 <template>
-    <div class="artist-page">
-        <div class="artist-info">
+    <div class="user-page">
+        <div class="user-info">
             <div class="left">
-                <img :src="artist?.cover">
+                <img :src="profile?.avatarUrl">
             </div>
             <div class="right">
-                <div class="name">{{ artist?.name }}</div>
-                <div class="artist">{{ identify?.imageDesc }}</div>
-                <div class="description" @click="detailStore.showFullDescription = true">{{ artist?.briefDesc }}</div>
+                <div class="name">{{ profile?.nickname }}</div>
+                <div class="artist" v-if="profile?.artistName">歌手： {{ profile?.artistName }}</div>
+                <div class="artist">等级： {{ detail.level }} 级</div>
+                <div class="artist">听歌：{{ detail.listenSongs }} 首</div>
+                <div class="description" @click="detailStore.showFullDescription = true">{{ profile?.signature }}</div>
                 <div class="buttons">
                     <button>关注</button>
                 </div>
             </div>
         </div>
-        <div class="popularTracks">
-            <div class="section-title">热门歌曲</div>
-            <TrackList :playlist="song"></TrackList>
-        </div>
-        <Detail v-if="detailStore.showFullDescription" :detail="'歌手介绍'">{{ artist?.briefDesc }}</Detail>
+        <Detail v-if="detailStore.showFullDescription" :detail="'个性签名'">{{ profile?.signature }}</Detail>
     </div>
 </template>
 
 <style lang='less' scoped>
-.artist-page {
+.user-page {
     margin: 64px 10vw 96px 10vw;
 
-    .artist-info {
+    .user-info {
         display: flex;
         align-items: center;
         margin-bottom: 26px;

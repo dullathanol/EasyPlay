@@ -1,6 +1,6 @@
 <script setup>
 import SvgIcon from '@/components/Plugins/SvgIcon.vue';
-import PlayListCover from '@/components/Body/PlayListCover.vue';
+import ListCover from '@/components/Body/ListCover.vue';
 import { getPersonalized, getHighquality, getToplist, getCatlist, getPlayList } from '@/apis/playlist.js'
 import { ref } from 'vue';
 
@@ -34,7 +34,7 @@ const loadPlayList = async (limit, cat) => {
 const personalized = async (info) => {
     showCatOptions.value = false
     active.value = info
-    type.value = 'picUrl'
+    type.value = 'playlist'
     const Personalized = await getPersonalized(48)
     playlist.value = Personalized.result
 }
@@ -42,7 +42,7 @@ const personalized = async (info) => {
 const highquality = async (info) => {
     showCatOptions.value = false
     active.value = info
-    type.value = 'coverImgUrl'
+    type.value = 'playlists'
     const Highquality = await getHighquality(48)
     playlist.value = Highquality.playlists
 }
@@ -50,14 +50,14 @@ const highquality = async (info) => {
 const rank = async (info) => {
     showCatOptions.value = false
     active.value = info
-    type.value = 'coverImgUrl'
+    type.value = 'playlists'
     const Toplist = await getToplist()
     playlist.value = Toplist.list
 }
 
 const toggleCat = async (sub) => {
     active.value = sub.name
-    type.value = 'highquality'
+    type.value = 'playlists'
     loadPlayList(48, sub.name)
 }
 </script>
@@ -84,7 +84,7 @@ const toggleCat = async (sub) => {
             </div>
         </div>
         <div class="playlists">
-            <PlayListCover :playlist="playlist" :type="type"></PlayListCover>
+            <ListCover class="play-row" :list="playlist" :type="type"></ListCover>
         </div>
     </div>
 </template>
@@ -105,19 +105,16 @@ const toggleCat = async (sub) => {
             font-weight: 600;
             border-radius: 8px;
             color: var(--color-text);
-            background: var(--color-secondary-bg);
             user-select: none;
             cursor: pointer;
             transition: 0.2s;
 
             &:hover {
-                color: var(--color-primary);
-                background: var(--color-primary-bg);
+                background: var(--color-secondary-bg);
             }
 
             &.active {
                 color: var(--color-primary);
-                background-color: var(--color-primary-bg);
 
                 .svg-icon {
                     color: var(--color-primary);
@@ -165,12 +162,10 @@ const toggleCat = async (sub) => {
 
                         &:hover {
                             color: var(--color-primary);
-                            background: var(--color-primary-bg);
                         }
 
                         &.active {
                             color: var(--color-primary);
-                            background-color: var(--color-primary-bg);
                         }
                     }
                 }
@@ -180,6 +175,11 @@ const toggleCat = async (sub) => {
 
     .playlists {
         margin-top: 24px;
+        .play-row{
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 30px 25px;
+        }
     }
 }
 </style>

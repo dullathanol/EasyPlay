@@ -1,22 +1,11 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
 import SvgIcon from '@/components/Plugins/SvgIcon.vue';
 
-const props = defineProps(['item', 'type'])
+const props = defineProps(['src'])
 
 const focus = ref(false)
 
-const Url = computed(() => {
-    if (props.type === 'picUrl') {
-        return props.item.picUrl
-    }
-    if (props.type === 'cover') {
-        return props.item.cover
-    }
-    if (props.type === 'coverImgUrl') {
-        return props.item.coverImgUrl
-    }
-})
 </script>
 
 <template>
@@ -26,7 +15,7 @@ const Url = computed(() => {
                 <SvgIcon icon-class="play"></SvgIcon>
             </button>
         </div>
-        <img :src="Url">
+        <img :src="src">
     </div>
 </template>
 
@@ -45,8 +34,8 @@ const Url = computed(() => {
 
         .play-button {
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
             color: white;
             backdrop-filter: blur(8px);
             height: 45px;

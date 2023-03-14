@@ -1,9 +1,7 @@
 <script setup>
 import RecommendedDaily from '@/components/Body/RecommendedDaily.vue';
 import FMCard from '@/components/Body/FMCard.vue';
-import PlayListCover from '@/components/Body/PlayListCover.vue';
-import MvListCover from '@/components/Body/MvListCover.vue';
-import RankListCover from '@/components/Body/RankListCover.vue';
+import ListCover from '@/components/Body/ListCover.vue';
 import { getPersonalized, getToplist } from '@/apis/playlist.js'
 import { getMvAll } from '@/apis/mvlist.js'
 import { ref } from 'vue';
@@ -18,7 +16,7 @@ const loadData = async () => {
     const MvAll = await getMvAll(10)
     mvAll.value = MvAll.data
     const Toplist = await getToplist()
-    toplist.value = Toplist.list.slice(0, 5)
+    toplist.value = Toplist.list.slice(0, 6)
 }
 
 loadData()
@@ -38,21 +36,21 @@ loadData()
                 推荐歌单
                 <router-link to="/expolore">查看更多</router-link>
             </div>
-            <PlayListCover :playlist="playlist"></PlayListCover>
+            <ListCover class="play-row" :list="playlist" :type="'playlist'"></ListCover>
         </div>
         <div class="index-row">
             <div class="title">
                 推荐MV
                 <router-link to="/expolore">查看更多</router-link>
             </div>
-            <MvListCover class="mv-row" :mvlist="mvAll"></MvListCover>
+            <ListCover class="mv-row" :list="mvAll" :type="'mvs'"></ListCover>
         </div>
         <div class="index-row">
             <div class="title">
                 排行榜
                 <router-link to="/expolore">查看更多</router-link>
             </div>
-            <RankListCover :toplist="toplist"></RankListCover>
+            <ListCover class="play-row" :list="toplist" :type="'rank'"></ListCover>
         </div>
     </div>
 </template>
@@ -78,6 +76,12 @@ loadData()
                 font-weight: 600;
                 opacity: 0.68;
             }
+        }
+
+        .play-row {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 30px 25px;
         }
 
         .mv-row {
