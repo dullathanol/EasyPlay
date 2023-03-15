@@ -95,3 +95,25 @@ export const getLikelist = (uid) => {
         }
     })
 }
+
+//获取用户关注列表
+export const getUserFollow = (id) => {
+    return request({
+        url: `/user/follows?uid=${id}`,
+        method: 'get',
+        params: {
+            timestamp: new Date().getTime(),
+        }
+    })
+}
+
+//收藏/取消收藏用户
+export const getFollow = (id, sub) => {
+    return request({
+        url: `/follow?id=${id}&t=${sub}`,
+        method: 'get',
+        params: {
+            timestamp: new Date().getTime(),
+        }
+    })
+}

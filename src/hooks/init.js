@@ -1,11 +1,10 @@
 import pinia from '@/utils/pinia.js'
-import { getLoginStatus } from '@/apis/login.js'
+import { getUserDetail, getLikelist, getUserFollow } from '@/apis/user.js'
 import { getArtistSublist, getAlbumSublist } from '@/apis/artist.js';
-import { getMvSublist } from '@/apis/mvlist.js';
-import { getLike } from '@/apis/user.js'
-import { getUserDetail, getLikelist } from '@/apis/user.js'
 import { useUserStore } from '@/stores/userStore.js';
 import { usePlayStore } from '@/stores/playStore.js';
+import { getLoginStatus } from '@/apis/login.js'
+import { getMvSublist } from '@/apis/mvlist.js';
 
 const userStore = useUserStore(pinia)
 const playStore = usePlayStore(pinia)
@@ -28,7 +27,7 @@ export const initDetail = async () => {
 }
 
 export const Likelist = async (id) => {
-    const Likelist = await getLikelist(userStore.userId)
+    const Likelist = await getLikelist(localStorage.getItem('userId'))
     if (Likelist.ids.includes(id)) {
         return true
     } else {
@@ -36,27 +35,9 @@ export const Likelist = async (id) => {
     }
 }
 
-
 export const AlbumSublist = async (id) => {
     const AlbumSublist = await getAlbumSublist()
-    let ids = []
-    AlbumSublist.data.forEach(data => {
-        ids.push(String(data.id))
-    });
-    if (ids.includes(id)) {
-        return true
-    } else {
-        return false
-    }
-}
-
-export const ArtistSublist = async (id) => {
-    const ArtistSublist = await getArtistSublist()
-    let ids = []
-    ArtistSublist.data.forEach(data => {
-        ids.push(String(data.id))
-    });
-    if (ids.includes(id)) {
+    if (AlbumSublist.data.map(data => data.id).includes(Number(id))) {
         return true
     } else {
         return false
@@ -65,11 +46,7 @@ export const ArtistSublist = async (id) => {
 
 export const MvSublist = async (id) => {
     const MvSublist = await getMvSublist()
-    let ids = []
-    MvSublist.data.forEach(data => {
-        ids.push(String(data.id))
-    });
-    if (ids.includes(id)) {
+    if (MvSublist.data.map(data => data.vid).includes(id)) {
         return true
     } else {
         return false

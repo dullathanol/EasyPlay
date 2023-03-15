@@ -69,8 +69,8 @@ watch(() => route.query.keywords, () => {
 })
 
 const toggle = (type) => {
-    loadData(type)
     active.value = type
+    loadData(type)
 }
 </script>
 
@@ -80,9 +80,9 @@ const toggle = (type) => {
             <div class="button" @click="toggle(1)" :class="{ active: active === 1 }">单曲</div>
             <div class="button" @click="toggle(10)" :class="{ active: active === 10 }">专辑</div>
             <div class="button" @click="toggle(100)" :class="{ active: active === 100 }"> 歌手</div>
-            <div class="button" @click="toggle(1000)" :class="{ active: active === 1000 }"> 歌单</div>
-            <div class="button" @click="toggle(1002)" :class="{ active: active === 1002 }"> 用户</div>
-            <div class="button" @click="toggle(1004)" :class="{ active: active === 1004 }"> MV</div>
+            <div class="button" @click="toggle(1000)" :class="{ active: active === 1000 }">歌单</div>
+            <div class="button" @click="toggle(1002)" :class="{ active: active === 1002 }">用户</div>
+            <div class="button" @click="toggle(1004)" :class="{ active: active === 1004 }">MV</div>
         </div>
         <div class="lists" v-if="active === 1">
             <TrackList :playlist="songs"></TrackList>

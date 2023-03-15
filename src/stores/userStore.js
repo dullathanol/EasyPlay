@@ -6,10 +6,6 @@ export const useUserStore = defineStore('userStore', () => {
     const userId = ref(null)
     const cookie = ref(null)
     const userDetail = ref([{}])
-    const likelist = ref([])
-    const artistSublist = ref([{}])
-    const albumSublist = ref([{}])
-    const mvSublist = ref([{}])
 
-    return { login, userId, cookie, userDetail, likelist, artistSublist, albumSublist, mvSublist }
+    return { login, userId, cookie, userDetail }
 })

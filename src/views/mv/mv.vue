@@ -1,23 +1,40 @@
 <script setup>
 import ArtistsName from '@/components/Body/ArtistsName.vue'
-import ButtonIcon from '@/components/Plugins/ButtonIcon.vue';
 import SvgIcon from '@/components/Plugins/SvgIcon.vue';
 import ListCover from '@/components/Body/ListCover.vue';
 import { useVideoStore } from '@/stores/videoStore.js'
-import { play, getVideo } from '@/hooks/Video.js'
+import { useUserStore } from '@/stores/userStore.js';
 import { FormatPlayCount } from '@/utils/common.js'
+import { play, getVideo } from '@/hooks/Video.js'
+import { MvSublist } from '@/hooks/init.js'
+import { getMvSub } from '@/apis/mvlist.js'
+import { ref, watch, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import { watch, onMounted } from 'vue';
 import 'plyr/dist/plyr.css';
 
 const route = useRoute()
+const userStore = useUserStore()
 const videoStore = useVideoStore()
 
+const isLike = ref(false)
+
 getVideo(route.query.id)
+
+MvSublist(route.query.id).then((value) => {
+    isLike.value = value
+})
+
+const like = (value) => {
+    isLike.value = !isLike.value
+    getMvSub(route.query.id, value)
+}
 
 watch(() => route.query.id, () => {
     if (route.query.id) {
         getVideo(route.query.id)
+        MvSublist(route.query.id).then((value) => {
+            isLike.value = value
+        })
     }
 });
 
@@ -35,10 +52,11 @@ onMounted(() => {
             <div class="video-info">
                 <div class="title">
                     {{ videoStore.detail.name }}
-                    <div class="buttons">
-                        <ButtonIcon>
-                            <SvgIcon icon-class="heart"></SvgIcon>
-                        </ButtonIcon>
+                    <div class="actions" v-if="userStore.login">
+                        <button>
+                            <SvgIcon v-show="!isLike" @click="like(1)" icon-class="heart"></SvgIcon>
+                            <SvgIcon v-show="isLike" @click="like(0)" icon-class="heart-solid"></SvgIcon>
+                        </button>
                     </div>
                 </div>
                 <div class="artists">
@@ -90,14 +108,32 @@ onMounted(() => {
             .title {
                 font-size: 20px;
                 font-weight: 600;
+                display: flex;
+                align-items: center;
 
-                .buttons {
-                    display: inline-block;
+                .actions {
+                    button {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        padding: 8px;
+                        background: transparent;
+                        border-radius: 25%;
+                        transition: transform 0.2s;
 
-                    .svg-icon {
-                        height: 18px;
-                        width: 18px;
-                        color: var(--color-primary);
+                        .svg-icon {
+                            height: 16px;
+                            width: 16px;
+                            color: var(--color-primary);
+                        }
+
+                        &:hover {
+                            transform: scale(1.12);
+                        }
+
+                        &:active {
+                            transform: scale(0.96);
+                        }
                     }
                 }
             }

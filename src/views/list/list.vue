@@ -1,16 +1,17 @@
 <script setup>
-import Cover from '@/components/Body/Cover.vue';
 import Detail from '@/components/Body/Detail.vue';
 import SvgIcon from '@/components/Plugins/SvgIcon.vue';
 import TrackList from '@/components/Body/TrackList.vue';
 import { useDetailStore } from '@/stores/detailStore.js'
+import { useUserStore } from '@/stores/userStore.js';
 import { useRoute, useRouter } from 'vue-router';
-import { getDetail } from '@/apis/playlist.js'
-import { FormatDate } from '@/utils/common.js'
+import { getDetail, getSubscribe } from '@/apis/playlist.js'
+import { FormatPlayCount, FormatDate } from '@/utils/common.js'
 import { ref, computed, watch } from 'vue';
 
 const route = useRoute()
 const router = useRouter()
+const userStore = useUserStore()
 const detailStore = useDetailStore()
 
 const playlist = ref([{}])
@@ -18,25 +19,27 @@ const playlist = ref([{}])
 const loadData = async (id) => {
     const Detail = await getDetail(id)
     playlist.value = Detail.playlist
+    console.log(playlist.value);
 }
 
 loadData(route.query.id)
-
-watch(router.currentRoute, () => {
-    loadData(route.query.id)
-});
 
 const creator = computed(() => {
     return playlist.value?.creator?.nickname
 })
 
-const play = () => {
+const isLike = computed(() => {
+    return playlist.value.subscribed
+})
 
+const like = (value) => {
+    playlist.value.subscribed = !playlist.value.subscribed
+    getSubscribe(route.query.id, value)
 }
 
-const heart = () => {
-
-}
+watch(router.currentRoute, () => {
+    loadData(route.query.id)
+});
 </script>
 
 <template>
@@ -49,15 +52,19 @@ const heart = () => {
                 <div class="title">{{ playlist.name }}</div>
                 <div class="artist">{{ creator }}</div>
                 <div class="data-and-count">更新于 {{ FormatDate(playlist.updateTime) }} · {{ playlist.trackCount }} 首歌</div>
+                <div class="count">播放 {{ FormatPlayCount(playlist.playCount) }} 收藏
+                    {{ FormatPlayCount(playlist.subscribedCount) }} 分享 {{ FormatPlayCount(playlist.shareCount) }}</div>
                 <div class="description" @click="detailStore.showFullDescription = true">
                     {{ playlist.description }}
                 </div>
-                <div class="buttons">
-                    <button>
-                        <SvgIcon icon-class="play" @click="play"></SvgIcon>
+                <div class="buttons" v-if="userStore.login && playlist.userId != userStore.userId">
+                    <button v-show="!isLike" @click="like(1)">
+                        <SvgIcon icon-class="heart"></SvgIcon>
+                        收藏
                     </button>
-                    <button>
-                        <SvgIcon :icon-class="detailStore.subscribed ? 'heart-solid' : 'heart'" @click="heart"></SvgIcon>
+                    <button v-show="isLike" @click="like(0)">
+                        <SvgIcon icon-class="heart-solid"></SvgIcon>
+                        以收藏
                     </button>
                 </div>
             </div>
@@ -102,8 +109,8 @@ const heart = () => {
             .artist {
                 font-size: 18px;
                 opacity: 0.88;
-                margin: 12px 0;
                 color: var(--color-text);
+                margin: 12px 0;
             }
 
             .data-and-count {
@@ -112,10 +119,16 @@ const heart = () => {
                 color: var(--color-text);
             }
 
-            .description {
+            .count {
                 font-size: 14px;
                 opacity: 0.88;
                 margin: 12px 0;
+                color: var(--color-text);
+            }
+
+            .description {
+                font-size: 14px;
+                opacity: 0.88;
                 color: var(--color-text);
                 display: -webkit-box;
                 -webkit-box-orient: vertical;
@@ -124,28 +137,19 @@ const heart = () => {
             }
 
             .buttons {
-                display: flex;
+                margin: 12px 0 0;
 
                 button {
-                    height: 40px;
-                    min-width: 40px;
-                    margin-right: 12px;
                     display: flex;
-                    justify-content: center;
                     align-items: center;
-                    font-size: 18px;
-                    line-height: 18px;
-                    font-weight: 600;
+                    justify-content: center;
+                    font-size: 15px;
+                    padding: 8px 12px;
                     border-radius: 8px;
+                    color: var(--color-text);
                     background-color: var(--color-secondary-bg-for-transparent);
                     user-select: none;
                     transition: 0.2s;
-
-                    .svg-icon {
-                        width: 16px;
-                        height: 16px;
-
-                    }
 
                     &:hover {
                         transform: scale(1.06);
@@ -153,6 +157,11 @@ const heart = () => {
 
                     &:active {
                         transform: scale(0.94);
+                    }
+
+                    .svg-icon {
+                        margin-right: 6px;
+                        color: var(--color-primary);
                     }
                 }
             }

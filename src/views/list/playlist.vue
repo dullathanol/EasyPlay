@@ -175,7 +175,8 @@ const toggleCat = async (sub) => {
 
     .playlists {
         margin-top: 24px;
-        .play-row{
+
+        .play-row {
             display: grid;
             grid-template-columns: repeat(6, 1fr);
             gap: 30px 25px;

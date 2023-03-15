@@ -1,17 +1,25 @@
 <script setup>
 import Detail from '@/components/Body/Detail.vue';
+import SvgIcon from '@/components/Plugins/SvgIcon.vue';
 import TrackList from '@/components/Body/TrackList.vue';
 import { getArtistDetail, getArtistFollow, getArtistSong, getArtistSub } from '@/apis/artist.js';
 import { useDetailStore } from '@/stores/detailStore.js'
+import { useUserStore } from '@/stores/userStore.js';
 import { ref, computed, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute()
+const userStore = useUserStore()
 const detailStore = useDetailStore()
 
 const detail = ref([{}])
 const follow = ref([{}])
 const song = ref([{}])
+
+const like = (value) => {
+    follow.value.follow = !follow.value.follow
+    getArtistSub(route.query.id, value)
+}
 
 const lodaData = () => {
     getArtistDetail(route.query.id).then((Detail) => {
@@ -37,6 +45,10 @@ const identify = computed(() => {
     return detail.value.identify
 })
 
+const isLike = computed(() => {
+    return follow.value.follow
+})
+
 watch(() => route.query.id, () => {
     lodaData()
 })
@@ -52,9 +64,17 @@ watch(() => route.query.id, () => {
             <div class="right">
                 <div class="name">{{ artist?.name }}</div>
                 <div class="artist">{{ identify?.imageDesc }}</div>
+                <div class="artist">关注：{{ follow.followCnt }} 粉丝：{{ follow.fansCnt }}</div>
                 <div class="description" @click="detailStore.showFullDescription = true">{{ artist?.briefDesc }}</div>
-                <div class="buttons">
-                    <button>关注</button>
+                <div class="buttons" v-if="userStore.login">
+                    <button v-show="!isLike" @click="like(1)">
+                        <SvgIcon icon-class="heart"></SvgIcon>
+                        关注
+                    </button>
+                    <button v-show="isLike" @click="like(0)">
+                        <SvgIcon icon-class="heart-solid"></SvgIcon>
+                        {{ follow.followDay }}
+                    </button>
                 </div>
             </div>
         </div>
@@ -103,7 +123,7 @@ watch(() => route.query.id, () => {
             }
 
             .artist {
-                font-size: 16px;
+                font-size: 15px;
                 opacity: 0.88;
                 margin: 12px 0;
             }
@@ -118,10 +138,12 @@ watch(() => route.query.id, () => {
             }
 
             .buttons {
-                display: flex;
                 margin: 12px 0;
 
                 button {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
                     font-size: 15px;
                     padding: 8px 12px;
                     border-radius: 8px;
@@ -136,6 +158,11 @@ watch(() => route.query.id, () => {
 
                     &:active {
                         transform: scale(0.94);
+                    }
+
+                    .svg-icon {
+                        margin-right: 6px;
+                        color: var(--color-primary);
                     }
                 }
             }

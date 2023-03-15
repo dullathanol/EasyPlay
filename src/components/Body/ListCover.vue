@@ -2,7 +2,7 @@
 import ArtistsName from '@/components/Body/ArtistsName.vue';
 import SvgIcon from '@/components/Plugins/SvgIcon.vue';
 import Cover from '@/components/Body/Cover.vue';
-import { FormatPlayCount } from '@/utils/common.js'
+import { FormatPlayCount, FormatSongTime } from '@/utils/common.js'
 import { useRouter } from 'vue-router';
 
 const router = useRouter()
@@ -45,6 +45,12 @@ const to = (item) => {
             query: { id: item.id }
         })
     }
+    if (props.type === 'submv') {
+        router.push({
+            name: 'mv',
+            query: { id: item.vid }
+        })
+    }
     if (props.type === 'rank') {
         router.push({
             name: 'list',
@@ -75,11 +81,24 @@ const src = (item) => {
     if (props.type === 'rank') {
         return item.coverImgUrl
     }
+    if (props.type === 'submv') {
+        return item.coverUrl
+    }
 }
 
 const playCount = (item) => {
     if (props.type === 'playlists' || 'mvs') {
         return FormatPlayCount(item.playCount)
+    }
+    return false
+}
+
+const playTime = (item) => {
+    if (props.type === 'mvs') {
+        return FormatSongTime(item.duration)
+    }
+    if (props.type === 'submv') {
+        return FormatSongTime(item.durationms)
     }
     return false
 }
@@ -97,9 +116,11 @@ const artists = (item) => {
 const name = (item) => {
     if (props.type === 'userprofiles') {
         return item.nickname
-    } else {
-        return item.name
     }
+    if (props.type === 'submv') {
+        return item.title
+    }
+    return item.name
 }
 </script>
 
@@ -108,10 +129,13 @@ const name = (item) => {
         <div class="item" v-for="item in list" :key="item.id">
             <Cover :src="src(item)" @click="to(item)"></Cover>
             <div class="info">
-                <div class="cover-play" v-if="playCount(item)">
-                    <span class="play-count">
+                <div class="cover-play">
+                    <span class="play-count" v-if="playCount(item)">
                         <SvgIcon icon-class="play"></SvgIcon>
                         {{ playCount(item) }}
+                    </span>
+                    <span class="play-time" v-if="playTime(item)">
+                        {{ playTime(item) }}
                     </span>
                 </div>
                 <div class="cover-artists" v-if="artists(item)">
@@ -136,13 +160,11 @@ const name = (item) => {
             margin-top: 8px;
 
             .cover-play {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
                 font-size: 12px;
                 line-height: 18px;
-                display: -webkit-box;
-                -webkit-box-orient: vertical;
-                -webkit-line-clamp: 2;
-                overflow: hidden;
-                word-break: break-word;
 
                 .play-count {
                     font-weight: 600;
@@ -152,6 +174,11 @@ const name = (item) => {
                         height: 8px;
                         width: 8px;
                     }
+                }
+
+                .play-time {
+                    font-weight: 600;
+                    color: var(--color-text);
                 }
             }
 

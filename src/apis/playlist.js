@@ -59,6 +59,17 @@ export const getDetail = (id) => {
     })
 }
 
+//收藏/取消收藏歌单
+export const getSubscribe = (id, sub) => {
+    return request({
+        url: `/playlist/subscribe?id=${id}&t=${sub}`,
+        method: 'get',
+        params: {
+            timestamp: new Date().getTime(),
+        }
+    })
+}
+
 //是否可用
 export const getCheck = (id) => {
     return request({

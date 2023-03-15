@@ -79,10 +79,8 @@ const time = computed(() => {
         </div>
         <div class="actions" v-if="userStore.login">
             <button>
-                <SvgIcon v-show="!isLike" @click="like('true')" icon-class="heart">
-                </SvgIcon>
-                <SvgIcon v-show="isLike" @click="like('false')" icon-class="heart-solid">
-                </SvgIcon>
+                <SvgIcon v-show="!isLike" @click="like('true')" icon-class="heart"></SvgIcon>
+                <SvgIcon v-show="isLike" @click="like('false')" icon-class="heart-solid"></SvgIcon>
             </button>
         </div>
         <div class="time">

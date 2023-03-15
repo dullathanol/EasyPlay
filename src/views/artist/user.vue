@@ -1,11 +1,14 @@
 <script setup>
 import Detail from '@/components/Body/Detail.vue';
+import SvgIcon from '@/components/Plugins/SvgIcon.vue';
 import { useDetailStore } from '@/stores/detailStore.js'
-import { getUserDetail } from '@/apis/user.js';
+import { useUserStore } from '@/stores/userStore.js';
+import { getUserDetail, getFollow } from '@/apis/user.js';
 import { useRoute } from 'vue-router';
 import { ref, computed } from 'vue';
 
 const route = useRoute()
+const userStore = useUserStore()
 const detailStore = useDetailStore()
 
 const detail = ref([{}])
@@ -14,8 +17,17 @@ getUserDetail(route.query.id).then((Detail) => {
     detail.value = Detail
 })
 
+const like = (value) => {
+    detail.value.profile.followed = !detail.value.profile.followed
+    getFollow(route.query.id, value)
+}
+
 const profile = computed(() => {
     return detail.value.profile
+})
+
+const isLike = computed(() => {
+    return detail.value.profile.followed
 })
 
 </script>
@@ -28,12 +40,20 @@ const profile = computed(() => {
             </div>
             <div class="right">
                 <div class="name">{{ profile?.nickname }}</div>
-                <div class="artist" v-if="profile?.artistName">歌手： {{ profile?.artistName }}</div>
-                <div class="artist">等级： {{ detail.level }} 级</div>
+                <div class="artist" v-if="profile?.artistName">歌手：{{ profile?.artistName }}</div>
+                <div class="artist">等级：{{ detail.level }} 级</div>
                 <div class="artist">听歌：{{ detail.listenSongs }} 首</div>
+                <div class="artist">关注：{{ profile?.follows }} 粉丝：{{ profile?.followeds }}</div>
                 <div class="description" @click="detailStore.showFullDescription = true">{{ profile?.signature }}</div>
-                <div class="buttons">
-                    <button>关注</button>
+                <div class="buttons" v-if="userStore.login">
+                    <button v-show="!isLike" @click="like(1)">
+                        <SvgIcon icon-class="heart"></SvgIcon>
+                        关注
+                    </button>
+                    <button v-show="isLike" @click="like(0)">
+                        <SvgIcon icon-class="heart-solid"></SvgIcon>
+                        以关注
+                    </button>
                 </div>
             </div>
         </div>
@@ -78,7 +98,7 @@ const profile = computed(() => {
             }
 
             .artist {
-                font-size: 16px;
+                font-size: 15px;
                 opacity: 0.88;
                 margin: 12px 0;
             }
@@ -93,10 +113,12 @@ const profile = computed(() => {
             }
 
             .buttons {
-                display: flex;
                 margin: 12px 0;
 
                 button {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
                     font-size: 15px;
                     padding: 8px 12px;
                     border-radius: 8px;
@@ -111,6 +133,11 @@ const profile = computed(() => {
 
                     &:active {
                         transform: scale(0.94);
+                    }
+
+                    .svg-icon {
+                        margin-right: 6px;
+                        color: var(--color-primary);
                     }
                 }
             }

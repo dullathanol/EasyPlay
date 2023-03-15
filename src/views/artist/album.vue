@@ -5,12 +5,14 @@ import SvgIcon from '@/components/Plugins/SvgIcon.vue';
 import Detail from '@/components/Body/Detail.vue';
 import { useDetailStore } from '@/stores/detailStore.js'
 import { getAlbum, getAlbumSub } from '@/apis/artist.js';
+import { useUserStore } from '@/stores/userStore.js';
 import { FormatDate } from '@/utils/common.js'
 import { AlbumSublist } from '@/hooks/init.js';
 import { useRoute } from 'vue-router';
 import { ref } from 'vue';
 
 const route = useRoute()
+const userStore = useUserStore()
 const detailStore = useDetailStore()
 
 const isLike = ref(false)
@@ -18,7 +20,6 @@ const album = ref([{}])
 const songs = ref([{}])
 
 AlbumSublist(route.query.id).then((value) => {
-    console.log(value);
     isLike.value = value
 })
 
@@ -30,6 +31,7 @@ const like = (value) => {
 getAlbum(route.query.id).then((Album) => {
     album.value = Album.album
     songs.value = Album.songs
+    console.log(Album);
 })
 
 </script>
@@ -47,7 +49,7 @@ getAlbum(route.query.id).then((Album) => {
                 </div>
                 <div class="data-and-count">更新于 {{ FormatDate(album.publishTime) }} · {{ songs.length }} 首歌</div>
                 <div class="description" @click="detailStore.showFullDescription = true">{{ album.description }}</div>
-                <div class="buttons">
+                <div class="buttons" v-if="userStore.login">
                     <button v-show="!isLike" @click="like(1)">
                         <SvgIcon icon-class="heart"></SvgIcon>
                         收藏

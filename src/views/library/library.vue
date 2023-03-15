@@ -1,26 +1,30 @@
 <script setup>
 import TrackList from '@/components/Body/TrackList.vue';
+import ListCover from '@/components/Body/ListCover.vue';
 import SvgIcon from '@/components/Plugins/SvgIcon.vue';
+import { getArtistSublist, getAlbumSublist } from '@/apis/artist.js';
+import { getMvSublist } from '@/apis/mvlist.js';
+import { getUserFollow } from '@/apis/user.js'
 import { getAccount, getRecord } from '@/apis/user.js';
 import { useUserStore } from '@/stores/userStore.js';
 import { useRoute, useRouter } from 'vue-router';
 import { FormatDate } from '@/utils/common.js'
 import { getPlaylist } from '@/apis/user.js';
 import { getLogout } from '@/apis/login.js'
-import { ref, watch } from 'vue';
+import { ref, computed, watch } from 'vue';
 
 const route = useRoute()
 const router = useRouter()
 const userStore = useUserStore()
+const id = localStorage.getItem('userId')
 
-const show = ref(false)
 const trackActive = ref(null)
 const changeActive = ref(1)
 const playlist = ref([{}])
 const account = ref([{}])
-const record = ref([])
-
-const id = localStorage.getItem('userId')
+const list = ref([{}])
+const show = ref(false)
+const active = ref(1)
 
 getPlaylist(id).then((Playlist) => {
     playlist.value = Playlist.playlist
@@ -33,23 +37,26 @@ getAccount().then((Account) => {
 const loadData = (type = 1) => {
     if (type == 0) {
         getRecord(id, type).then((Data) => {
-            Data.allData.forEach(song => {
-                record.value.push(song.song)
-            });
+            list.value = Data.allData.map(song => song.song);
         })
     } else {
         getRecord(id, type).then((Data) => {
-            Data.weekData.forEach(song => {
-                record.value.push(song.song)
-            });
+            list.value = Data.weekData.map(song => song.song);
         })
     }
 }
 
 loadData()
 
+const userlist = computed(() => {
+    return playlist.value.filter(list => list.userId == userStore.userId)
+})
+
+const sublist = computed(() => {
+    return playlist.value.filter(list => list.userId != userStore.userId)
+})
+
 const change = (type) => {
-    record.value = []
     changeActive.value = type
     loadData(type)
 }
@@ -58,6 +65,30 @@ const go = (id) => {
     show.value = true
     trackActive.value = id
     router.push({ name: 'likelist', query: { id: id } })
+}
+
+const toggle = (type) => {
+    active.value = type
+    if (type === 3) {
+        getAlbumSublist().then((data) => {
+            list.value = data.data
+        })
+    }
+    if (type === 4) {
+        getArtistSublist().then((data) => {
+            list.value = data.data
+        })
+    }
+    if (type === 5) {
+        getUserFollow(id).then((follow) => {
+            list.value = follow.follow
+        })
+    }
+    if (type === 6) {
+        getMvSublist().then((data) => {
+            list.value = data.data
+        })
+    }
 }
 
 const logout = () => {
@@ -83,7 +114,7 @@ watch(route, () => {
 <template>
     <div class="library">
         <div class="library-row">
-            <div class="track" v-for="item in playlist" @click="go(item.id)" :class="{ active: item.id === trackActive }">
+            <div class="track" v-for="item in userlist" @click="go(item.id)" :class="{ active: item.id === trackActive }">
                 <img :src="item.coverImgUrl">
                 <div class="title">{{ item.name }}</div>
             </div>
@@ -105,14 +136,36 @@ watch(route, () => {
                 </div>
             </div>
             <div class="Tracks">
-                <div class="section-title">
-                    <div class="title">听歌排行</div>
+                <div class="buttons">
+                    <div class="button" @click="toggle(1)" :class="{ active: active === 1 }">听歌排行</div>
+                    <div class="button" @click="toggle(2)" :class="{ active: active === 2 }">收藏歌单</div>
+                    <div class="button" @click="toggle(3)" :class="{ active: active === 3 }">收藏专辑</div>
+                    <div class="button" @click="toggle(4)" :class="{ active: active === 4 }">关注歌手</div>
+                    <div class="button" @click="toggle(5)" :class="{ active: active === 5 }">关注用户</div>
+                    <div class="button" @click="toggle(6)" :class="{ active: active === 6 }">收藏MV</div>
+                </div>
+                <div class="lists" v-if="active === 1">
                     <div class="links">
                         <div @click="change(1)" :class="{ active: changeActive == 1 }">最近一周</div>
                         <div @click="change(0)" :class="{ active: changeActive == 0 }">所有时间</div>
                     </div>
+                    <TrackList :playlist="list"></TrackList>
                 </div>
-                <TrackList :playlist="record"></TrackList>
+                <div class="lists" v-if="active === 2">
+                    <ListCover class="play-row" :list="sublist" :type="'playlists'"></ListCover>
+                </div>
+                <div class="lists" v-if="active === 3">
+                    <ListCover class="play-row" :list="list" :type="'albums'"></ListCover>
+                </div>
+                <div class="lists" v-if="active === 4">
+                    <ListCover class="play-row" :list="list" :type="'artists'"></ListCover>
+                </div>
+                <div class="lists" v-if="active === 5">
+                    <ListCover class="play-row" :list="list" :type="'userprofiles'"></ListCover>
+                </div>
+                <div class="lists" v-if="active === 6">
+                    <ListCover class="mv-row" :list="list" :type="'submv'"></ListCover>
+                </div>
             </div>
         </div>
         <div class="library-view" v-if="show">
@@ -240,20 +293,39 @@ watch(route, () => {
         }
 
         .Tracks {
-            .section-title {
+            .buttons {
                 display: flex;
-                align-items: center;
-                justify-content: space-between;
+                flex-wrap: wrap;
 
-                .title {
-
-                    font-size: 24px;
+                .button {
+                    padding: 8px 16px;
+                    margin: 10px 16px 6px 0;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    font-size: 16px;
                     font-weight: 600;
-                    opacity: 0.88;
-                    margin-bottom: 16px;
+                    border-radius: 8px;
                     color: var(--color-text);
-                }
+                    user-select: none;
+                    cursor: pointer;
+                    transition: 0.2s;
 
+                    &:hover {
+                        background: var(--color-secondary-bg);
+                    }
+
+                    &.active {
+                        color: var(--color-primary);
+
+                        .svg-icon {
+                            color: var(--color-primary);
+                        }
+                    }
+                }
+            }
+
+            .lists {
                 .links {
                     display: flex;
                     justify-content: flex-end;
@@ -282,7 +354,20 @@ watch(route, () => {
                         }
                     }
                 }
+            }
 
+            .play-row {
+                display: grid;
+                grid-template-columns: repeat(6, 1fr);
+                gap: 30px 25px;
+                margin-top: 20px;
+            }
+
+            .mv-row {
+                display: grid;
+                grid-template-columns: repeat(5, 1fr);
+                gap: 30px 25px;
+                margin-top: 20px;
             }
         }
     }

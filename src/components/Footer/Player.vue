@@ -123,7 +123,7 @@ watch(() => playStore.songList[playStore.currentIndex].id, () => {
                         </div>
                     </div>
                     <div class="like-button">
-                        <ButtonIcon v-show="userStore.login && playStore.songList[playStore.currentIndex]">
+                        <ButtonIcon v-if="userStore.login && playStore.songList[playStore.currentIndex]">
                             <SvgIcon v-show="!isLike" @click="like('true')" icon-class="heart"></SvgIcon>
                             <SvgIcon v-show="isLike" @click="like('false')" icon-class="heart-solid"></SvgIcon>
                         </ButtonIcon>
