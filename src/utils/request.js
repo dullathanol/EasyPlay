@@ -3,7 +3,7 @@ import axios from "axios";
 const request = axios.create({
     timeout: 30000,
     withCredentials: true,
-    baseURL: 'http://localhost:3000'
+    baseURL: 'https://service-7x3mck5i-1315208496.gz.apigw.tencentcs.com/release/'
 })
 
 request.interceptors.request.use((config) => {
