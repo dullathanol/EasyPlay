@@ -1,8 +1,8 @@
 import pinia from '@/utils/pinia.js'
-import { getUserDetail, getLikelist, getUserFollow } from '@/apis/user.js'
-import { getArtistSublist, getAlbumSublist } from '@/apis/artist.js';
+import { getUserDetail, getLikelist } from '@/apis/user.js'
 import { useUserStore } from '@/stores/userStore.js';
 import { usePlayStore } from '@/stores/playStore.js';
+import { getAlbumSublist } from '@/apis/artist.js';
 import { getLoginStatus } from '@/apis/login.js'
 import { getMvSublist } from '@/apis/mvlist.js';
 
@@ -14,8 +14,7 @@ export const initCookie = async () => {
     const LoginStatus = await getLoginStatus(userStore.cookie)
     localStorage.setItem('userId', LoginStatus.data.profile.userId)
     userStore.userId = LoginStatus.data.profile.userId
-    const UserDetail = await getUserDetail(userStore.userId)
-    userStore.userDetail = UserDetail.profile
+    userStore.userDetail = await getUserDetail(userStore.userId)
     userStore.login = true
 }
 
@@ -27,6 +26,7 @@ export const initDetail = async () => {
 }
 
 export const Likelist = async (id) => {
+    if (userStore.login === false) return
     const Likelist = await getLikelist(localStorage.getItem('userId'))
     if (Likelist.ids.includes(id)) {
         return true
@@ -36,6 +36,7 @@ export const Likelist = async (id) => {
 }
 
 export const AlbumSublist = async (id) => {
+    if (userStore.login === false) return
     const AlbumSublist = await getAlbumSublist()
     if (AlbumSublist.data.map(data => data.id).includes(Number(id))) {
         return true
@@ -45,6 +46,7 @@ export const AlbumSublist = async (id) => {
 }
 
 export const MvSublist = async (id) => {
+    if (userStore.login === false) return
     const MvSublist = await getMvSublist()
     if (MvSublist.data.map(data => data.vid).includes(id)) {
         return true

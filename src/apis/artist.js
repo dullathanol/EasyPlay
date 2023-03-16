@@ -68,18 +68,26 @@ export const getArtistFollow = (id) => {
     })
 }
 
-//获取歌手专辑
-export const getArtistAlbum = (id) => {
-    return request({
-        url: `/artist/album?id=${id}`,
-        method: 'get',
-    })
-}
-
 //获取专辑内容
 export const getAlbum = (id) => {
     return request({
         url: `/album?id=${id}`,
+        method: 'get',
+    })
+}
+
+//获取歌手MV
+export const getArtistMv = (id) => {
+    return request({
+        url: `/artist/mv?id=${id}`,
+        method: 'get',
+    })
+}
+
+//获取歌手专辑
+export const getArtistAlbum = (id) => {
+    return request({
+        url: `/artist/album?id=${id}`,
         method: 'get',
     })
 }

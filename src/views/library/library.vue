@@ -4,7 +4,7 @@ import ListCover from '@/components/Body/ListCover.vue';
 import SvgIcon from '@/components/Plugins/SvgIcon.vue';
 import { getArtistSublist, getAlbumSublist } from '@/apis/artist.js';
 import { getMvSublist } from '@/apis/mvlist.js';
-import { getUserFollow } from '@/apis/user.js'
+import { getUserFollow } from '@/apis/user.js';
 import { getAccount, getRecord } from '@/apis/user.js';
 import { useUserStore } from '@/stores/userStore.js';
 import { useRoute, useRouter } from 'vue-router';
@@ -23,6 +23,7 @@ const changeActive = ref(1)
 const playlist = ref([{}])
 const account = ref([{}])
 const list = ref([{}])
+const record = ref([{}])
 const show = ref(false)
 const active = ref(1)
 
@@ -37,11 +38,11 @@ getAccount().then((Account) => {
 const loadData = (type = 1) => {
     if (type == 0) {
         getRecord(id, type).then((Data) => {
-            list.value = Data.allData.map(song => song.song);
+            record.value = Data.allData.map(song => song.song);
         })
     } else {
         getRecord(id, type).then((Data) => {
-            list.value = Data.weekData.map(song => song.song);
+            record.value = Data.weekData.map(song => song.song);
         })
     }
 }
@@ -131,6 +132,10 @@ watch(route, () => {
                             <SvgIcon icon-class="logout"></SvgIcon>
                         </div>
                     </div>
+                    <div class="artist">等级：{{ userStore.userDetail.level }} 级</div>
+                    <div class="artist">听歌：{{ userStore.userDetail.listenSongs }} 首</div>
+                    <div class="artist">关注：{{ userStore.userDetail.profile?.follows }} 粉丝：{{
+                        userStore.userDetail.profile?.followeds }}</div>
                     <div class="data-and-count">注册于 {{ FormatDate(account.createTime) }}</div>
                     <div class="description">{{ account.description }}</div>
                 </div>
@@ -149,7 +154,7 @@ watch(route, () => {
                         <div @click="change(1)" :class="{ active: changeActive == 1 }">最近一周</div>
                         <div @click="change(0)" :class="{ active: changeActive == 0 }">所有时间</div>
                     </div>
-                    <TrackList :playlist="list"></TrackList>
+                    <TrackList :playlist="record"></TrackList>
                 </div>
                 <div class="lists" v-if="active === 2">
                     <ListCover class="play-row" :list="sublist" :type="'playlists'"></ListCover>
@@ -273,8 +278,14 @@ watch(route, () => {
                     }
                 }
 
-                .data-and-count {
+                .artist {
                     margin: 12px 0;
+                    font-size: 15px;
+                    opacity: 0.88;
+                    color: var(--color-text);
+                }
+
+                .data-and-count {
                     font-size: 14px;
                     opacity: 0.88;
                     color: var(--color-text);

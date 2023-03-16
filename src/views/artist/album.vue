@@ -31,7 +31,6 @@ const like = (value) => {
 getAlbum(route.query.id).then((Album) => {
     album.value = Album.album
     songs.value = Album.songs
-    console.log(Album);
 })
 
 </script>

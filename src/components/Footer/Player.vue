@@ -20,10 +20,6 @@ const userStore = useUserStore()
 
 const isLike = ref(false)
 
-Likelist(playStore.songList[playStore.currentIndex].id).then((value) => {
-    isLike.value = value
-})
-
 const like = (value) => {
     isLike.value = !isLike.value
     getLike(playStore.songList[playStore.currentIndex].id, value)
@@ -98,10 +94,12 @@ const track = () => {
     }
 }
 
-watch(() => playStore.songList[playStore.currentIndex].id, () => {
-    Likelist(playStore.songList[playStore.currentIndex].id).then((value) => {
+watch(() => playStore.songList[playStore.currentIndex]?.id, () => {
+    if(playStore.songList[playStore.currentIndex]?.id){
+        Likelist(playStore.songList[playStore.currentIndex].id).then((value) => {
         isLike.value = value
     })
+    }
 })
 
 </script>

@@ -30,7 +30,7 @@ const like = (value) => {
 }
 
 watch(() => route.query.id, () => {
-    if (route.query.id) {
+    if (route.name == 'mv') {
         getVideo(route.query.id)
         MvSublist(route.query.id).then((value) => {
             isLike.value = value

@@ -44,7 +44,7 @@ const login = computed(() => {
 })
 
 const avatarUrl = computed(() => {
-    return userStore.userDetail?.avatarUrl ? userStore.userDetail.avatarUrl : ''
+    return userStore.userDetail?.avatarUrl
 })
 
 </script>
@@ -76,8 +76,8 @@ const avatarUrl = computed(() => {
                     </div>
                 </div>
                 <router-link :to="login" class="avatar">
-                    <img v-show="avatarUrl" :src="avatarUrl">
-                    <SvgIcon v-show="!avatarUrl" icon-class="login"></SvgIcon>
+                    <img v-if="avatarUrl" :src="avatarUrl">
+                    <SvgIcon v-if="!avatarUrl" icon-class="login"></SvgIcon>
                 </router-link>
             </div>
         </nav>

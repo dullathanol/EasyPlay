@@ -45,6 +45,12 @@ const to = (item) => {
             query: { id: item.id }
         })
     }
+    if (props.type === 'artistmv') {
+        router.push({
+            name: 'mv',
+            query: { id: item.id }
+        })
+    }
     if (props.type === 'submv') {
         router.push({
             name: 'mv',
@@ -83,6 +89,9 @@ const src = (item) => {
     }
     if (props.type === 'submv') {
         return item.coverUrl
+    }
+    if (props.type === 'artistmv') {
+        return item.imgurl
     }
 }
 

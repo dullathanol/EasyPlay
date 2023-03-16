@@ -18,8 +18,7 @@ const playlist = ref([{}])
 
 const loadData = async (id) => {
     const Detail = await getDetail(id)
-    playlist.value = Detail.playlist
-    console.log(playlist.value);
+    playlist.value = Detail?.playlist
 }
 
 loadData(route.query.id)
