@@ -61,7 +61,7 @@ const avatarUrl = computed(() => {
                 </ButtonIcon>
             </div>
             <div class="navigation-links">
-                <router-link to="/home" :class="{ active: !route.path.indexOf('/home') }">首页</router-link>
+                <router-link to="/" :class="{ active: route.name === 'home' }">首页</router-link>
                 <router-link to="/expolore" :class="{ active: !route.path.indexOf('/expolore') }">发现</router-link>
                 <router-link :to="login" :class="{ active: !route.path.indexOf('/library') }">我的</router-link>
             </div>
