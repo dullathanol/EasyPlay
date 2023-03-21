@@ -34,21 +34,21 @@ loadData()
         <div class="index-row">
             <div class="title">
                 推荐歌单
-                <router-link to="/expolore">查看更多</router-link>
+                <router-link to="/expolore/playlist">查看更多</router-link>
             </div>
             <ListCover class="play-row" :list="playlist" :type="'playlist'"></ListCover>
         </div>
         <div class="index-row">
             <div class="title">
                 推荐MV
-                <router-link to="/expolore">查看更多</router-link>
+                <router-link to="/expolore/mvlist">查看更多</router-link>
             </div>
             <ListCover class="mv-row" :list="mvAll" :type="'mvs'"></ListCover>
         </div>
         <div class="index-row">
             <div class="title">
                 排行榜
-                <router-link to="/expolore">查看更多</router-link>
+                <router-link to="/expolore/playlist">查看更多</router-link>
             </div>
             <ListCover class="play-row" :list="toplist" :type="'rank'"></ListCover>
         </div>

@@ -246,16 +246,17 @@ watch(route, () => {
             color: var(--color-text);
 
             .left {
+                flex: 2;
+
                 img {
-                    height: 200px;
-                    width: 200px;
+                    width: 100%;
                     border-radius: 10px;
-                    margin-right: 56px;
                 }
             }
 
             .right {
-                width: 100%;
+                flex: 7;
+                padding-left: 24px;
 
                 .user {
                     display: flex;

@@ -27,6 +27,7 @@ const all = async (info) => {
     active.value = info
     const MvAll = await getMvAll(50)
     mvlist.value = MvAll.data
+
 }
 
 all('all')

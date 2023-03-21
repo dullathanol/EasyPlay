@@ -83,7 +83,7 @@ watch(router.currentRoute, () => {
         position: relative;
 
         .cover {
-            flex: 1;
+            flex: 2;
 
             img {
                 width: 100%;
@@ -93,7 +93,7 @@ watch(router.currentRoute, () => {
         }
 
         .info {
-            flex: 3;
+            flex: 7;
             display: flex;
             flex-direction: column;
             justify-content: center;

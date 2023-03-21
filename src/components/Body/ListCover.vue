@@ -104,7 +104,9 @@ const playCount = (item) => {
 
 const playTime = (item) => {
     if (props.type === 'mvs') {
-        return FormatSongTime(item.duration)
+        if (item.duration !== 0) {
+            return FormatSongTime(item.duration)
+        }
     }
     if (props.type === 'submv') {
         return FormatSongTime(item.durationms)

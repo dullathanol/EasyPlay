@@ -44,7 +44,7 @@ const login = computed(() => {
 })
 
 const avatarUrl = computed(() => {
-    return userStore.userDetail?.avatarUrl
+    return userStore.userDetail?.profile?.avatarUrl
 })
 
 </script>

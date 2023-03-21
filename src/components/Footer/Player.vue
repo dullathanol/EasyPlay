@@ -82,7 +82,9 @@ const volume = computed({
     },
     set(value) {
         playStore.volume = value
-        playStore.Howl.volume(value)
+        if (playStore.Howl) {
+            playStore.Howl.volume(value)
+        }
     }
 })
 
@@ -95,10 +97,10 @@ const track = () => {
 }
 
 watch(() => playStore.songList[playStore.currentIndex]?.id, () => {
-    if(playStore.songList[playStore.currentIndex]?.id){
+    if (playStore.songList[playStore.currentIndex]?.id) {
         Likelist(playStore.songList[playStore.currentIndex].id).then((value) => {
-        isLike.value = value
-    })
+            isLike.value = value
+        })
     }
 })
 

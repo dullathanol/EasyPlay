@@ -79,15 +79,18 @@ getAlbum(route.query.id).then((Album) => {
         color: var(--color-text);
 
         .left {
+            flex: 2;
+
             img {
-                height: 250px;
-                width: 250px;
+                width: 100%;
                 border-radius: 10px;
-                margin-right: 56px;
             }
         }
 
         .right {
+            flex: 7;
+            padding-left: 24px;
+
             .name {
                 font-size: 36px;
                 font-weight: 700;
