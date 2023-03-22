@@ -70,7 +70,7 @@ const avatarUrl = computed(() => {
                     <div class="container" :class="{ active: inputFocus }">
                         <SvgIcon icon-class="search"></SvgIcon>
                         <div class="input">
-                            <input type="search" ref="searchInput" v-model="keywords" :placeholder="inputFocus ? '' : '搜索'"
+                            <input type="search" v-model="keywords" :placeholder="inputFocus ? '' : '搜索'"
                                 @keydown.enter="doSearch" @focus="inputFocus = true" @blur="inputFocus = false">
                         </div>
                     </div>
@@ -125,11 +125,10 @@ nav {
             padding: 6px 10px;
             margin: 0 12px;
             border-radius: 6px;
-            color: var(--color-text);
             transition: 0.2s;
 
             &:hover {
-                background: var(--color-secondary-bg-for-transparent);
+                background: var(--color-hover-bg);
             }
 
             &:active {
@@ -158,7 +157,7 @@ nav {
                 width: 200px;
                 height: 32px;
                 border-radius: 8px;
-                background: var(--color-secondary-bg-for-transparent);
+                background: var(--color-hover-bg);
 
                 .svg-icon {
                     height: 15px;
@@ -180,7 +179,7 @@ nav {
                 }
 
                 &.active {
-                    background-color: var(--color-primary-bg-for-transparent);
+                    background-color: var(--color-panel-bg);
 
                     input,
                     .svg-icon {

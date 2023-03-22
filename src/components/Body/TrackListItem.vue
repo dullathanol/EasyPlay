@@ -101,7 +101,7 @@ const time = computed(() => {
     user-select: none;
 
     &:hover {
-        background: var(--color-primary-bg-for-transparent);
+        background: var(--color-hover-bg);
     }
 
     &:active {
@@ -109,7 +109,7 @@ const time = computed(() => {
     }
 
     &.active {
-        background: var(--color-primary-bg-for-transparent);
+        background: var(--color-panel-bg);
     }
 
     img {

@@ -146,7 +146,7 @@ watch(router.currentRoute, () => {
                     padding: 8px 12px;
                     border-radius: 8px;
                     color: var(--color-text);
-                    background-color: var(--color-secondary-bg-for-transparent);
+                    background-color: var(--color-hover-bg);
                     user-select: none;
                     transition: 0.2s;
 

@@ -70,7 +70,7 @@ const close = () => {
                 transition: 0.2s;
 
                 &:hover {
-                    background: var(--color-secondary-bg-for-transparent);
+                    background: var(--color-hover-bg);
                 }
 
                 .svg-icon {

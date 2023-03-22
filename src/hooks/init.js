@@ -26,7 +26,7 @@ export const initDetail = async () => {
 }
 
 export const Likelist = async (id) => {
-    if (userStore.login === false) return
+    if (!localStorage.getItem('cookie')) return
     const Likelist = await getLikelist(localStorage.getItem('userId'))
     if (Likelist.ids.includes(id)) {
         return true
@@ -36,7 +36,7 @@ export const Likelist = async (id) => {
 }
 
 export const AlbumSublist = async (id) => {
-    if (userStore.login === false) return
+    if (!localStorage.getItem('cookie')) return
     const AlbumSublist = await getAlbumSublist()
     if (AlbumSublist.data.map(data => data.id).includes(Number(id))) {
         return true
@@ -46,6 +46,7 @@ export const AlbumSublist = async (id) => {
 }
 
 export const MvSublist = async (id) => {
+    if (!localStorage.getItem('cookie')) return
     if (userStore.login === false) return
     const MvSublist = await getMvSublist()
     if (MvSublist.data.map(data => data.vid).includes(id)) {

@@ -89,7 +89,7 @@ getAlbum(route.query.id).then((Album) => {
 
         .right {
             flex: 7;
-            padding-left: 24px;
+            margin-left: 56px;
 
             .name {
                 font-size: 36px;
@@ -127,7 +127,7 @@ getAlbum(route.query.id).then((Album) => {
                     padding: 8px 12px;
                     border-radius: 8px;
                     color: var(--color-text);
-                    background-color: var(--color-secondary-bg-for-transparent);
+                    background-color: var(--color-panel-bg);
                     user-select: none;
                     transition: 0.2s;
 

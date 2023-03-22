@@ -80,7 +80,7 @@ const next = () => {
 .fm {
     height: 200px;
     padding: 1rem;
-    background: var(--color-secondary-bg);
+    background: var(--color-hover-bg);
     border-radius: 1rem;
     display: flex;
     box-sizing: border-box;

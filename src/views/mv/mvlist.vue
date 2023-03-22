@@ -126,7 +126,7 @@ const toggleCat = async (item, type) => {
             transition: 0.2s;
 
             &:hover {
-                background: var(--color-secondary-bg);
+                background: var(--color-hover-bg);
             }
 
             &.active {
@@ -144,7 +144,7 @@ const toggleCat = async (item, type) => {
         padding: 0 20px 20px 20px;
         border-radius: 10px;
         color: var(--color-text);
-        background: var(--color-secondary-bg);
+        background: var(--color-panel-bg);
 
         .big-cat {
             display: flex;

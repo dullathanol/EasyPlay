@@ -203,7 +203,7 @@ watch(route, () => {
             cursor: pointer;
 
             &:hover {
-                background: var(--color-primary-bg-for-transparent);
+                background: var(--color-hover-bg);
             }
 
             &:active {
@@ -230,7 +230,7 @@ watch(route, () => {
             }
 
             &.active {
-                background: var(--color-primary-bg-for-transparent);
+                background: var(--color-panel-bg);
             }
         }
     }
@@ -256,7 +256,7 @@ watch(route, () => {
 
             .right {
                 flex: 7;
-                padding-left: 24px;
+                margin-left: 56px;
 
                 .user {
                     display: flex;
@@ -353,7 +353,7 @@ watch(route, () => {
                         cursor: pointer;
 
                         &:hover {
-                            background: var(--color-secondary-bg-for-transparent);
+                            background: var(--color-hover-bg);
                         }
 
                         &:active {
@@ -362,7 +362,7 @@ watch(route, () => {
                         }
 
                         &.active {
-                            background: var(--color-secondary-bg-for-transparent);
+                            background: var(--color-panel-bg);
                         }
                     }
                 }

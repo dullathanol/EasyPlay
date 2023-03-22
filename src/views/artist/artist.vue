@@ -142,7 +142,7 @@ watch(() => route.query.id, () => {
 
         .right {
             flex: 7;
-            padding-left: 24px;
+            margin-left: 56px;
 
             .name {
                 font-size: 36px;
@@ -186,7 +186,7 @@ watch(() => route.query.id, () => {
                     padding: 8px 12px;
                     border-radius: 8px;
                     color: var(--color-text);
-                    background-color: var(--color-secondary-bg-for-transparent);
+                    background-color: var(--color-panel-bg);
                     user-select: none;
                     transition: 0.2s;
 
@@ -227,7 +227,7 @@ watch(() => route.query.id, () => {
                 transition: 0.2s;
 
                 &:hover {
-                    background: var(--color-secondary-bg);
+                    background: var(--color-hover-bg);
                 }
 
                 &.active {
@@ -241,48 +241,19 @@ watch(() => route.query.id, () => {
         }
 
         .lists {
-            .links {
-                display: flex;
-                justify-content: flex-end;
-                user-select: none;
-
-                div {
-                    font-size: 12px;
-                    border-radius: 6px;
-                    padding: 6px 10px;
-                    margin: 0 5px;
-                    color: var(--color-text);
-                    transition: 0.2s;
-                    cursor: pointer;
-
-                    &:hover {
-                        background: var(--color-secondary-bg-for-transparent);
-                    }
-
-                    &:active {
-                        transform: scale(0.92);
-                        transition: 0.2s;
-                    }
-
-                    &.active {
-                        background: var(--color-secondary-bg-for-transparent);
-                    }
-                }
+            .play-row {
+                display: grid;
+                grid-template-columns: repeat(6, 1fr);
+                gap: 30px 25px;
+                margin-top: 20px;
             }
-        }
 
-        .play-row {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 30px 25px;
-            margin-top: 20px;
-        }
-
-        .mv-row {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 30px 25px;
-            margin-top: 20px;
+            .mv-row {
+                display: grid;
+                grid-template-columns: repeat(5, 1fr);
+                gap: 30px 25px;
+                margin-top: 20px;
+            }
         }
     }
 }

@@ -20,6 +20,12 @@ const userStore = useUserStore()
 
 const isLike = ref(false)
 
+if (playStore.songList[playStore.currentIndex]?.id) {
+    Likelist(playStore.songList[playStore.currentIndex].id).then((value) => {
+        isLike.value = value
+    })
+}
+
 const like = (value) => {
     isLike.value = !isLike.value
     getLike(playStore.songList[playStore.currentIndex].id, value)
@@ -96,6 +102,14 @@ const track = () => {
     }
 }
 
+const lyrics = () => {
+    if (route.name == 'lyrics') {
+        router.go(-1)
+    } else {
+        router.push({ name: 'lyrics' })
+    }
+}
+
 watch(() => playStore.songList[playStore.currentIndex]?.id, () => {
     if (playStore.songList[playStore.currentIndex]?.id) {
         Likelist(playStore.songList[playStore.currentIndex].id).then((value) => {
@@ -166,7 +180,7 @@ watch(() => playStore.songList[playStore.currentIndex]?.id, () => {
                                 :duration="0" tooltip="none" :dot-size="12" :silent="true"></VueSlider>
                         </div>
                     </div>
-                    <ButtonIcon title="歌词">
+                    <ButtonIcon title="歌词" @click="lyrics">
                         <SvgIcon icon-class="arrow-up"></SvgIcon>
                     </ButtonIcon>
                 </div>

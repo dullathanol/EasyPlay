@@ -128,7 +128,7 @@ const toggle = (type) => {
             transition: 0.2s;
 
             &:hover {
-                background: var(--color-secondary-bg);
+                background: var(--color-hover-bg);
             }
 
             &.active {
