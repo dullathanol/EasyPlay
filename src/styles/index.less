@@ -1,0 +1,60 @@
+@import url('ant-design-vue/dist/antd.css');
+
+:root {
+  --color-text: #ffffff;
+  --color-primary: #335eea;
+  --color-secondary: #7a7a7b;
+  --color-body-bg: #222222;
+  --color-navbar-bg: rgba(34, 34, 34, 0.85);
+  --color-panel-bg: rgba(255, 255, 255, 0.12);
+  --color-hover-bg: rgba(255, 255, 255, 0.08);
+}
+
+body {
+  background-color: var(--color-body-bg);
+}
+
+html {
+  min-width: 768px;
+  /* 过度滚动 */
+  overscroll-behavior: none;
+}
+
+button {
+  background: none;
+  border: none;
+  /* 选择文本 */
+  user-select: none;
+  cursor: pointer;
+}
+
+input,
+button {
+  &:focus {
+    outline: none;
+  }
+}
+
+a {
+  color: var(--color-text);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+// 滚动条
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+// 滚动条轨道
+::-webkit-scrollbar-track {
+  background: transparent;
+  border-left: 1px solid rgba(128, 128, 128, 0.18);
+  background: var(--color-body-bg);
+}
+
+// 滚动条滑块
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: var(--color-secondary);
+}
