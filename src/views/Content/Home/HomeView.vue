@@ -1,26 +1,24 @@
 <script setup lang="ts">
-  import { ref } from 'vue';
-  import { getMvAll } from '@/apis/modules/mvlist';
-  import { getPersonalized, getToplist } from '@/apis/modules/playlist';
+  import { ref, onMounted } from 'vue';
+  import { getMvAll } from '@/apis/modules/resource';
+  import { getPersonalized, getToplist } from '@/apis/modules/resource';
 
-  import FMCard from '@/components/FMCard.vue';
   import ListCover from '@/components/ListCover.vue';
-  import RecommendedDaily from '@/components/RecommendedDaily.vue';
+  import FMCard from './src/FMCard.vue';
+  import RecommendedDaily from './src/RecommendedDaily.vue';
 
   const playlist = ref([{}]);
   const mvAll = ref([{}]);
   const toplist = ref([{}]);
 
-  const loadData = async () => {
+  onMounted(async () => {
     const Personalized = await getPersonalized(6);
-    playlist.value = Personalized?.result;
+    playlist.value = Personalized.result;
     const MvAll = await getMvAll(10);
     mvAll.value = MvAll.data;
     const Toplist = await getToplist();
     toplist.value = Toplist.list.slice(0, 6);
-  };
-
-  loadData();
+  });
 </script>
 
 <template>
@@ -35,21 +33,21 @@
     <div class="index-row">
       <div class="title">
         推荐歌单
-        <router-link to="/expolore/playlist">查看更多</router-link>
+        <router-link to="/expolore">查看更多</router-link>
       </div>
       <ListCover class="play-row" :list="playlist" :type="'playlist'"></ListCover>
     </div>
     <div class="index-row">
       <div class="title">
         推荐MV
-        <router-link to="/expolore/mvlist">查看更多</router-link>
+        <router-link to="/expolore">查看更多</router-link>
       </div>
       <ListCover class="mv-row" :list="mvAll" :type="'mvs'"></ListCover>
     </div>
     <div class="index-row">
       <div class="title">
         排行榜
-        <router-link to="/expolore/playlist">查看更多</router-link>
+        <router-link to="/expolore">查看更多</router-link>
       </div>
       <ListCover class="play-row" :list="toplist" :type="'rank'"></ListCover>
     </div>
@@ -58,17 +56,15 @@
 
 <style lang="less" scoped>
   .home {
-    margin: 64px 10vw 96px 10vw;
-
     .index-row {
-      margin-top: 54px;
+      margin-top: 30px;
 
       .title {
         display: flex;
-        justify-content: space-between;
         align-items: flex-end;
+        justify-content: space-between;
         margin-bottom: 20px;
-        font-size: 28px;
+        font-size: 30px;
         font-weight: 700;
         color: var(--color-text);
 

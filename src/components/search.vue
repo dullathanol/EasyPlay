@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import ListCover from '@/components/ListCover.vue';
   import TrackList from '@/components/TrackList.vue';
-  import { getSearch } from '@/apis/modules/other';
+  import { getSearch } from '@/apis/modules/resource';
   import { useRoute } from 'vue-router';
   import { ref, watch } from 'vue';
 
@@ -110,8 +110,6 @@
 
 <style lang="less" scoped>
   .search {
-    margin: 64px 10vw 96px 10vw;
-
     .buttons {
       display: flex;
       flex-wrap: wrap;

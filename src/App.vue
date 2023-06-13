@@ -4,7 +4,13 @@
 </script>
 
 <template>
-  <NavBar></NavBar>
-  <router-view></router-view>
-  <PlayBar></PlayBar>
+  <div class="app-header">
+    <NavBar></NavBar>
+  </div>
+  <div class="app-content">
+    <router-view></router-view>
+  </div>
+  <div class="app-footer">
+    <PlayBar></PlayBar>
+  </div>
 </template>

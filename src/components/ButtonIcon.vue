@@ -10,10 +10,12 @@
     align-items: center;
     justify-content: center;
     background: transparent;
+    border: none;
     margin: 4px;
     padding: 8px;
     border-radius: 20%;
     transition: 0.2s;
+    cursor: pointer;
 
     &:hover {
       background: var(--color-hover-bg);

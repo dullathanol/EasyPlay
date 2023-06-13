@@ -1,23 +1,20 @@
 <script setup lang="ts">
-  import Detail from '@/components/Detail.vue';
   import SvgIcon from '@/components/SvgIcon.vue';
   import TrackList from '@/components/TrackList.vue';
-  import { useDetailStore } from '@/stores/modules/detailStore';
   import { useUserStore } from '@/stores/modules/userStore';
   import { useRoute, useRouter } from 'vue-router';
-  import { getDetail, getSubscribe } from '@/apis/modules/playlist';
+  import { getUserDetail, getSubscribeSub } from '@/apis/modules/user';
   import { FormatPlayCount, FormatDate } from '@/utils/common';
   import { ref, computed, watch } from 'vue';
 
   const route = useRoute();
   const router = useRouter();
   const userStore = useUserStore();
-  const detailStore = useDetailStore();
 
   const playlist = ref([{}]);
 
   const loadData = async (id) => {
-    const Detail = await getDetail(id);
+    const Detail = await getUserDetail(id);
     playlist.value = Detail?.playlist;
   };
 
@@ -33,7 +30,7 @@
 
   const like = (value) => {
     playlist.value.subscribed = !playlist.value.subscribed;
-    getSubscribe(route.query.id, value);
+    getSubscribeSub(route.query.id, value);
   };
 
   watch(router.currentRoute, () => {
@@ -58,7 +55,7 @@
           {{ FormatPlayCount(playlist.subscribedCount) }} 分享
           {{ FormatPlayCount(playlist.shareCount) }}</div
         >
-        <div class="description" @click="detailStore.showFullDescription = true">
+        <div class="description">
           {{ playlist.description }}
         </div>
         <div class="buttons" v-if="userStore.login && playlist.userId != userStore.userId">
@@ -74,16 +71,11 @@
       </div>
     </div>
     <TrackList :playlist="playlist.tracks"></TrackList>
-    <Detail v-if="detailStore.showFullDescription" :detail="'歌单介绍'">{{
-      playlist.description
-    }}</Detail>
   </div>
 </template>
 
 <style lang="less" scoped>
   .playlist {
-    margin: 64px 10vw 96px 10vw;
-
     .playlist-info {
       display: flex;
       margin-bottom: 72px;

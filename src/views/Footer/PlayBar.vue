@@ -3,7 +3,7 @@
   import { useRoute, useRouter } from 'vue-router';
   import { usePlayStore } from '@/stores/modules/playStore';
   import { useUserStore } from '@/stores/modules/userStore';
-  import { getLike } from '@/apis/modules/user';
+  import { getLikeSub } from '@/apis/modules/user';
   import { startMusic, pauseMusic, playLast, playNext, changePlayMode, mute } from '@/hooks/Player';
   import { FormatTrackTime } from '@/utils/common';
 
@@ -23,7 +23,7 @@
 
   const like = (value: string) => {
     isLike.value = !isLike.value;
-    getLike(playStore.songId, value);
+    getLikeSub(playStore.songId, value);
   };
 
   const progress = computed({
@@ -153,20 +153,14 @@
 
 <style lang="less" scoped>
   .play-bar {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 64px;
+    height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    z-index: 100;
-    background: var(--color-navbar-bg);
-    backdrop-filter: saturate(180%) blur(30px);
 
     .progress-bar {
       width: 100%;
+      margin-top: -6px;
+      margin-bottom: -6px;
       cursor: pointer;
     }
 

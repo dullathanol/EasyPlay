@@ -2,7 +2,7 @@ import Plyr from 'plyr';
 import pinia from '@/stores';
 import { usePlayStore } from '@/stores/modules/playStore';
 import { useVideoStore } from '@/stores/modules/videoStore';
-import { getDetail, getMvUrl, getSimi } from '@/apis/modules/mvlist';
+import { getMVDetail, getMvUrl, getMVSimi } from '@/apis/modules/resource';
 import { startMusic, pauseMusic } from '@/hooks/Player';
 
 const playStore = usePlayStore();
@@ -29,11 +29,11 @@ export const play = () => {
 };
 
 export const getVideo = (id) => {
-  getDetail(id).then(async (Detail) => {
+  getMVDetail(id).then(async (Detail) => {
     videoStore.detail = Detail.data;
 
     let brs = videoStore.detail.brs;
-    let sources = [];
+    const sources: any[] = [];
 
     for (let i = 0; i < brs.length; i++) {
       await getMvUrl(id, brs[i].br).then((res) => {
@@ -52,7 +52,7 @@ export const getVideo = (id) => {
       poster: videoStore.detail.cover,
     };
 
-    const Simi = await getSimi(id);
+    const Simi = await getMVSimi(id);
     videoStore.simi = Simi.mvs;
   });
 };

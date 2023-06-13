@@ -64,18 +64,10 @@
 
 <style lang="less" scoped>
   .nav-bar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 64px;
-    padding: 0 10vw;
-    z-index: 1;
-    background-color: var(--color-navbar-bg);
-    backdrop-filter: saturate(180%) blur(20px);
 
     .navigation-buttons {
       flex: 1;
@@ -146,6 +138,10 @@
           border: none;
           background: transparent;
           color: var(--color-text);
+
+          &:focus {
+            outline: none;
+          }
         }
 
         &.active {

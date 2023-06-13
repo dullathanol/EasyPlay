@@ -2,7 +2,7 @@ import pinia from '@/stores';
 import { Howl } from 'howler';
 import { usePlayStore } from '@/stores/modules/playStore';
 import { GetRandomInt } from '@/utils/common';
-import { getCheck, getSongUrl } from '@/apis/modules/playlist';
+import { getSongCheck, getSongUrl } from '@/apis/modules/resource';
 
 const playStore = usePlayStore(pinia);
 
@@ -61,7 +61,7 @@ export const addSong = (id, index, autoplay) => {
 };
 
 export const getSong = async (id, autoplay) => {
-  await getCheck(id).then((result) => {
+  await getSongCheck(id).then((result) => {
     if (result.success == true) {
       getSongUrl(id).then((songInfo) => {
         play(songInfo.data[0].url, autoplay);

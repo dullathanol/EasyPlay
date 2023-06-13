@@ -1,10 +1,18 @@
 import request from '@/apis';
 
+enum API {
+  LOGIN_QR_KEY = '/login/qr/key',
+  LOGIN_QR_CREATE = '/login/qr/create',
+  LOGIN_QR_CHECK = '/login/qr/check',
+  LOGIN_STATUS = '/login/status',
+  LOG_OUT = '/logout',
+}
+
 //二维码key
-export const getLoginKey = () => {
+export const getLoginQrKey = () => {
   return request({
-    url: '/login/qr/key',
-    method: 'get',
+    url: API.LOGIN_QR_KEY,
+    method: 'GET',
     params: {
       timestamp: new Date().getTime(),
     },
@@ -12,10 +20,10 @@ export const getLoginKey = () => {
 };
 
 //二维码图片
-export const getLoginCreate = (key: string) => {
+export const getLoginQrCreate = (key: string) => {
   return request({
-    url: '/login/qr/create',
-    method: 'get',
+    url: API.LOGIN_QR_CREATE,
+    method: 'GET',
     params: {
       qrimg: true,
       key,
@@ -25,10 +33,10 @@ export const getLoginCreate = (key: string) => {
 };
 
 //扫码状态
-export const getLoginCheck = (key: string) => {
+export const getLoginQrCheck = (key: string) => {
   return request({
-    url: '/login/qr/check',
-    method: 'get',
+    url: API.LOGIN_QR_CHECK,
+    method: 'GET',
     params: {
       key,
       timestamp: new Date().getTime(),
@@ -39,8 +47,8 @@ export const getLoginCheck = (key: string) => {
 //登录状态
 export const getLoginStatus = () => {
   return request({
-    url: '/login/status',
-    method: 'post',
+    url: API.LOGIN_STATUS,
+    method: 'POST',
     params: {
       timestamp: new Date().getTime(),
     },
@@ -48,10 +56,10 @@ export const getLoginStatus = () => {
 };
 
 //退出登录
-export const getLogout = () => {
+export const getLogOut = () => {
   return request({
-    url: '/logout',
-    method: 'post',
+    url: API.LOG_OUT,
+    method: 'POST',
     params: {
       timestamp: new Date().getTime(),
     },

@@ -1,10 +1,8 @@
 import pinia from '@/stores';
-import { getUserDetail, getLikelist } from '@/apis/modules/user';
+import { getUserDetail, getUserLikeList, getAlbumSubList, getMvSubList } from '@/apis/modules/user';
 import { useUserStore } from '@/stores/modules/userStore';
 import { usePlayStore } from '@/stores/modules/playStore';
-import { getAlbumSublist } from '@/apis/modules/artist';
 import { getLoginStatus } from '@/apis/modules/login';
-import { getMvSublist } from '@/apis/modules/mvlist';
 
 const userStore = useUserStore(pinia);
 const playStore = usePlayStore(pinia);
@@ -27,7 +25,7 @@ export const initDetail = async () => {
 
 export const Likelist = async (id) => {
   if (!localStorage.getItem('cookie')) return;
-  const Likelist = await getLikelist(localStorage.getItem('userId'));
+  const Likelist = await getUserLikeList(localStorage.getItem('userId'));
   if (Likelist.ids.includes(id)) {
     return true;
   } else {
@@ -37,7 +35,7 @@ export const Likelist = async (id) => {
 
 export const AlbumSublist = async (id) => {
   if (!localStorage.getItem('cookie')) return;
-  const AlbumSublist = await getAlbumSublist();
+  const AlbumSublist = await getAlbumSubList();
   if (AlbumSublist.data.map((data) => data.id).includes(Number(id))) {
     return true;
   } else {
@@ -48,7 +46,7 @@ export const AlbumSublist = async (id) => {
 export const MvSublist = async (id) => {
   if (!localStorage.getItem('cookie')) return;
   if (userStore.login === false) return;
-  const MvSublist = await getMvSublist();
+  const MvSublist = await getMvSubList();
   if (MvSublist.data.map((data) => data.vid).includes(id)) {
     return true;
   } else {

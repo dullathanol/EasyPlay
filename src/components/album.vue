@@ -2,9 +2,8 @@
   import ArtistsName from '@/components/ArtistsName.vue';
   import TrackList from '@/components/TrackList.vue';
   import SvgIcon from '@/components/SvgIcon.vue';
-  import Detail from '@/components/Detail.vue';
-  import { useDetailStore } from '@/stores/modules/detailStore';
-  import { getAlbum, getAlbumSub } from '@/apis/modules/artist';
+  import { getAlbumSub } from '@/apis/modules/user';
+  import { getAlbumDetail } from '@/apis/modules/resource';
   import { useUserStore } from '@/stores/modules/userStore';
   import { FormatDate } from '@/utils/common';
   import { AlbumSublist } from '@/hooks/init';
@@ -13,7 +12,6 @@
 
   const route = useRoute();
   const userStore = useUserStore();
-  const detailStore = useDetailStore();
 
   const isLike = ref(false);
   const album = ref([{}]);
@@ -28,7 +26,7 @@
     getAlbumSub(route.query.id, value);
   };
 
-  getAlbum(route.query.id).then((Album) => {
+  getAlbumDetail(route.query.id).then((Album) => {
     album.value = Album.album;
     songs.value = Album.songs;
   });
@@ -48,9 +46,7 @@
         <div class="data-and-count"
           >更新于 {{ FormatDate(album.publishTime) }} · {{ songs.length }} 首歌</div
         >
-        <div class="description" @click="detailStore.showFullDescription = true">{{
-          album.description
-        }}</div>
+        <div class="description">{{ album.description }}</div>
         <div class="buttons" v-if="userStore.login">
           <button v-show="!isLike" @click="like(1)">
             <SvgIcon icon-class="heart"></SvgIcon>
@@ -67,16 +63,11 @@
       <div class="section-title">专辑列表</div>
       <TrackList :playlist="songs"></TrackList>
     </div>
-    <Detail v-if="detailStore.showFullDescription" :detail="'专辑介绍'">{{
-      album.description
-    }}</Detail>
   </div>
 </template>
 
 <style lang="less" scoped>
   .album-page {
-    margin: 64px 10vw 96px 10vw;
-
     .album-info {
       display: flex;
       align-items: center;

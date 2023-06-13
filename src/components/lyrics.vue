@@ -9,7 +9,7 @@
   import { FormatTrackTime } from '@/utils/common';
   import { ref, computed, watch } from 'vue';
   import { Likelist } from '@/hooks/init';
-  import { getLike } from '@/apis/modules/user';
+  import { getLikeSub } from '@/apis/modules/user';
   import { useRouter } from 'vue-router';
 
   const router = useRouter();
@@ -26,7 +26,7 @@
 
   const like = (value) => {
     isLike.value = !isLike.value;
-    getLike(playStore.songList[playStore.currentIndex].id, value);
+    getLikeSub(playStore.songList[playStore.currentIndex].id, value);
   };
 
   const go = () => {

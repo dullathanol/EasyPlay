@@ -14,8 +14,6 @@
 
 <style lang="less" scoped>
   .track {
-    margin: 64px 10vw 96px 10vw;
-
     h1 {
       margin: 24px;
       color: var(--color-text);

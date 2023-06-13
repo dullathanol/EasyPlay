@@ -2,15 +2,19 @@
   import TrackList from '@/components/TrackList.vue';
   import ListCover from '@/components/ListCover.vue';
   import SvgIcon from '@/components/SvgIcon.vue';
-  import { getArtistSublist, getAlbumSublist } from '@/apis/modules/artist';
-  import { getMvSublist } from '@/apis/modules/mvlist';
-  import { getUserFollow } from '@/apis/modules/user';
-  import { getAccount, getRecord } from '@/apis/modules/user';
+  import {
+    getUserAccount,
+    getUserRecord,
+    getArtistSubList,
+    getAlbumSubList,
+    getUserFollowList,
+    getMvSubList,
+  } from '@/apis/modules/user';
   import { useUserStore } from '@/stores/modules/userStore';
   import { useRoute, useRouter } from 'vue-router';
   import { FormatDate } from '@/utils/common';
-  import { getPlaylist } from '@/apis/modules/user';
-  import { getLogout } from '@/apis/modules/login';
+  import { getPlayList } from '@/apis/modules/resource';
+  import { getLogOut } from '@/apis/modules/login';
   import { ref, computed, watch } from 'vue';
 
   const route = useRoute();
@@ -27,21 +31,21 @@
   const show = ref(false);
   const active = ref(1);
 
-  getPlaylist(id).then((Playlist) => {
+  getPlayList(id).then((Playlist) => {
     playlist.value = Playlist.playlist;
   });
 
-  getAccount().then((Account) => {
+  getUserAccount().then((Account) => {
     account.value = Account.profile;
   });
 
   const loadData = (type = 1) => {
     if (type == 0) {
-      getRecord(id, type).then((Data) => {
+      getUserRecord(id, type).then((Data) => {
         record.value = Data.allData.map((song) => song.song);
       });
     } else {
-      getRecord(id, type).then((Data) => {
+      getUserRecord(id, type).then((Data) => {
         record.value = Data.weekData.map((song) => song.song);
       });
     }
@@ -71,29 +75,29 @@
   const toggle = (type) => {
     active.value = type;
     if (type === 3) {
-      getAlbumSublist().then((data) => {
+      getAlbumSubList().then((data) => {
         list.value = data.data;
       });
     }
     if (type === 4) {
-      getArtistSublist().then((data) => {
+      getArtistSubList().then((data) => {
         list.value = data.data;
       });
     }
     if (type === 5) {
-      getUserFollow(id).then((follow) => {
+      getUserFollowList(id).then((follow) => {
         list.value = follow.follow;
       });
     }
     if (type === 6) {
-      getMvSublist().then((data) => {
+      getMvSubList().then((data) => {
         list.value = data.data;
       });
     }
   };
 
   const logout = () => {
-    getLogout().then((result) => {
+    getLogOut().then((result) => {
       if (result.code == 200) {
         localStorage.clear();
         userStore.login = false;
@@ -189,8 +193,6 @@
 
 <style lang="less" scoped>
   .library {
-    margin: 64px 10vw 96px 10vw;
-    display: flex;
 
     .library-row {
       flex: 2;
@@ -332,7 +334,7 @@
             transition: 0.2s;
 
             &:hover {
-              background: var(--color-secondary-bg);
+              background: var(--color-hover-bg);
             }
 
             &.active {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { getLoginKey, getLoginCreate, getLoginCheck } from '@/apis/modules/login';
+  import { getLoginQrKey, getLoginQrCreate, getLoginQrCheck } from '@/apis/modules/login';
   import { initCookie } from '@/hooks/init';
   import { useRouter } from 'vue-router';
   import { ref } from 'vue';
@@ -10,14 +10,14 @@
   const qrMessage = ref('打开网易云音乐APP扫码登录');
 
   const loadData = async () => {
-    const LoginKey = await getLoginKey();
+    const LoginKey = await getLoginQrKey();
     const unikey = LoginKey.data.unikey;
-    const LoginCreate = await getLoginCreate(unikey);
+    const LoginCreate = await getLoginQrCreate(unikey);
 
     qrImg.value = LoginCreate.data.qrimg;
 
     let timer = setInterval(async () => {
-      const LoginCheck = await getLoginCheck(unikey);
+      const LoginCheck = await getLoginQrCheck(unikey);
       if (LoginCheck.code == 800) {
         qrMessage.value = LoginCheck.message;
         clearInterval(timer);
@@ -60,8 +60,6 @@
 
 <style lang="less" scoped>
   .login {
-    margin: 64px 10vw 96px 10vw;
-
     .login-container {
       display: flex;
       flex-direction: column;

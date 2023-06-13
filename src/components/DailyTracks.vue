@@ -1,11 +1,25 @@
 <script setup lang="ts">
+  import { ref, onMounted } from 'vue';
+  import { useUserStore } from '@/stores/modules/userStore';
+  import { getNewSong, getRecommendSong } from '@/apis/modules/resource';
+
   import TrackList from '@/components/TrackList.vue';
-  import { usePlaylistStore } from '@/stores/modules/playlistStore';
-  import { getRecommend } from '@/hooks/playlist';
 
-  const playlistStore = usePlaylistStore();
+  const userStore = useUserStore();
 
-  getRecommend();
+  const recommendSong = ref<any[]>([]);
+
+  onMounted(async () => {
+    if (userStore.login) {
+      getRecommendSong().then((RecommendSongs) => {
+        recommendSong.value = RecommendSongs.data.dailySongs;
+      });
+    } else {
+      getNewSong().then((Newsong) => {
+        recommendSong.value = Newsong.result;
+      });
+    }
+  });
 </script>
 
 <template>
@@ -15,7 +29,7 @@
       <div class="subtitle">根据你的音乐口味生成 · 每天6:00更新</div>
     </div>
     <div class="tracklist">
-      <TrackList :playlist="playlistStore.recommendSong"></TrackList>
+      <TrackList :playlist="recommendSong"></TrackList>
     </div>
   </div>
 </template>
@@ -39,9 +53,5 @@
       margin: 28px 0 54px 0;
       color: var(--color-text);
     }
-  }
-
-  .tracklist {
-    margin: 64px 10vw 96px 10vw;
   }
 </style>

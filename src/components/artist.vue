@@ -1,24 +1,21 @@
 <script setup lang="ts">
-  import Detail from '@/components/Detail.vue';
   import SvgIcon from '@/components/SvgIcon.vue';
   import TrackList from '@/components/TrackList.vue';
   import ListCover from '@/components/ListCover.vue';
   import {
     getArtistDetail,
     getArtistFollow,
-    getArtistSub,
     getArtistSong,
     getArtistMv,
     getArtistAlbum,
   } from '@/apis/modules/artist';
-  import { useDetailStore } from '@/stores/modules/detailStore';
+  import { getArtistSub } from '@/apis/modules/user';
   import { useUserStore } from '@/stores/modules/userStore';
   import { ref, computed, watch } from 'vue';
   import { useRoute } from 'vue-router';
 
   const route = useRoute();
   const userStore = useUserStore();
-  const detailStore = useDetailStore();
 
   const active = ref(1);
   const detail = ref([{}]);
@@ -97,9 +94,7 @@
         <div class="name">{{ artist?.name }}</div>
         <div class="artist">{{ identify?.imageDesc }}</div>
         <div class="artist">关注：{{ follow.followCnt }} 粉丝：{{ follow.fansCnt }}</div>
-        <div class="description" @click="detailStore.showFullDescription = true">{{
-          artist?.briefDesc
-        }}</div>
+        <div class="description">{{ artist?.briefDesc }}</div>
         <div class="buttons" v-if="userStore.login">
           <button v-show="!isLike" @click="like(1)">
             <SvgIcon icon-class="heart"></SvgIcon>
@@ -128,16 +123,11 @@
         <ListCover class="mv-row" :list="list" :type="'artistmv'"></ListCover>
       </div>
     </div>
-    <Detail v-if="detailStore.showFullDescription" :detail="'歌手介绍'">{{
-      artist?.briefDesc
-    }}</Detail>
   </div>
 </template>
 
 <style lang="less" scoped>
   .artist-page {
-    margin: 64px 10vw 96px 10vw;
-
     .artist-info {
       display: flex;
       align-items: center;

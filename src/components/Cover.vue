@@ -1,8 +1,9 @@
 <script setup lang="ts">
   import { ref } from 'vue';
   import SvgIcon from '@/components/SvgIcon.vue';
+  import ButtonIcon from './ButtonIcon.vue';
 
-  const props = defineProps(['src']);
+  defineProps(['src']);
 
   const focus = ref(false);
 </script>
@@ -10,9 +11,9 @@
 <template>
   <div class="cover" @mouseover="focus = true" @mouseleave="focus = false">
     <div class="shade">
-      <button class="play-button" v-show="focus">
+      <ButtonIcon v-show="focus">
         <SvgIcon icon-class="play"></SvgIcon>
-      </button>
+      </ButtonIcon>
     </div>
     <img :src="src" />
   </div>
@@ -28,18 +29,14 @@
       width: 100%;
       height: 100%;
       display: flex;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
 
-      .play-button {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        backdrop-filter: blur(8px);
+      .button-icon {
         height: 45px;
         width: 45px;
         border-radius: 50%;
+        backdrop-filter: blur(5px);
         transition: 0.2s;
 
         .svg-icon {
@@ -48,7 +45,7 @@
         }
 
         &:hover {
-          background: rgba(255, 255, 255, 0.28);
+          background: var(--color-active-bg);
         }
 
         &:active {

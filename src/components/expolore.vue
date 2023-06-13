@@ -18,8 +18,6 @@
 
 <style lang="less" scoped>
   .expolore {
-    margin: 64px 10vw 96px 10vw;
-
     .navigation-links {
       display: flex;
       justify-content: center;

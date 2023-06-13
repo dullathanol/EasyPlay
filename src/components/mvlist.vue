@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import SvgIcon from '@/components/SvgIcon.vue';
   import ListCover from '@/components/ListCover.vue';
-  import { getMvAll, getFirst, getExclusive } from '@/apis/modules/mvlist';
+  import { getMvAll, getMVFirst, getMVExclusive } from '@/apis/modules/resource';
   import { mvArea, mvType, mvOrder } from '@/utils/data';
   import { ref, reactive } from 'vue';
 
@@ -34,14 +34,14 @@
   const first = async (info) => {
     showCatOptions.value = false;
     active.value = info;
-    const First = await getFirst();
+    const First = await getMVFirst();
     mvlist.value = First.data;
   };
 
   const exclusive = async (info) => {
     showCatOptions.value = false;
     active.value = info;
-    const Exclusive = await getExclusive();
+    const Exclusive = await getMVExclusive();
     mvlist.value = Exclusive.data;
   };
 

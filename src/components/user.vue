@@ -1,16 +1,14 @@
 <script setup lang="ts">
-  import Detail from '@/components/Detail.vue';
   import SvgIcon from '@/components/SvgIcon.vue';
   import ListCover from '@/components/ListCover.vue';
-  import { useDetailStore } from '@/stores/modules/detailStore';
   import { useUserStore } from '@/stores/modules/userStore';
-  import { getUserDetail, getFollow, getPlaylist } from '@/apis/modules/user';
+  import { getUserDetail, getFollowSub } from '@/apis/modules/user';
+  import { getPlayList } from '@/apis/modules/resource';
   import { useRoute } from 'vue-router';
   import { ref, computed } from 'vue';
 
   const route = useRoute();
   const userStore = useUserStore();
-  const detailStore = useDetailStore();
 
   const active = ref(1);
   const detail = ref([{}]);
@@ -20,7 +18,7 @@
     detail.value = Detail;
   });
 
-  getPlaylist(route.query.id).then((Playlist) => {
+  getPlayList(route.query.id).then((Playlist) => {
     playlist.value = Playlist.playlist;
   });
 
@@ -42,7 +40,7 @@
 
   const like = (value) => {
     detail.value.profile.followed = !detail.value.profile.followed;
-    getFollow(route.query.id, value);
+    getFollowSub(route.query.id, value);
   };
 </script>
 
@@ -58,9 +56,7 @@
         <div class="artist">等级：{{ detail.level }} 级</div>
         <div class="artist">听歌：{{ detail.listenSongs }} 首</div>
         <div class="artist">关注：{{ profile?.follows }} 粉丝：{{ profile?.followeds }}</div>
-        <div class="description" @click="detailStore.showFullDescription = true">{{
-          profile?.signature
-        }}</div>
+        <div class="description">{{ profile?.signature }}</div>
         <div class="buttons" v-if="userStore.login">
           <button v-show="!isLike" @click="like(1)">
             <SvgIcon icon-class="heart"></SvgIcon>
@@ -85,16 +81,11 @@
         <ListCover class="play-row" :list="sublist" :type="'playlists'"></ListCover>
       </div>
     </div>
-    <Detail v-if="detailStore.showFullDescription" :detail="'个性签名'">{{
-      profile?.signature
-    }}</Detail>
   </div>
 </template>
 
 <style lang="less" scoped>
   .user-page {
-    margin: 64px 10vw 96px 10vw;
-
     .user-info {
       display: flex;
       align-items: center;
@@ -197,7 +188,7 @@
           transition: 0.2s;
 
           &:hover {
-            background: var(--color-secondary-bg);
+            background: var(--color-hover-bg);
           }
 
           &.active {

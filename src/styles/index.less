@@ -1,39 +1,29 @@
 :root {
-  --color-text: #fff;
-  --color-primary: #335eea;
-  --color-secondary: #7a7a7b;
-  --color-body-bg: #222;
-  --color-navbar-bg: rgba(34 34 34 /85%);
-  --color-panel-bg: rgba(255 255 255 /12%);
+  --color-text: rgb(255 255 255);
+  --color-primary: rgb(55 95 235);
+  --color-body-bg: rgb(34 34 34);
+  --color-navbar-bg: rgba(34 34 34 / 80%);
   --color-hover-bg: rgba(255 255 255 / 8%);
+  --color-panel-bg: rgba(255 255 255 / 10%);
+  --color-active-bg: rgba(255 255 255 / 30%);
 }
 
 body {
   background-color: var(--color-body-bg);
 }
 
-button {
-  background: none;
-  border: none;
-  user-select: none;
-  cursor: pointer;
-}
-
-input,
-button {
-  &:focus {
-    outline: none;
-  }
-}
-
 a {
   color: var(--color-text);
   text-decoration: none;
   cursor: pointer;
+
+  &:hover {
+    color: var(--color-primary);
+  }
 }
 
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 5px;
 }
 
 ::-webkit-scrollbar-track {
@@ -42,6 +32,35 @@ a {
 }
 
 ::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-  background: var(--color-secondary);
+  border-radius: 5px;
+  background: var(--color-active-bg);
+}
+
+.app-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 64px;
+  padding: 0 10vw;
+  background-color: var(--color-navbar-bg);
+  backdrop-filter: saturate(180%) blur(20px);
+  z-index: 1;
+}
+
+.app-content {
+  padding: 64px 10vw;
+}
+
+.app-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 64px;
+  background: var(--color-navbar-bg);
+  backdrop-filter: saturate(180%) blur(20px);
+  z-index: 1;
 }
