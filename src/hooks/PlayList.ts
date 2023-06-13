@@ -1,6 +1,6 @@
 import pinia from '@/stores';
-import { getNewsong } from '@/apis/playlist';
-import { getRecommendSongs } from '@/apis/user';
+import { getNewsong } from '@/apis/modules/playlist';
+import { getRecommendSongs } from '@/apis/modules/user';
 import { useUserStore } from '@/stores/modules/userStore';
 import { usePlaylistStore } from '@/stores/modules/playlistStore';
 

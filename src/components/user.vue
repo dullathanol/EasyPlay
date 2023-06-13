@@ -4,7 +4,7 @@
   import ListCover from '@/components/ListCover.vue';
   import { useDetailStore } from '@/stores/modules/detailStore';
   import { useUserStore } from '@/stores/modules/userStore';
-  import { getUserDetail, getFollow, getPlaylist } from '@/apis/user';
+  import { getUserDetail, getFollow, getPlaylist } from '@/apis/modules/user';
   import { useRoute } from 'vue-router';
   import { ref, computed } from 'vue';
 

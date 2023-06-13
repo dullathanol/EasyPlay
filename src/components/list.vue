@@ -5,7 +5,7 @@
   import { useDetailStore } from '@/stores/modules/detailStore';
   import { useUserStore } from '@/stores/modules/userStore';
   import { useRoute, useRouter } from 'vue-router';
-  import { getDetail, getSubscribe } from '@/apis/playlist';
+  import { getDetail, getSubscribe } from '@/apis/modules/playlist';
   import { FormatPlayCount, FormatDate } from '@/utils/common';
   import { ref, computed, watch } from 'vue';
 

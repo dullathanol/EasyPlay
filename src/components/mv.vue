@@ -7,7 +7,7 @@
   import { FormatPlayCount } from '@/utils/common';
   import { play, getVideo } from '@/hooks/Video';
   import { MvSublist } from '@/hooks/init';
-  import { getMvSub } from '@/apis/mvlist';
+  import { getMvSub } from '@/apis/modules/mvlist';
   import { ref, watch, onMounted } from 'vue';
   import { useRoute } from 'vue-router';
   import 'plyr/dist/plyr.css';

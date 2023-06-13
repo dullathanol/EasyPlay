@@ -4,7 +4,7 @@
   import SvgIcon from '@/components/SvgIcon.vue';
   import Detail from '@/components/Detail.vue';
   import { useDetailStore } from '@/stores/modules/detailStore';
-  import { getAlbum, getAlbumSub } from '@/apis/artist';
+  import { getAlbum, getAlbumSub } from '@/apis/modules/artist';
   import { useUserStore } from '@/stores/modules/userStore';
   import { FormatDate } from '@/utils/common';
   import { AlbumSublist } from '@/hooks/init';

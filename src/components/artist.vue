@@ -10,7 +10,7 @@
     getArtistSong,
     getArtistMv,
     getArtistAlbum,
-  } from '@/apis/artist';
+  } from '@/apis/modules/artist';
   import { useDetailStore } from '@/stores/modules/detailStore';
   import { useUserStore } from '@/stores/modules/userStore';
   import { ref, computed, watch } from 'vue';

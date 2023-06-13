@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import { ref, computed } from 'vue';
+  import { ref } from 'vue';
   import { useRoute, useRouter } from 'vue-router';
   import { useUserStore } from '@/stores/modules/userStore';
-  import { initCookie, initDetail } from '@/hooks/init';
+
   import ButtonIcon from '@/components/ButtonIcon.vue';
   import SvgIcon from '@/components/SvgIcon.vue';
 
@@ -11,17 +11,9 @@
   const userStore = useUserStore();
 
   const inputFocus = ref(false);
-  const keywords = ref(null);
+  const keywords = ref();
 
-  if (localStorage.getItem('cookie')) {
-    initCookie();
-  }
-
-  if (localStorage.getItem('detail')) {
-    initDetail();
-  }
-
-  const go = (where) => {
+  const go = (where: string) => {
     if (where === 'back') router.go(-1);
     else router.go(1);
   };
@@ -34,68 +26,44 @@
       query: { keywords: keywords.value },
     });
   };
-
-  const login = computed(() => {
-    if (userStore.login) {
-      return { name: 'library' };
-    } else {
-      return { name: 'login' };
-    }
-  });
-
-  const avatarUrl = computed(() => {
-    return userStore.userDetail?.profile?.avatarUrl;
-  });
 </script>
 
 <template>
-  <div>
-    <nav>
-      <div class="navigation-buttons">
-        <ButtonIcon @click="go('back')">
-          <SvgIcon icon-class="arrow-left"></SvgIcon>
-        </ButtonIcon>
-        <ButtonIcon @click="go('forward')">
-          <SvgIcon icon-class="arrow-right"></SvgIcon>
-        </ButtonIcon>
+  <div class="nav-bar">
+    <div class="navigation-buttons">
+      <ButtonIcon @click="go('back')">
+        <SvgIcon icon-class="arrow-left"></SvgIcon>
+      </ButtonIcon>
+      <ButtonIcon @click="go('forward')">
+        <SvgIcon icon-class="arrow-right"></SvgIcon>
+      </ButtonIcon>
+    </div>
+    <div class="navigation-links">
+      <router-link to="/" :class="{ active: route.name === 'home' }">首页</router-link>
+      <router-link to="/expolore" :class="{ active: route.name === '/expolore' }">发现</router-link>
+      <router-link to="/library" :class="{ active: route.name === '/library' }">我的</router-link>
+    </div>
+    <div class="navigation-avatar">
+      <div class="search-box" :class="{ active: inputFocus }">
+        <SvgIcon icon-class="search"></SvgIcon>
+        <input
+          type="search"
+          v-model="keywords"
+          @keydown.enter="doSearch"
+          @focus="inputFocus = true"
+          @blur="inputFocus = false"
+        />
       </div>
-      <div class="navigation-links">
-        <router-link to="/" :class="{ active: route.name === 'home' }">首页</router-link>
-        <router-link to="/expolore" :class="{ active: !route.path.indexOf('/expolore') }"
-          >发现</router-link
-        >
-        <router-link :to="login" :class="{ active: !route.path.indexOf('/library') }"
-          >我的</router-link
-        >
-      </div>
-      <div class="right-part">
-        <div class="search-box">
-          <div class="container" :class="{ active: inputFocus }">
-            <SvgIcon icon-class="search"></SvgIcon>
-            <div class="input">
-              <input
-                type="search"
-                v-model="keywords"
-                :placeholder="inputFocus ? '' : '搜索'"
-                @keydown.enter="doSearch"
-                @focus="inputFocus = true"
-                @blur="inputFocus = false"
-              />
-            </div>
-          </div>
-        </div>
-        <router-link :to="login" class="avatar">
-          <img v-if="avatarUrl" :src="avatarUrl" />
-          <SvgIcon v-if="!avatarUrl" icon-class="login"></SvgIcon>
-        </router-link>
-      </div>
-    </nav>
+      <router-link to="/library" class="avatar">
+        <img v-if="userStore.login" :src="userStore.avatarUrl" />
+        <SvgIcon v-else icon-class="login"></SvgIcon>
+      </router-link>
+    </div>
   </div>
 </template>
 
 <style lang="less" scoped>
-  nav {
-    // 移出文档流
+  .nav-bar {
     position: fixed;
     top: 0;
     left: 0;
@@ -105,9 +73,8 @@
     justify-content: space-between;
     height: 64px;
     padding: 0 10vw;
-    z-index: 100;
+    z-index: 1;
     background-color: var(--color-navbar-bg);
-    //图形效果  //饱和度  //高斯模糊
     backdrop-filter: saturate(180%) blur(20px);
 
     .navigation-buttons {
@@ -141,7 +108,7 @@
         }
 
         &:active {
-          transform: scale(0.92);
+          transform: scale(0.9);
         }
 
         &.active {
@@ -150,7 +117,7 @@
       }
     }
 
-    .right-part {
+    .navigation-avatar {
       flex: 1;
       display: flex;
       align-items: center;
@@ -158,77 +125,60 @@
 
       .search-box {
         display: flex;
-        justify-content: flex-end;
+        align-items: center;
+        width: 200px;
+        height: 32px;
+        border-radius: 7px;
+        background: var(--color-hover-bg);
 
-        .container {
-          display: flex;
-          align-items: center;
-          width: 200px;
-          height: 32px;
-          border-radius: 8px;
-          background: var(--color-hover-bg);
+        .svg-icon {
+          height: 18px;
+          width: 18px;
+          margin: 0 7px;
+          opacity: 0.28;
+          color: var(--color-text);
+        }
 
+        input {
+          font-size: 16px;
+          width: 90%;
+          font-weight: 600;
+          border: none;
+          background: transparent;
+          color: var(--color-text);
+        }
+
+        &.active {
+          background-color: var(--color-panel-bg);
+
+          input,
           .svg-icon {
-            height: 15px;
-            width: 15px;
-            margin: 0 6px;
+            opacity: 1;
             color: var(--color-text);
-            opacity: 0.28;
-          }
-
-          .input {
-            input {
-              font-size: 16px;
-              width: 96%;
-              font-weight: 600;
-              border: none;
-              background: transparent;
-              color: var(--color-text);
-            }
-          }
-
-          &.active {
-            background-color: var(--color-panel-bg);
-
-            input,
-            .svg-icon {
-              opacity: 1;
-              color: var(--color-text);
-            }
           }
         }
       }
 
       .avatar {
+        margin-left: 12px;
+        cursor: pointer;
+
         img {
-          user-select: none;
           height: 30px;
-          margin-left: 12px;
-          vertical-align: middle;
           border-radius: 50%;
-          cursor: pointer;
+          vertical-align: middle;
         }
 
         .svg-icon {
-          user-select: none;
           width: 24px;
           height: 24px;
-          margin-left: 12px;
           vertical-align: middle;
-          cursor: pointer;
         }
 
         &:hover {
-          //模糊  //亮度值
           filter: brightness(80%);
         }
       }
-    }
-  }
-
-  @media (max-width: 1366px) {
-    nav {
-      padding: 0 5vw;
     }
   }
 </style>

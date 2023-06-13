@@ -1,10 +1,11 @@
 <script setup lang="ts">
-  import RecommendedDaily from '@/components/RecommendedDaily.vue';
+  import { ref } from 'vue';
+  import { getMvAll } from '@/apis/modules/mvlist';
+  import { getPersonalized, getToplist } from '@/apis/modules/playlist';
+
   import FMCard from '@/components/FMCard.vue';
   import ListCover from '@/components/ListCover.vue';
-  import { getPersonalized, getToplist } from '@/apis/playlist';
-  import { getMvAll } from '@/apis/mvlist';
-  import { ref } from 'vue';
+  import RecommendedDaily from '@/components/RecommendedDaily.vue';
 
   const playlist = ref([{}]);
   const mvAll = ref([{}]);
@@ -12,7 +13,7 @@
 
   const loadData = async () => {
     const Personalized = await getPersonalized(6);
-    playlist.value = Personalized.result;
+    playlist.value = Personalized?.result;
     const MvAll = await getMvAll(10);
     mvAll.value = MvAll.data;
     const Toplist = await getToplist();

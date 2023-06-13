@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import ListCover from '@/components/ListCover.vue';
   import TrackList from '@/components/TrackList.vue';
-  import { getSearch } from '@/apis/other';
+  import { getSearch } from '@/apis/modules/other';
   import { useRoute } from 'vue-router';
   import { ref, watch } from 'vue';
 

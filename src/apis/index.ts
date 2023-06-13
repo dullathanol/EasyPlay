@@ -1,4 +1,8 @@
 import axios from 'axios';
+import pinia from '@/stores';
+import { useUserStore } from '@/stores/modules/userStore';
+
+const userStore = useUserStore(pinia);
 
 const request = axios.create({
   timeout: 30000,
@@ -8,8 +12,8 @@ const request = axios.create({
 
 request.interceptors.request.use(
   (config) => {
-    if (localStorage.getItem('cookie') && config.params) {
-      config.params.cookie = localStorage.getItem('cookie');
+    if (userStore.cookie) {
+      config.headers.cookie = userStore.cookie;
     }
     return config;
   },

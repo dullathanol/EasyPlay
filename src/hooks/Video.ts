@@ -2,7 +2,7 @@ import Plyr from 'plyr';
 import pinia from '@/stores';
 import { usePlayStore } from '@/stores/modules/playStore';
 import { useVideoStore } from '@/stores/modules/videoStore';
-import { getDetail, getMvUrl, getSimi } from '@/apis/mvlist';
+import { getDetail, getMvUrl, getSimi } from '@/apis/modules/mvlist';
 import { startMusic, pauseMusic } from '@/hooks/Player';
 
 const playStore = usePlayStore();

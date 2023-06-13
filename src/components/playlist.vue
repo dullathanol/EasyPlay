@@ -7,7 +7,7 @@
     getToplist,
     getCatlist,
     getPlayList,
-  } from '@/apis/playlist';
+  } from '@/apis/modules/playlist';
   import { ref } from 'vue';
 
   const showCatOptions = ref(false);

@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import SvgIcon from '@/components/SvgIcon.vue';
   import ListCover from '@/components/ListCover.vue';
-  import { getMvAll, getFirst, getExclusive } from '@/apis/mvlist';
+  import { getMvAll, getFirst, getExclusive } from '@/apis/modules/mvlist';
   import { mvArea, mvType, mvOrder } from '@/utils/data';
   import { ref, reactive } from 'vue';
 

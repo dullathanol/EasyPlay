@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { ref, computed } from 'vue';
-  import { getFM, getTrash } from '@/apis/user';
+  import { getFM, getTrash } from '@/apis/modules/user';
   import { usePlayStore } from '@/stores/modules/playStore';
   import { addSong, startMusic, pauseMusic } from '@/hooks/Player';
   import ArtistsName from '@/components/ArtistsName.vue';

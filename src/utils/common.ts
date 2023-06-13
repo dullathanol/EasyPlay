@@ -1,4 +1,4 @@
-export const FormatPlayCount = (count) => {
+export const FormatPlayCount = (count: number) => {
   if (count > 100000000) {
     return `${Math.floor((count / 100000000) * 100) / 100}亿`;
   }
@@ -11,7 +11,7 @@ export const FormatPlayCount = (count) => {
   return count;
 };
 
-export const FormatDate = (timestamp, format = 'yyyy-MM-dd') => {
+export const FormatDate = (timestamp: number, format = 'yyyy-MM-dd') => {
   const dt = new Date(timestamp);
   const opt = {
     yyyy: dt.getFullYear(),
@@ -39,13 +39,13 @@ export const FormatSongTime = (duration = 0) => {
   return `${m}:${s}`;
 };
 
-export const FormatTrackTime = (value) => {
+export const FormatTrackTime = (value: number) => {
   if (!value) return '';
-  let min = ~~((value / 60) % 60);
-  let sec = (~~(value % 60)).toString().padStart(2, '0');
+  const min = ~~((value / 60) % 60);
+  const sec = (~~(value % 60)).toString().padStart(2, '0');
   return `${min}:${sec}`;
 };
 
-export const GetRandomInt = (min, max) => {
+export const GetRandomInt = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min + 1) + min);
 };

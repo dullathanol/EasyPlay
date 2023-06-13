@@ -1,4 +1,4 @@
-import request from '@/utils/request';
+import request from '@/apis';
 
 //推荐新音乐
 export const getNewsong = () => {
@@ -9,18 +9,24 @@ export const getNewsong = () => {
 };
 
 //推荐歌单
-export const getPersonalized = (limit) => {
+export const getPersonalized = (limit: number) => {
   return request({
-    url: `/personalized?limit=${limit}`,
+    url: '/personalized',
     method: 'get',
+    params: {
+      limit,
+    },
   });
 };
 
 //精品歌单
-export const getHighquality = (limit) => {
+export const getHighquality = (limit: number) => {
   return request({
-    url: `/top/playlist/highquality?limit=${limit}`,
+    url: '/top/playlist/highquality',
     method: 'get',
+    params: {
+      limit,
+    },
   });
 };
 
@@ -41,47 +47,58 @@ export const getCatlist = () => {
 };
 
 //网友精选碟歌单
-export const getPlayList = (limit, cat) => {
+export const getPlayList = (limit: number, cat: number) => {
   return request({
-    url: `/top/playlist?limit=${limit}&cat=${cat}`,
+    url: '/top/playlist',
     method: 'get',
+    params: {
+      limit,
+      cat,
+    },
   });
 };
 
 //歌单详情
-export const getDetail = (id) => {
+export const getDetail = (id: number) => {
   return request({
-    url: `/playlist/detail?id=${id}`,
+    url: '/playlist/detail',
     method: 'get',
     params: {
-      timestamp: new Date().getTime(),
+      id,
     },
   });
 };
 
 //收藏/取消收藏歌单
-export const getSubscribe = (id, sub) => {
+export const getSubscribe = (id: number, t: number) => {
   return request({
-    url: `/playlist/subscribe?id=${id}&t=${sub}`,
+    url: '/playlist/subscribe',
     method: 'get',
     params: {
-      timestamp: new Date().getTime(),
+      id,
+      t,
     },
   });
 };
 
 //是否可用
-export const getCheck = (id) => {
+export const getCheck = (id: number) => {
   return request({
-    url: `/check/music?id=${id}`,
+    url: '/check/music',
     method: 'get',
+    params: {
+      id,
+    },
   });
 };
 
 //音乐url
-export const getSongUrl = (id) => {
+export const getSongUrl = (id: number) => {
   return request({
-    url: `/song/url?id=${id}`,
+    url: '/song/url',
     method: 'get',
+    params: {
+      id,
+    },
   });
 };

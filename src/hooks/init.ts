@@ -1,10 +1,10 @@
 import pinia from '@/stores';
-import { getUserDetail, getLikelist } from '@/apis/user';
+import { getUserDetail, getLikelist } from '@/apis/modules/user';
 import { useUserStore } from '@/stores/modules/userStore';
 import { usePlayStore } from '@/stores/modules/playStore';
-import { getAlbumSublist } from '@/apis/artist';
-import { getLoginStatus } from '@/apis/login';
-import { getMvSublist } from '@/apis/mvlist';
+import { getAlbumSublist } from '@/apis/modules/artist';
+import { getLoginStatus } from '@/apis/modules/login';
+import { getMvSublist } from '@/apis/modules/mvlist';
 
 const userStore = useUserStore(pinia);
 const playStore = usePlayStore(pinia);

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { getLoginKey, getLoginCreate, getLoginCheck } from '@/apis/login';
+  import { getLoginKey, getLoginCreate, getLoginCheck } from '@/apis/modules/login';
   import { initCookie } from '@/hooks/init';
   import { useRouter } from 'vue-router';
   import { ref } from 'vue';

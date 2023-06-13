@@ -5,7 +5,7 @@
   import { useUserStore } from '@/stores/modules/userStore';
   import { usePlayStore } from '@/stores/modules/playStore';
   import { Likelist } from '@/hooks/init';
-  import { getLike } from '@/apis/user';
+  import { getLike } from '@/apis/modules/user';
   import { ref, computed } from 'vue';
 
   const props = defineProps(['playlist']);

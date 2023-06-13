@@ -2,15 +2,15 @@
   import TrackList from '@/components/TrackList.vue';
   import ListCover from '@/components/ListCover.vue';
   import SvgIcon from '@/components/SvgIcon.vue';
-  import { getArtistSublist, getAlbumSublist } from '@/apis/artist';
-  import { getMvSublist } from '@/apis/mvlist';
-  import { getUserFollow } from '@/apis/user';
-  import { getAccount, getRecord } from '@/apis/user';
+  import { getArtistSublist, getAlbumSublist } from '@/apis/modules/artist';
+  import { getMvSublist } from '@/apis/modules/mvlist';
+  import { getUserFollow } from '@/apis/modules/user';
+  import { getAccount, getRecord } from '@/apis/modules/user';
   import { useUserStore } from '@/stores/modules/userStore';
   import { useRoute, useRouter } from 'vue-router';
   import { FormatDate } from '@/utils/common';
-  import { getPlaylist } from '@/apis/user';
-  import { getLogout } from '@/apis/login';
+  import { getPlaylist } from '@/apis/modules/user';
+  import { getLogout } from '@/apis/modules/login';
   import { ref, computed, watch } from 'vue';
 
   const route = useRoute();

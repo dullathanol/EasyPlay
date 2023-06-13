@@ -12,7 +12,7 @@
     background: transparent;
     margin: 4px;
     padding: 8px;
-    border-radius: 25%;
+    border-radius: 20%;
     transition: 0.2s;
 
     &:hover {
@@ -20,7 +20,7 @@
     }
 
     &:active {
-      transform: scale(0.92);
+      transform: scale(0.9);
     }
   }
 </style>

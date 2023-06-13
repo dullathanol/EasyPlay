@@ -1,5 +1,5 @@
+import 'ant-design-vue/dist/antd.dark.css';
 import 'virtual:svg-icons-register';
-import 'ant-design-vue/dist/antd.css';
 import '@/styles/index.less';
 
 import { createApp } from 'vue';

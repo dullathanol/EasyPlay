@@ -2,7 +2,7 @@ import pinia from '@/stores';
 import { Howl } from 'howler';
 import { usePlayStore } from '@/stores/modules/playStore';
 import { GetRandomInt } from '@/utils/common';
-import { getCheck, getSongUrl } from '@/apis/playlist';
+import { getCheck, getSongUrl } from '@/apis/modules/playlist';
 
 const playStore = usePlayStore(pinia);
 
