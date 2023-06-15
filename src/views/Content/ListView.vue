@@ -1,84 +1,94 @@
 <script setup lang="ts">
-  import SvgIcon from '@/components/SvgIcon.vue';
-  import TrackList from '@/components/TrackList.vue';
+  import { ref, computed, onMounted } from 'vue';
+  import { useRoute } from 'vue-router';
   import { useUserStore } from '@/stores/modules/userStore';
-  import { useRoute, useRouter } from 'vue-router';
-  import { getUserDetail, getSubscribeSub } from '@/apis/modules/user';
+  import { getSubscribeSub } from '@/apis/modules/user';
+  import { getListDetail } from '@/apis/modules/resource';
   import { FormatPlayCount, FormatDate } from '@/utils/common';
-  import { ref, computed, watch } from 'vue';
+
+  import { Modal } from 'ant-design-vue';
+
+  import SvgIcon from '@/components/SvgIcon.vue';
+  import ButtonIcon from '@/components/ButtonIcon.vue';
+  import TrackList from '@/components/TrackList.vue';
 
   const route = useRoute();
-  const router = useRouter();
+
   const userStore = useUserStore();
 
-  const playlist = ref([{}]);
+  const id = ref();
+  const playlist = ref();
 
-  const loadData = async (id) => {
-    const Detail = await getUserDetail(id);
-    playlist.value = Detail?.playlist;
-  };
-
-  loadData(route.query.id);
+  const open = ref<boolean>(false);
 
   const creator = computed(() => {
-    return playlist.value?.creator?.nickname;
+    return playlist.value?.creator.nickname;
   });
 
   const isLike = computed(() => {
     return playlist.value.subscribed;
   });
 
-  const like = (value) => {
+  const like = (value: number) => {
     playlist.value.subscribed = !playlist.value.subscribed;
-    getSubscribeSub(route.query.id, value);
+    getSubscribeSub(id.value, value);
   };
 
-  watch(router.currentRoute, () => {
-    loadData(route.query.id);
+  const showModal = () => {
+    open.value = true;
+  };
+
+  onMounted(() => {
+    id.value = route.query.id;
+    getListDetail(id.value).then((Detail) => {
+      playlist.value = Detail.playlist;
+    });
   });
 </script>
 
 <template>
-  <div class="playlist" :class="{ active: !route.path.indexOf('/library') }">
+  <div class="playlist">
     <div class="playlist-info">
       <div class="cover">
-        <img :src="playlist.coverImgUrl" />
+        <img :src="playlist?.coverImgUrl" />
       </div>
       <div class="info">
-        <div class="title">{{ playlist.name }}</div>
+        <div class="title">{{ playlist?.name }}</div>
         <div class="artist">{{ creator }}</div>
         <div class="data-and-count"
-          >更新于 {{ FormatDate(playlist.updateTime) }} · {{ playlist.trackCount }} 首歌</div
+          >更新于 {{ FormatDate(playlist?.updateTime) }} · {{ playlist?.trackCount }} 首歌</div
         >
         <div class="count"
-          >播放 {{ FormatPlayCount(playlist.playCount) }} 收藏
-          {{ FormatPlayCount(playlist.subscribedCount) }} 分享
-          {{ FormatPlayCount(playlist.shareCount) }}</div
+          >播放 {{ FormatPlayCount(playlist?.playCount) }} 收藏
+          {{ FormatPlayCount(playlist?.subscribedCount) }} 分享
+          {{ FormatPlayCount(playlist?.shareCount) }}</div
         >
-        <div class="description">
-          {{ playlist.description }}
-        </div>
+        <div class="description" @click="showModal">{{ playlist?.description }}</div>
         <div class="buttons" v-if="userStore.login && playlist.userId != userStore.userId">
-          <button v-show="!isLike" @click="like(1)">
+          <ButtonIcon v-show="!isLike" @click="like(1)">
             <SvgIcon icon-class="heart"></SvgIcon>
             收藏
-          </button>
-          <button v-show="isLike" @click="like(0)">
+          </ButtonIcon>
+          <ButtonIcon v-show="isLike" @click="like(0)">
             <SvgIcon icon-class="heart-solid"></SvgIcon>
             以收藏
-          </button>
+          </ButtonIcon>
         </div>
       </div>
     </div>
-    <TrackList :playlist="playlist.tracks"></TrackList>
   </div>
+  <TrackList :playlist="playlist?.tracks"></TrackList>
+
+  <Modal v-model:open="open" title="歌单简介" :width="1000" :footer="null" centered>{{
+    playlist?.description
+  }}</Modal>
 </template>
 
 <style lang="less" scoped>
   .playlist {
     .playlist-info {
       display: flex;
-      margin-bottom: 72px;
+      margin-bottom: 30px;
       position: relative;
 
       .cover {
@@ -95,39 +105,34 @@
         flex: 7;
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        color: var(--color-text);
         margin-left: 56px;
 
         .title {
           font-size: 36px;
           font-weight: 700;
-          color: var(--color-text);
         }
 
         .artist {
           font-size: 18px;
           opacity: 0.88;
-          color: var(--color-text);
           margin: 12px 0;
         }
 
         .data-and-count {
           font-size: 14px;
           opacity: 0.88;
-          color: var(--color-text);
         }
 
         .count {
           font-size: 14px;
           opacity: 0.88;
           margin: 12px 0;
-          color: var(--color-text);
         }
 
         .description {
           font-size: 14px;
           opacity: 0.88;
-          color: var(--color-text);
           display: -webkit-box;
           -webkit-box-orient: vertical;
           -webkit-line-clamp: 3;
@@ -137,25 +142,12 @@
         .buttons {
           margin: 12px 0 0;
 
-          button {
-            display: flex;
-            align-items: center;
-            justify-content: center;
+          .button-icon {
             font-size: 15px;
             padding: 8px 12px;
             border-radius: 8px;
-            color: var(--color-text);
             background-color: var(--color-hover-bg);
             user-select: none;
-            transition: 0.2s;
-
-            &:hover {
-              transform: scale(1.06);
-            }
-
-            &:active {
-              transform: scale(0.94);
-            }
 
             .svg-icon {
               margin-right: 6px;
@@ -164,10 +156,6 @@
           }
         }
       }
-    }
-
-    &.active {
-      margin: 0;
     }
   }
 </style>

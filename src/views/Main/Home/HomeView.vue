@@ -3,13 +3,16 @@
   import { getMvAll } from '@/apis/modules/resource';
   import { getPersonalized, getToplist } from '@/apis/modules/resource';
 
+  import { Skeleton } from 'ant-design-vue';
+
   import ListCover from '@/components/ListCover.vue';
   import FMCard from './src/FMCard.vue';
   import RecommendedDaily from './src/RecommendedDaily.vue';
 
-  const playlist = ref([{}]);
+  const playlist = ref();
   const mvAll = ref([{}]);
   const toplist = ref([{}]);
+  const loading = ref<boolean>(true);
 
   onMounted(async () => {
     const Personalized = await getPersonalized(6);
@@ -18,6 +21,7 @@
     mvAll.value = MvAll.data;
     const Toplist = await getToplist();
     toplist.value = Toplist.list.slice(0, 6);
+    loading.value = false;
   });
 </script>
 
@@ -35,21 +39,27 @@
         推荐歌单
         <router-link to="/expolore">查看更多</router-link>
       </div>
-      <ListCover class="play-row" :list="playlist" :type="'playlist'"></ListCover>
+      <Skeleton :loading="loading" active>
+        <ListCover class="play-row" :list="playlist" :type="'playlist'"></ListCover>
+      </Skeleton>
     </div>
     <div class="index-row">
       <div class="title">
         推荐MV
         <router-link to="/expolore">查看更多</router-link>
       </div>
-      <ListCover class="mv-row" :list="mvAll" :type="'mvs'"></ListCover>
+      <Skeleton :loading="loading" active>
+        <ListCover class="mv-row" :list="mvAll" :type="'mvs'"></ListCover>
+      </Skeleton>
     </div>
     <div class="index-row">
       <div class="title">
         排行榜
         <router-link to="/expolore">查看更多</router-link>
       </div>
-      <ListCover class="play-row" :list="toplist" :type="'rank'"></ListCover>
+      <Skeleton :loading="loading" active>
+        <ListCover class="play-row" :list="toplist" :type="'rank'"></ListCover>
+      </Skeleton>
     </div>
   </div>
 </template>

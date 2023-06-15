@@ -85,13 +85,13 @@
     height: 200px;
     padding: 1rem;
     border-radius: 1rem;
-    background: var(--color-hover-bg);
     display: flex;
+    box-sizing: border-box;
+    background: var(--color-hover-bg);
 
     .cover {
       height: 100%;
       border-radius: 0.75rem;
-      cursor: pointer;
     }
 
     .right-part {

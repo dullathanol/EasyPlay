@@ -1,4 +1,3 @@
-import 'ant-design-vue/dist/antd.dark.css';
 import 'virtual:svg-icons-register';
 import '@/styles/index.less';
 

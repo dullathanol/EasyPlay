@@ -1,6 +1,7 @@
 <script setup lang="ts">
-  import TrackList from '@/components/TrackList.vue';
   import { usePlayStore } from '@/stores/modules/playStore';
+
+  import TrackList from '@/components/TrackList.vue';
 
   const playStore = usePlayStore();
 </script>

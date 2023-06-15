@@ -14,8 +14,8 @@
   const userStore = useUserStore();
 
   const isLike = ref(false);
-  const album = ref([{}]);
-  const songs = ref([{}]);
+  const album = ref();
+  const songs = ref();
 
   AlbumSublist(route.query.id).then((value) => {
     isLike.value = value;

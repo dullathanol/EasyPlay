@@ -1,4 +1,4 @@
-import type { Personalized, Toplist, NewSong } from './types';
+import type { Personalized, Toplist, NewSong, ListDetail, Search } from './types';
 
 import request from '@/apis';
 
@@ -53,7 +53,7 @@ export const getFMTrash = (id: number) => {
 };
 
 //搜索
-export const getSearch = (keywords: string, type: number) => {
+export const getSearch = (keywords: string, type: number): Promise<Search> => {
   return request({
     url: API.SEARCH,
     method: 'GET',
@@ -123,7 +123,7 @@ export const getPlayList = (limit: number, cat: number) => {
 };
 
 //歌单详情
-export const getListDetail = (id: number) => {
+export const getListDetail = (id: number): Promise<ListDetail> => {
   return request({
     url: API.LIST_DETAIL,
     method: 'GET',

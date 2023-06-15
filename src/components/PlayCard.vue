@@ -1,20 +1,21 @@
 <script setup lang="ts">
-  import SvgIcon from '@/components/SvgIcon.vue';
-  import ListCover from '@/components/ListCover.vue';
+  import { ref } from 'vue';
   import {
-    getPersonalized,
-    getHighquality,
     getToplist,
     getCatlist,
     getPlayList,
+    getHighquality,
+    getPersonalized,
   } from '@/apis/modules/resource';
-  import { ref } from 'vue';
+
+  import SvgIcon from '@/components/SvgIcon.vue';
+  import ListCover from '@/components/ListCover.vue';
 
   const showCatOptions = ref(false);
   const active = ref('personalized');
   const type = ref('personalized');
-  const playlist = ref([{}]);
-  const catList = ref([{}]);
+  const playlist = ref();
+  const catList = ref();
   const list = ref([]);
 
   const loadData = async () => {

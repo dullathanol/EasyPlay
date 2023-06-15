@@ -2,12 +2,12 @@ export default [
   {
     path: '/',
     name: 'home',
-    component: () => import('@/views/Content/Home/HomeView.vue'),
+    component: () => import('@/views/Main/Home/HomeView.vue'),
   },
   {
     path: '/expolore',
     name: 'expolore',
-    component: () => import('@/components/expolore.vue'),
+    component: () => import('@/views/Main/Expolore/ExpoloreView.vue'),
     children: [
       {
         path: '/expolore',
@@ -16,75 +16,75 @@ export default [
       {
         path: 'playlist',
         name: 'playlist',
-        component: () => import('@/components/playlist.vue'),
+        component: () => import('@/components/PlayCard.vue'),
       },
       {
         path: 'mvlist',
         name: 'mvlist',
-        component: () => import('@/components/mvlist.vue'),
+        component: () => import('@/components/MVCard.vue'),
       },
     ],
   },
   {
     path: '/library',
     name: 'library',
-    component: () => import('@/components/library.vue'),
+    component: () => import('@/components/LibraryView.vue'),
     children: [
       {
         path: 'likelist',
         name: 'likelist',
-        component: () => import('@/components/list.vue'),
+        component: () => import('@/views/Content/ListView.vue'),
       },
     ],
   },
   {
     path: '/list',
     name: 'list',
-    component: () => import('@/components/list.vue'),
+    component: () => import('@/views/Content/ListView.vue'),
   },
   {
     path: '/track',
     name: 'track',
-    component: () => import('@/components/track.vue'),
+    component: () => import('@/components/TrackView.vue'),
   },
   {
     path: '/lyrics',
     name: 'lyrics',
-    component: () => import('@/components/lyrics.vue'),
+    component: () => import('@/components/LyricsView.vue'),
   },
   {
     path: '/mv',
     name: 'mv',
-    component: () => import('@/components/mv.vue'),
+    component: () => import('@/components/MVView.vue'),
   },
   {
     path: '/album',
     name: 'album',
-    component: () => import('@/components/album.vue'),
+    component: () => import('@/components/AlbumView.vue'),
   },
   {
     path: '/artist',
     name: 'artist',
-    component: () => import('@/components/artist.vue'),
+    component: () => import('@/components/ArtistView.vue'),
   },
   {
     path: '/user',
     name: 'user',
-    component: () => import('@/components/user.vue'),
+    component: () => import('@/components/UserView.vue'),
   },
   {
     path: '/dailySongs',
     name: 'dailySongs',
-    component: () => import('@/components/DailyTracks.vue'),
+    component: () => import('@/views/Content/DailyTracks.vue'),
   },
   {
     path: '/search',
     name: 'search',
-    component: () => import('@/components/search.vue'),
+    component: () => import('@/views/Content/SearchView.vue'),
   },
   {
     path: '/login',
     name: 'login',
-    component: () => import('@/components/login.vue'),
+    component: () => import('@/components/LoginView.vue'),
   },
 ];

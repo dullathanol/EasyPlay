@@ -1,14 +1,15 @@
 <script setup lang="ts">
-  import ArtistsName from '@/components/ArtistsName.vue';
-  import SvgIcon from '@/components/SvgIcon.vue';
-  import Cover from '@/components/Cover.vue';
-  import { FormatPlayCount, FormatSongTime } from '@/utils/common';
   import { useRouter } from 'vue-router';
+  import { FormatPlayCount, FormatSongTime } from '@/utils/common';
+
+  import CoverImg from '@/components/CoverImg.vue';
+  import SvgIcon from '@/components/SvgIcon.vue';
+  import ArtistsName from '@/components/ArtistsName.vue';
 
   const router = useRouter();
   const props = defineProps(['list', 'type']);
 
-  const to = (item) => {
+  const to = (item: any) => {
     if (props.type === 'albums') {
       router.push({
         name: 'album',
@@ -21,34 +22,11 @@
         query: { id: item.id },
       });
     }
-    if (props.type === 'playlist') {
-      router.push({
-        name: 'list',
-        query: { id: item.id },
-      });
-    }
-    if (props.type === 'playlists') {
-      router.push({
-        name: 'list',
-        query: { id: item.id },
-      });
-    }
+
     if (props.type === 'userprofiles') {
       router.push({
         name: 'user',
         query: { id: item.userId },
-      });
-    }
-    if (props.type === 'mvs') {
-      router.push({
-        name: 'mv',
-        query: { id: item.id },
-      });
-    }
-    if (props.type === 'artistmv') {
-      router.push({
-        name: 'mv',
-        query: { id: item.id },
       });
     }
     if (props.type === 'submv') {
@@ -57,7 +35,13 @@
         query: { id: item.vid },
       });
     }
-    if (props.type === 'rank') {
+    if (props.type === 'mvs' || props.type === 'artistmv') {
+      router.push({
+        name: 'mv',
+        query: { id: item.id },
+      });
+    }
+    if (props.type === 'playlist' || props.type === 'playlists' || props.type === 'rank') {
       router.push({
         name: 'list',
         query: { id: item.id },
@@ -65,27 +49,12 @@
     }
   };
 
-  const src = (item) => {
-    if (props.type === 'albums') {
-      return item.picUrl;
-    }
-    if (props.type === 'artists') {
-      return item.picUrl;
-    }
-    if (props.type === 'playlist') {
-      return item.picUrl;
-    }
-    if (props.type === 'playlists') {
-      return item.coverImgUrl;
-    }
+  const src = (item: any) => {
     if (props.type === 'userprofiles') {
       return item.avatarUrl;
     }
     if (props.type === 'mvs') {
       return item.cover;
-    }
-    if (props.type === 'rank') {
-      return item.coverImgUrl;
     }
     if (props.type === 'submv') {
       return item.coverUrl;
@@ -93,16 +62,22 @@
     if (props.type === 'artistmv') {
       return item.imgurl;
     }
+    if (props.type === 'playlists' || props.type === 'rank') {
+      return item.coverImgUrl;
+    }
+    if (props.type === 'albums' || props.type === 'artists' || props.type === 'playlist') {
+      return item.picUrl;
+    }
   };
 
-  const playCount = (item) => {
-    if (props.type === 'playlists' || 'mvs') {
+  const playCount = (item: any) => {
+    if (props.type === 'playlists' || props.type === 'mvs') {
       return FormatPlayCount(item.playCount);
     }
-    return false;
+    return null;
   };
 
-  const playTime = (item) => {
+  const playTime = (item: any) => {
     if (props.type === 'mvs') {
       if (item.duration !== 0) {
         return FormatSongTime(item.duration);
@@ -111,20 +86,20 @@
     if (props.type === 'submv') {
       return FormatSongTime(item.durationms);
     }
-    return false;
+    return null;
   };
 
-  const artists = (item) => {
+  const artists = (item: any) => {
     if (props.type === 'songs') {
       return item.ar;
     }
-    if (props.type === 'albums' || 'mvs') {
+    if (props.type === 'albums' || props.type === 'mvs') {
       return item.artists;
     }
-    return false;
+    return null;
   };
 
-  const name = (item) => {
+  const name = (item: any) => {
     if (props.type === 'userprofiles') {
       return item.nickname;
     }
@@ -138,7 +113,7 @@
 <template>
   <div class="cover-row" v-if="list">
     <div class="item" v-for="item in list" :key="item.id">
-      <Cover :src="src(item)" @click="to(item)"></Cover>
+      <CoverImg :src="src(item)" :item="item" @click="to(item)"></CoverImg>
       <div class="info">
         <div class="cover-play">
           <span class="play-count" v-if="playCount(item)">

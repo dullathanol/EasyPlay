@@ -2,10 +2,11 @@
   import { addSong } from '@/hooks/Player';
   import { usePlayStore } from '@/stores/modules/playStore';
 
-  import TrackListItem from '@/components/TrackListItem.vue';
+  import TrackListItem from '@/components/TrackItem.vue';
+
+  const playStore = usePlayStore();
 
   const props = defineProps(['playlist']);
-  const playStore = usePlayStore();
 
   const play = (id: number, index: number) => {
     playStore.songList = props.playlist;
@@ -14,15 +15,11 @@
 </script>
 
 <template>
-  <div class="track-list">
-    <TrackListItem
-      v-for="(item, index) in playlist"
-      :key="item.id"
-      :playlist="item"
-      @dblclick="play(item.id, index)"
-    >
-    </TrackListItem>
-  </div>
+  <TrackListItem
+    v-for="(item, index) in playlist"
+    :key="item.id"
+    :playlist="item"
+    @dblclick="play(item.id, index)"
+  >
+  </TrackListItem>
 </template>
-
-<style lang="less" scoped></style>

@@ -1,26 +1,20 @@
 <script setup lang="ts">
+  import { ref, computed, onMounted } from 'vue';
+  import { useRoute } from 'vue-router';
+  import { getUserList } from '@/apis/modules/user';
+  import { getUserDetail, getFollowSub } from '@/apis/modules/user';
+  import { useUserStore } from '@/stores/modules/userStore';
+
   import SvgIcon from '@/components/SvgIcon.vue';
   import ListCover from '@/components/ListCover.vue';
-  import { useUserStore } from '@/stores/modules/userStore';
-  import { getUserDetail, getFollowSub } from '@/apis/modules/user';
-  import { getPlayList } from '@/apis/modules/resource';
-  import { useRoute } from 'vue-router';
-  import { ref, computed } from 'vue';
 
   const route = useRoute();
   const userStore = useUserStore();
 
+  const id = ref();
   const active = ref(1);
-  const detail = ref([{}]);
-  const playlist = ref([{}]);
-
-  getUserDetail(route.query.id).then((Detail) => {
-    detail.value = Detail;
-  });
-
-  getPlayList(route.query.id).then((Playlist) => {
-    playlist.value = Playlist.playlist;
-  });
+  const detail = ref();
+  const playlist = ref();
 
   const userlist = computed(() => {
     return playlist.value.filter((list) => list.userId == route.query.id);
@@ -38,10 +32,20 @@
     return detail.value.profile?.followed;
   });
 
-  const like = (value) => {
+  const like = (value: string) => {
     detail.value.profile.followed = !detail.value.profile.followed;
-    getFollowSub(route.query.id, value);
+    getFollowSub(id.value, value);
   };
+  onMounted(() => {
+    id.value = route.query.id;
+    getUserDetail(id.value).then((Detail) => {
+      detail.value = Detail;
+    });
+
+    getUserList(id.value).then((Playlist) => {
+      playlist.value = Playlist.playlist;
+    });
+  });
 </script>
 
 <template>

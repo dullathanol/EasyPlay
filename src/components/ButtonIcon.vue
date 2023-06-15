@@ -18,6 +18,7 @@
     cursor: pointer;
 
     &:hover {
+      transform: scale(1.1);
       background: var(--color-hover-bg);
     }
 

@@ -131,7 +131,7 @@ export const getSubscribeSub = (id: number, t: number) => {
 };
 
 //收藏/取消收藏用户
-export const getFollowSub = (id: number, t: number) => {
+export const getFollowSub = (id: number, t: string) => {
   return request({
     url: API.FOLLOW_SUB,
     method: 'GET',

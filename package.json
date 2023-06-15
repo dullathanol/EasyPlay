@@ -12,7 +12,7 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
-    "ant-design-vue": "^3.2.20",
+    "ant-design-vue": "^4.0.0-rc.5",
     "axios": "^1.4.0",
     "howler": "^2.2.3",
     "pinia": "^2.0.36",
