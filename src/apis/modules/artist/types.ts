@@ -1,9 +1,19 @@
-export interface MyResponseType<T = any> {
+export interface ArtistDetail {
   code: number;
-  message: string;
-  data: T;
+  data: any;
 }
 
-export interface User {
-  name: string;
+export interface ArtistSong {
+  code: number;
+  songs: any;
+}
+
+export interface ArtistAlbum {
+  code: number;
+  hotAlbums: any;
+}
+
+export interface ArtistMv {
+  code: number;
+  mvs: any;
 }

@@ -1,7 +1,9 @@
 <script setup lang="ts">
-  import TrackList from '@/components/TrackList.vue';
-  import ListCover from '@/components/ListCover.vue';
-  import SvgIcon from '@/components/SvgIcon.vue';
+  import { ref, computed, onMounted } from 'vue';
+  import { useRouter } from 'vue-router';
+  import { useUserStore } from '@/stores/modules/userStore';
+  import { getUserList } from '@/apis/modules/user';
+  import { getLogOut } from '@/apis/modules/login';
   import {
     getUserAccount,
     getUserRecord,
@@ -10,69 +12,57 @@
     getUserFollowList,
     getMvSubList,
   } from '@/apis/modules/user';
-  import { useUserStore } from '@/stores/modules/userStore';
-  import { useRoute, useRouter } from 'vue-router';
   import { FormatDate } from '@/utils/common';
-  import { getPlayList } from '@/apis/modules/resource';
-  import { getLogOut } from '@/apis/modules/login';
-  import { ref, computed, watch } from 'vue';
 
-  const route = useRoute();
+  import TrackList from '@/components/TrackList.vue';
+  import ListCover from '@/components/ListCover.vue';
+  import SvgIcon from '@/components/SvgIcon.vue';
+
   const router = useRouter();
   const userStore = useUserStore();
-  const id = localStorage.getItem('userId');
 
-  const trackActive = ref(null);
+  const id = ref();
+  const trackActive = ref();
   const changeActive = ref(1);
-  const playlist = ref([{}]);
-  const account = ref([{}]);
-  const list = ref([{}]);
-  const record = ref([{}]);
+  const playlist = ref();
+  const account = ref();
+  const list = ref();
+  const record = ref();
   const show = ref(false);
   const active = ref(1);
 
-  getPlayList(id).then((Playlist) => {
-    playlist.value = Playlist.playlist;
-  });
-
-  getUserAccount().then((Account) => {
-    account.value = Account.profile;
-  });
-
   const loadData = (type = 1) => {
     if (type == 0) {
-      getUserRecord(id, type).then((Data) => {
+      getUserRecord(id.value, type).then((Data) => {
         record.value = Data.allData.map((song) => song.song);
       });
     } else {
-      getUserRecord(id, type).then((Data) => {
+      getUserRecord(id.value, type).then((Data) => {
         record.value = Data.weekData.map((song) => song.song);
       });
     }
   };
 
-  loadData();
-
   const userlist = computed(() => {
-    return playlist.value.filter((list) => list.userId == userStore.userId);
+    return playlist.value.filter((list: any) => list.userId == userStore.userId);
   });
 
   const sublist = computed(() => {
-    return playlist.value.filter((list) => list.userId != userStore.userId);
+    return playlist.value.filter((list: any) => list.userId != userStore.userId);
   });
 
-  const change = (type) => {
+  const change = (type: number) => {
     changeActive.value = type;
     loadData(type);
   };
 
-  const go = (id) => {
+  const go = (id: number) => {
     show.value = true;
     trackActive.value = id;
     router.push({ name: 'likelist', query: { id: id } });
   };
 
-  const toggle = (type) => {
+  const toggle = (type: number) => {
     active.value = type;
     if (type === 3) {
       getAlbumSubList().then((data) => {
@@ -85,7 +75,7 @@
       });
     }
     if (type === 5) {
-      getUserFollowList(id).then((follow) => {
+      getUserFollowList(id.value).then((follow) => {
         list.value = follow.follow;
       });
     }
@@ -108,11 +98,18 @@
     });
   };
 
-  watch(route, () => {
-    if (route.path !== '/library/likelist') {
-      show.value = false;
-      trackActive.value = null;
-    }
+  onMounted(() => {
+    id.value = localStorage.getItem('userId');
+
+    loadData();
+
+    getUserList(id.value).then((Playlist) => {
+      playlist.value = Playlist.playlist;
+    });
+
+    getUserAccount().then((Account) => {
+      account.value = Account.profile;
+    });
   });
 </script>
 
@@ -124,6 +121,7 @@
         v-for="item in userlist"
         @click="go(item.id)"
         :class="{ active: item.id === trackActive }"
+        :key="item.key"
       >
         <img :src="item.coverImgUrl" />
         <div class="title">{{ item.name }}</div>
@@ -193,7 +191,6 @@
 
 <style lang="less" scoped>
   .library {
-
     .library-row {
       flex: 2;
       position: fixed;

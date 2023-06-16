@@ -1,3 +1,5 @@
+import type { LogOut, LoginQrCheck } from './types';
+
 import request from '@/apis';
 
 enum API {
@@ -33,7 +35,7 @@ export const getLoginQrCreate = (key: string) => {
 };
 
 //扫码状态
-export const getLoginQrCheck = (key: string) => {
+export const getLoginQrCheck = (key: string): Promise<LoginQrCheck> => {
   return request({
     url: API.LOGIN_QR_CHECK,
     method: 'GET',
@@ -56,7 +58,7 @@ export const getLoginStatus = () => {
 };
 
 //退出登录
-export const getLogOut = () => {
+export const getLogOut = (): Promise<LogOut> => {
   return request({
     url: API.LOG_OUT,
     method: 'POST',

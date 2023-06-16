@@ -6,9 +6,9 @@ import { getSongCheck, getSongUrl } from '@/apis/modules/resource';
 
 const playStore = usePlayStore(pinia);
 
-let musicProgress = null;
+let musicProgress: any;
 
-export const play = (url, autoplay) => {
+export const play = (url: string, autoplay: boolean) => {
   if (playStore.Howl) playStore.Howl.unload();
   playStore.Howl = new Howl({
     src: url,
@@ -42,7 +42,7 @@ export const play = (url, autoplay) => {
   });
 };
 
-export const addSong = (id, index, autoplay) => {
+export const addSong = (id: number, index: number, autoplay: boolean) => {
   setId(id, index);
   playStore.progress = 0;
   if (playStore.Howl && playStore.volume != 0) {
@@ -60,12 +60,12 @@ export const addSong = (id, index, autoplay) => {
   }
 };
 
-export const getSong = async (id, autoplay) => {
+export const getSong = async (id: number, autoplay: boolean) => {
   await getSongCheck(id).then((result) => {
     if (result.success == true) {
       getSongUrl(id).then((songInfo) => {
         play(songInfo.data[0].url, autoplay);
-        let detail = {
+        const detail = {
           songId: playStore.songId,
           songList: playStore.songList,
           currentIndex: playStore.currentIndex,
@@ -169,7 +169,7 @@ export const mute = () => {
   }
 };
 
-export const setId = (id, index) => {
+export const setId = (id: number, index: number) => {
   if (playStore.playMode != 2) {
     playStore.songId = id;
     playStore.currentIndex = index;

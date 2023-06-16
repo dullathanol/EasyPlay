@@ -1,34 +1,35 @@
 <script setup lang="ts">
+  import { ref, onMounted } from 'vue';
+  import { useRoute } from 'vue-router';
+  import { useUserStore } from '@/stores/modules/userStore';
+  import { getAlbumSub } from '@/apis/modules/user';
+  import { getAlbumDetail } from '@/apis/modules/resource';
+  import { FormatDate } from '@/utils/common';
+
   import ArtistsName from '@/components/ArtistsName.vue';
   import TrackList from '@/components/TrackList.vue';
   import SvgIcon from '@/components/SvgIcon.vue';
-  import { getAlbumSub } from '@/apis/modules/user';
-  import { getAlbumDetail } from '@/apis/modules/resource';
-  import { useUserStore } from '@/stores/modules/userStore';
-  import { FormatDate } from '@/utils/common';
-  import { AlbumSublist } from '@/hooks/init';
-  import { useRoute } from 'vue-router';
-  import { ref } from 'vue';
 
   const route = useRoute();
   const userStore = useUserStore();
 
   const isLike = ref(false);
+  const id = ref();
   const album = ref();
   const songs = ref();
 
-  AlbumSublist(route.query.id).then((value) => {
-    isLike.value = value;
-  });
-
-  const like = (value) => {
+  const like = (value: number) => {
     isLike.value = !isLike.value;
-    getAlbumSub(route.query.id, value);
+    getAlbumSub(id.value, value);
   };
 
-  getAlbumDetail(route.query.id).then((Album) => {
-    album.value = Album.album;
-    songs.value = Album.songs;
+  onMounted(() => {
+    id.value = route.query.id;
+
+    getAlbumDetail(id.value).then((Album) => {
+      album.value = Album.album;
+      songs.value = Album.songs;
+    });
   });
 </script>
 

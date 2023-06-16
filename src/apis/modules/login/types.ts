@@ -1,9 +1,9 @@
-export interface MyResponseType<T = any> {
+export interface LogOut {
   code: number;
-  message: string;
-  data: T;
 }
 
-export interface User {
-  name: string;
+export interface LoginQrCheck {
+  code: number;
+  message: string;
+  cookie: string;
 }

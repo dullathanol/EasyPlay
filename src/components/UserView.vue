@@ -17,11 +17,11 @@
   const playlist = ref();
 
   const userlist = computed(() => {
-    return playlist.value.filter((list) => list.userId == route.query.id);
+    return playlist.value.filter((list: any) => list.userId == route.query.id);
   });
 
   const sublist = computed(() => {
-    return playlist.value.filter((list) => list.userId != route.query.id);
+    return playlist.value.filter((list: any) => list.userId != route.query.id);
   });
 
   const profile = computed(() => {
@@ -32,7 +32,7 @@
     return detail.value.profile?.followed;
   });
 
-  const like = (value: string) => {
+  const like = (value: number) => {
     detail.value.profile.followed = !detail.value.profile.followed;
     getFollowSub(id.value, value);
   };

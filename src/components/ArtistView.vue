@@ -1,7 +1,8 @@
 <script setup lang="ts">
-  import SvgIcon from '@/components/SvgIcon.vue';
-  import TrackList from '@/components/TrackList.vue';
-  import ListCover from '@/components/ListCover.vue';
+  import { ref, computed, onMounted } from 'vue';
+  import { useRoute } from 'vue-router';
+  import { useUserStore } from '@/stores/modules/userStore';
+  import { getArtistSub } from '@/apis/modules/user';
   import {
     getArtistDetail,
     getArtistFollow,
@@ -9,54 +10,53 @@
     getArtistMv,
     getArtistAlbum,
   } from '@/apis/modules/artist';
-  import { getArtistSub } from '@/apis/modules/user';
-  import { useUserStore } from '@/stores/modules/userStore';
-  import { ref, computed, watch } from 'vue';
-  import { useRoute } from 'vue-router';
+
+  import SvgIcon from '@/components/SvgIcon.vue';
+  import TrackList from '@/components/TrackList.vue';
+  import ListCover from '@/components/ListCover.vue';
 
   const route = useRoute();
   const userStore = useUserStore();
 
+  const id = ref();
   const active = ref(1);
-  const detail = ref([{}]);
-  const follow = ref([{}]);
-  const list = ref([{}]);
+  const detail = ref();
+  const follow = ref();
+  const list = ref();
 
-  const like = (value) => {
+  const like = (value: number) => {
     follow.value.follow = !follow.value.follow;
-    getArtistSub(route.query.id, value);
+    getArtistSub(id.value, value);
   };
 
   const lodaData = () => {
-    getArtistDetail(route.query.id).then((Detail) => {
+    getArtistDetail(id.value).then((Detail) => {
       detail.value = Detail.data;
     });
 
-    getArtistFollow(route.query.id).then((Follow) => {
+    getArtistFollow(id.value).then((Follow) => {
       follow.value = Follow.data;
     });
 
-    getArtistSong(route.query.id).then((Song) => {
+    getArtistSong(id.value).then((Song) => {
       list.value = Song.songs;
     });
   };
 
-  lodaData();
-
-  const toggle = (type) => {
+  const toggle = (type: number) => {
     active.value = type;
     if (type === 1) {
-      getArtistSong(route.query.id).then((Song) => {
+      getArtistSong(id.value).then((Song) => {
         list.value = Song.songs;
       });
     }
     if (type === 2) {
-      getArtistAlbum(route.query.id).then((data) => {
+      getArtistAlbum(id.value).then((data) => {
         list.value = data.hotAlbums;
       });
     }
     if (type === 3) {
-      getArtistMv(route.query.id).then((data) => {
+      getArtistMv(id.value).then((data) => {
         list.value = data.mvs;
       });
     }
@@ -74,14 +74,11 @@
     return follow.value.follow;
   });
 
-  watch(
-    () => route.query.id,
-    () => {
-      if (route.name == 'artist') {
-        lodaData();
-      }
-    },
-  );
+  onMounted(() => {
+    id.value = route.query.id;
+
+    lodaData();
+  });
 </script>
 
 <template>

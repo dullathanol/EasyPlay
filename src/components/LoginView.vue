@@ -1,12 +1,12 @@
 <script setup lang="ts">
+  import { ref } from 'vue';
+  import { useRouter } from 'vue-router';
   import { getLoginQrKey, getLoginQrCreate, getLoginQrCheck } from '@/apis/modules/login';
   import { initCookie } from '@/hooks/init';
-  import { useRouter } from 'vue-router';
-  import { ref } from 'vue';
 
   const router = useRouter();
 
-  const qrImg = ref(null);
+  const qrImg = ref();
   const qrMessage = ref('打开网易云音乐APP扫码登录');
 
   const loadData = async () => {

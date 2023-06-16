@@ -28,7 +28,7 @@ export default [
   {
     path: '/library',
     name: 'library',
-    component: () => import('@/components/LibraryView.vue'),
+    component: () => import('@/views/Main/Library/LibraryView.vue'),
     children: [
       {
         path: 'likelist',

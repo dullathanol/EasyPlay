@@ -1,47 +1,35 @@
 <script setup lang="ts">
+  import { ref, onMounted } from 'vue';
+  import { useRoute } from 'vue-router';
+  import { getMvSub } from '@/apis/modules/user';
+  import { useUserStore } from '@/stores/modules/userStore';
+  import { useVideoStore } from '@/stores/modules/videoStore';
+  import { play, getVideo } from '@/hooks/Video';
+  import { FormatPlayCount } from '@/utils/common';
+
   import ArtistsName from '@/components/ArtistsName.vue';
   import SvgIcon from '@/components/SvgIcon.vue';
   import ListCover from '@/components/ListCover.vue';
-  import { useVideoStore } from '@/stores/modules/videoStore';
-  import { useUserStore } from '@/stores/modules/userStore';
-  import { FormatPlayCount } from '@/utils/common';
-  import { play, getVideo } from '@/hooks/Video';
-  import { MvSublist } from '@/hooks/init';
-  import { getMvSub } from '@/apis/modules/user';
-  import { ref, watch, onMounted } from 'vue';
-  import { useRoute } from 'vue-router';
+
   import 'plyr/dist/plyr.css';
 
   const route = useRoute();
   const userStore = useUserStore();
   const videoStore = useVideoStore();
 
+  const id = ref();
   const isLike = ref(false);
 
-  getVideo(route.query.id);
-
-  MvSublist(route.query.id).then((value) => {
-    isLike.value = value;
-  });
-
-  const like = (value) => {
+  const like = (value: number) => {
     isLike.value = !isLike.value;
-    getMvSub(route.query.id, value);
+    getMvSub(id.value, value);
   };
 
-  watch(
-    () => route.query.id,
-    () => {
-      if (route.name == 'mv') {
-        getVideo(route.query.id);
-        MvSublist(route.query.id).then((value) => {
-          isLike.value = value;
-        });
-      }
-    },
-  );
-
   onMounted(() => {
+    id.value = route.query.id;
+
+    getVideo(id.value);
+
     play();
   });
 </script>

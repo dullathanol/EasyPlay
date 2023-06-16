@@ -1,3 +1,5 @@
+import type { ArtistDetail, ArtistSong, ArtistAlbum, ArtistMv } from './types';
+
 import request from '@/apis';
 
 enum API {
@@ -9,7 +11,7 @@ enum API {
 }
 
 //获取歌手详情
-export const getArtistDetail = (id: number) => {
+export const getArtistDetail = (id: number): Promise<ArtistDetail> => {
   return request({
     url: API.ARTIST_DETAIL,
     method: 'GET',
@@ -20,7 +22,7 @@ export const getArtistDetail = (id: number) => {
 };
 
 //歌手热门 50 首歌曲
-export const getArtistSong = (id: number) => {
+export const getArtistSong = (id: number): Promise<ArtistSong> => {
   return request({
     url: API.ARTIST_SONG,
     method: 'GET',
@@ -42,7 +44,7 @@ export const getArtistFollow = (id: number) => {
 };
 
 //获取歌手MV
-export const getArtistMv = (id: number) => {
+export const getArtistMv = (id: number): Promise<ArtistMv> => {
   return request({
     url: API.ARTIST_MV,
     method: 'GET',
@@ -53,7 +55,7 @@ export const getArtistMv = (id: number) => {
 };
 
 //获取歌手专辑
-export const getArtistAlbum = (id: number) => {
+export const getArtistAlbum = (id: number): Promise<ArtistAlbum> => {
   return request({
     url: API.ARTIST_ALBUM,
     method: 'GET',

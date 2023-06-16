@@ -9,7 +9,7 @@ const playStore = usePlayStore();
 const videoStore = useVideoStore(pinia);
 
 export const play = () => {
-  let config = {
+  const config = {
     settings: ['captions', 'quality', 'speed', 'loop'],
     autoplay: false,
     quality: {
@@ -28,11 +28,11 @@ export const play = () => {
   });
 };
 
-export const getVideo = (id) => {
+export const getVideo = (id: number) => {
   getMVDetail(id).then(async (Detail) => {
     videoStore.detail = Detail.data;
 
-    let brs = videoStore.detail.brs;
+    const brs = videoStore.detail.brs;
     const sources: any[] = [];
 
     for (let i = 0; i < brs.length; i++) {

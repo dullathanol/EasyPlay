@@ -1,9 +1,10 @@
 <script setup lang="ts">
-  import SvgIcon from '@/components/SvgIcon.vue';
-  import ListCover from '@/components/ListCover.vue';
+  import { ref, reactive, onMounted } from 'vue';
   import { getMvAll, getMVFirst, getMVExclusive } from '@/apis/modules/resource';
   import { mvArea, mvType, mvOrder } from '@/utils/data';
-  import { ref, reactive } from 'vue';
+
+  import SvgIcon from '@/components/SvgIcon.vue';
+  import ListCover from '@/components/ListCover.vue';
 
   const showCatOptions = ref(false);
   const active = ref('all');
@@ -22,31 +23,28 @@
     mvlist.value = MvAll.data;
   };
 
-  const all = async (info) => {
+  const all = async (info: string) => {
     showCatOptions.value = false;
     active.value = info;
     const MvAll = await getMvAll(50);
     mvlist.value = MvAll.data;
   };
 
-  all('all');
-
-  const first = async (info) => {
+  const first = async (info: string) => {
     showCatOptions.value = false;
     active.value = info;
     const First = await getMVFirst();
     mvlist.value = First.data;
   };
 
-  const exclusive = async (info) => {
+  const exclusive = async (info: string) => {
     showCatOptions.value = false;
     active.value = info;
     const Exclusive = await getMVExclusive();
     mvlist.value = Exclusive.data;
   };
 
-  const toggleCat = async (item, type) => {
-    active.value = null;
+  const toggleCat = async (item: any, type: string) => {
     if (type == 'area') {
       params.area = item;
       areaActive.value = item;
@@ -59,6 +57,10 @@
     }
     loadData();
   };
+
+  onMounted(() => {
+    all('all');
+  });
 </script>
 
 <template>

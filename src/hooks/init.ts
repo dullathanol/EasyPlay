@@ -7,9 +7,11 @@ import { getLoginStatus } from '@/apis/modules/login';
 const userStore = useUserStore(pinia);
 const playStore = usePlayStore(pinia);
 
+const detail: any = localStorage.getItem('detail');
+const userId: any = localStorage.getItem('userId');
+
 export const initCookie = async () => {
-  userStore.cookie = localStorage.getItem('cookie');
-  const LoginStatus = await getLoginStatus(userStore.cookie);
+  const LoginStatus = await getLoginStatus();
   localStorage.setItem('userId', LoginStatus.data.profile.userId);
   userStore.userId = LoginStatus.data.profile.userId;
   userStore.userDetail = await getUserDetail(userStore.userId);
@@ -17,15 +19,15 @@ export const initCookie = async () => {
 };
 
 export const initDetail = async () => {
-  let detail = JSON.parse(localStorage.getItem('detail'));
-  playStore.songId = detail.songId;
-  playStore.songList = detail.songList;
-  playStore.currentIndex = detail.currentIndex;
+  const initDetail = JSON.parse(detail);
+  playStore.songId = initDetail.songId;
+  playStore.songList = initDetail.songList;
+  playStore.currentIndex = initDetail.currentIndex;
 };
 
-export const Likelist = async (id) => {
+export const Likelist = async (id: number) => {
   if (!localStorage.getItem('cookie')) return;
-  const Likelist = await getUserLikeList(localStorage.getItem('userId'));
+  const Likelist = await getUserLikeList(userId);
   if (Likelist.ids.includes(id)) {
     return true;
   } else {
@@ -33,21 +35,21 @@ export const Likelist = async (id) => {
   }
 };
 
-export const AlbumSublist = async (id) => {
+export const AlbumSublist = async (id: number) => {
   if (!localStorage.getItem('cookie')) return;
   const AlbumSublist = await getAlbumSubList();
-  if (AlbumSublist.data.map((data) => data.id).includes(Number(id))) {
+  if (AlbumSublist.data.map((data: any) => data.id).includes(Number(id))) {
     return true;
   } else {
     return false;
   }
 };
 
-export const MvSublist = async (id) => {
+export const MvSublist = async (id: number) => {
   if (!localStorage.getItem('cookie')) return;
   if (userStore.login === false) return;
   const MvSublist = await getMvSubList();
-  if (MvSublist.data.map((data) => data.vid).includes(id)) {
+  if (MvSublist.data.map((data: any) => data.vid).includes(id)) {
     return true;
   } else {
     return false;

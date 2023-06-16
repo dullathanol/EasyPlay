@@ -1,3 +1,5 @@
+import type { UserList, UserRecord, UserAccount, UserFollowList, UserLikeList } from './types';
+
 import request from '@/apis';
 
 enum API {
@@ -19,7 +21,7 @@ enum API {
 }
 
 //账号信息
-export const getUserAccount = () => {
+export const getUserAccount = (): Promise<UserAccount> => {
   return request({
     url: API.USER_ACCOUNT,
     method: 'GET',
@@ -38,7 +40,7 @@ export const getUserDetail = (uid: number) => {
 };
 
 //用户歌单
-export const getUserList = (uid: number) => {
+export const getUserList = (uid: number): Promise<UserList> => {
   return request({
     url: API.USER_LIST,
     method: 'GET',
@@ -49,7 +51,7 @@ export const getUserList = (uid: number) => {
 };
 
 //用户播放记录
-export const getUserRecord = (uid: number, type: number) => {
+export const getUserRecord = (uid: number, type: number): Promise<UserRecord> => {
   return request({
     url: API.USER_RECORD,
     method: 'GET',
@@ -61,7 +63,7 @@ export const getUserRecord = (uid: number, type: number) => {
 };
 
 //喜欢的音乐列表
-export const getUserLikeList = (uid: number) => {
+export const getUserLikeList = (uid: number): Promise<UserLikeList> => {
   return request({
     url: API.USER_LIKE_LIST,
     method: 'GET',
@@ -72,7 +74,7 @@ export const getUserLikeList = (uid: number) => {
 };
 
 //用户的关注列表
-export const getUserFollowList = (id: number) => {
+export const getUserFollowList = (id: number): Promise<UserFollowList> => {
   return request({
     url: API.USER_FOLLOW_LIST,
     method: 'GET',
@@ -131,7 +133,7 @@ export const getSubscribeSub = (id: number, t: number) => {
 };
 
 //收藏/取消收藏用户
-export const getFollowSub = (id: number, t: string) => {
+export const getFollowSub = (id: number, t: number) => {
   return request({
     url: API.FOLLOW_SUB,
     method: 'GET',

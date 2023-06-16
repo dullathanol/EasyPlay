@@ -1,4 +1,15 @@
-import type { Personalized, Toplist, NewSong, ListDetail, Search } from './types';
+import type {
+  Personalized,
+  Toplist,
+  NewSong,
+  ListDetail,
+  Search,
+  PlayList,
+  Highquality,
+  MVSimi,
+  AlbumDetail,
+  SongCheck,
+} from './types';
 
 import request from '@/apis';
 
@@ -84,7 +95,7 @@ export const getPersonalized = (limit: number): Promise<Personalized> => {
 };
 
 //精品歌单
-export const getHighquality = (limit: number) => {
+export const getHighquality = (limit: number): Promise<Highquality> => {
   return request({
     url: API.HIGHQUALITY,
     method: 'GET',
@@ -111,7 +122,7 @@ export const getCatlist = () => {
 };
 
 //网友精选碟歌单
-export const getPlayList = (limit: number, cat: number) => {
+export const getPlayList = (limit: number, cat: string): Promise<PlayList> => {
   return request({
     url: API.PLAY_LIST,
     method: 'GET',
@@ -134,7 +145,7 @@ export const getListDetail = (id: number): Promise<ListDetail> => {
 };
 
 //歌曲是否可用
-export const getSongCheck = (id: number) => {
+export const getSongCheck = (id: number): Promise<SongCheck> => {
   return request({
     url: API.SONG_CHECK,
     method: 'GET',
@@ -215,7 +226,7 @@ export const getMvUrl = (id: number, r: number) => {
 };
 
 //相似mv
-export const getMVSimi = (mvid: number) => {
+export const getMVSimi = (mvid: number): Promise<MVSimi> => {
   return request({
     url: API.MV_SIMI,
     method: 'GET',
@@ -226,7 +237,7 @@ export const getMVSimi = (mvid: number) => {
 };
 
 //获取专辑内容
-export const getAlbumDetail = (id: number) => {
+export const getAlbumDetail = (id: number): Promise<AlbumDetail> => {
   return request({
     url: API.ALBUM_DETAIL,
     method: 'GET',

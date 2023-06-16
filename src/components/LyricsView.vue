@@ -1,16 +1,16 @@
 <script setup lang="ts">
+  import { ref, computed } from 'vue';
+  import { useRouter } from 'vue-router';
+  import { usePlayStore } from '@/stores/modules/playStore';
+  import { useUserStore } from '@/stores/modules/userStore';
+  import { startMusic, pauseMusic, playLast, playNext, changePlayMode, mute } from '@/hooks/Player';
+  import { getLikeSub } from '@/apis/modules/user';
+  import { FormatTrackTime } from '@/utils/common';
+
   import ButtonIcon from '@/components/ButtonIcon.vue';
   import ArtistsName from '@/components/ArtistsName.vue';
   import SvgIcon from '@/components/SvgIcon.vue';
   import VueSlider from 'vue-slider-component';
-  import { startMusic, pauseMusic, playLast, playNext, changePlayMode, mute } from '@/hooks/Player';
-  import { usePlayStore } from '@/stores/modules/playStore';
-  import { useUserStore } from '@/stores/modules/userStore';
-  import { FormatTrackTime } from '@/utils/common';
-  import { ref, computed, watch } from 'vue';
-  import { Likelist } from '@/hooks/init';
-  import { getLikeSub } from '@/apis/modules/user';
-  import { useRouter } from 'vue-router';
 
   const router = useRouter();
   const playStore = usePlayStore();
@@ -18,13 +18,7 @@
 
   const isLike = ref(false);
 
-  if (playStore.songList[playStore.currentIndex]?.id) {
-    Likelist(playStore.songList[playStore.currentIndex].id).then((value) => {
-      isLike.value = value;
-    });
-  }
-
-  const like = (value) => {
+  const like = (value: string) => {
     isLike.value = !isLike.value;
     getLikeSub(playStore.songList[playStore.currentIndex].id, value);
   };
@@ -32,48 +26,6 @@
   const go = () => {
     router.go(-1);
   };
-
-  const title = computed(() => {
-    if (playStore.playMode == 0) {
-      return '顺序播放';
-    }
-    if (playStore.playMode == 1) {
-      return '单曲循环';
-    }
-    if (playStore.playMode == 2) {
-      return '随机播放';
-    }
-  });
-
-  const src = computed(() => {
-    if (playStore.songList[playStore.currentIndex]?.picUrl) {
-      return playStore.songList[playStore.currentIndex].picUrl;
-    }
-    if (playStore.songList[playStore.currentIndex]?.al) {
-      return playStore.songList[playStore.currentIndex].al.picUrl;
-    }
-    if (playStore.songList[playStore.currentIndex]?.album) {
-      return playStore.songList[playStore.currentIndex].album.picUrl;
-    }
-  });
-
-  const name = computed(() => {
-    if (playStore.songList[playStore.currentIndex]?.name) {
-      return playStore.songList[playStore.currentIndex].name;
-    }
-  });
-
-  const artists = computed(() => {
-    if (playStore.songList[playStore.currentIndex]?.ar) {
-      return playStore.songList[playStore.currentIndex].ar;
-    }
-    if (playStore.songList[playStore.currentIndex]?.artists) {
-      return playStore.songList[playStore.currentIndex].artists;
-    }
-    if (playStore.songList[playStore.currentIndex]?.song.artists) {
-      return playStore.songList[playStore.currentIndex].song.artists;
-    }
-  });
 
   const progress = computed({
     get() {
@@ -83,30 +35,19 @@
       playStore.Howl.seek(value);
     },
   });
-
-  watch(
-    () => playStore.songList[playStore.currentIndex]?.id,
-    () => {
-      if (playStore.songList[playStore.currentIndex]?.id) {
-        Likelist(playStore.songList[playStore.currentIndex].id).then((value) => {
-          isLike.value = value;
-        });
-      }
-    },
-  );
 </script>
 
 <template>
   <div class="lyrics-page">
     <div class="cover">
-      <img :src="src" />
+      <img :src="playStore.src" />
     </div>
     <div class="controls">
       <div class="track-info">
         <div class="title">
-          {{ name }}
+          {{ playStore.name }}
         </div>
-        <ArtistsName :artists="artists"></ArtistsName>
+        <ArtistsName :artists="playStore.artists"></ArtistsName>
         <div class="subtitle">
           <ButtonIcon v-if="userStore.login && playStore.songList[playStore.currentIndex]">
             <SvgIcon v-show="!isLike" @click="like('true')" icon-class="heart"></SvgIcon>
@@ -134,7 +75,7 @@
         <span>{{ FormatTrackTime(playStore.time) }}</span>
       </div>
       <div class="media-controls">
-        <ButtonIcon :title="title" @click="changePlayMode">
+        <ButtonIcon :title="playStore.title" @click="changePlayMode">
           <SvgIcon v-show="playStore.playMode == 0" icon-class="repeat"></SvgIcon>
           <SvgIcon v-show="playStore.playMode == 1" icon-class="repeat-1"></SvgIcon>
           <SvgIcon v-show="playStore.playMode == 2" icon-class="shuffle"></SvgIcon>

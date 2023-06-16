@@ -22,3 +22,29 @@ export interface Search {
   code: number;
   result: any;
 }
+
+export interface PlayList {
+  code: number;
+  playlists: any;
+}
+
+export interface Highquality {
+  code: number;
+  playlists: any;
+}
+
+export interface MVSimi {
+  code: number;
+  mvs: any;
+}
+
+export interface AlbumDetail {
+  code: number;
+  album: any;
+  songs: any;
+}
+
+export interface SongCheck {
+  code: number;
+  success: any;
+}

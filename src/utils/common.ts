@@ -13,7 +13,7 @@ export const FormatPlayCount = (count: number) => {
 
 export const FormatDate = (timestamp: number, format = 'yyyy-MM-dd') => {
   const dt = new Date(timestamp);
-  const opt = {
+  const opt: any = {
     yyyy: dt.getFullYear(),
     MM: (dt.getMonth() + 1 + '').padStart(2, '0'),
     dd: (dt.getDate() + '').padStart(2, '0'),

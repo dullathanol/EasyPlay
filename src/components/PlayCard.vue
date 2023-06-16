@@ -16,15 +16,15 @@
   const type = ref('personalized');
   const playlist = ref();
   const catList = ref();
-  const list = ref([]);
+  const list = ref<any>([]);
 
   const loadData = async () => {
     const CatList = await getCatlist();
     catList.value = CatList;
 
     for (const k in catList.value.categories) {
-      const params = { name: catList.value.categories[k] };
-      params.sub = catList.value.sub.filter((subItem) => {
+      const params = { name: catList.value.categories[k], sub: [] };
+      params.sub = catList.value.sub.filter((subItem: any) => {
         return subItem.category === Number(k);
       });
       list.value.push(params);
@@ -35,12 +35,12 @@
 
   loadData();
 
-  const loadPlayList = async (limit, cat) => {
+  const loadPlayList = async (limit: number, cat: string) => {
     const PlayList = await getPlayList(limit, cat);
     playlist.value = PlayList.playlists;
   };
 
-  const personalized = async (info) => {
+  const personalized = async (info: string) => {
     showCatOptions.value = false;
     active.value = info;
     type.value = 'playlist';
@@ -48,7 +48,7 @@
     playlist.value = Personalized.result;
   };
 
-  const highquality = async (info) => {
+  const highquality = async (info: string) => {
     showCatOptions.value = false;
     active.value = info;
     type.value = 'playlists';
@@ -56,7 +56,7 @@
     playlist.value = Highquality.playlists;
   };
 
-  const rank = async (info) => {
+  const rank = async (info: string) => {
     showCatOptions.value = false;
     active.value = info;
     type.value = 'playlists';
@@ -64,7 +64,7 @@
     playlist.value = Toplist.list;
   };
 
-  const toggleCat = async (sub) => {
+  const toggleCat = async (sub: any) => {
     active.value = sub.name;
     type.value = 'playlists';
     loadPlayList(48, sub.name);
